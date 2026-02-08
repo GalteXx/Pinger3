@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:templatecontrols="using:Pinger3.TemplateControls">
+	<Design.PreviewWith>
+		<templatecontrols:PingDisplay />
+	</Design.PreviewWith>
+	<!-- Add Resources Here -->
+	<ResourceDictionary.ThemeDictionaries>
+		<ResourceDictionary x:Key="Light">
+			<SolidColorBrush x:Key="BackgroundColor" Color="White"/>
+			<SolidColorBrush x:Key="PrimaryColor" Color="#FF000000"/>
+			<SolidColorBrush x:Key="SecondaryColor" Color="#FF888888"/>
+			<SolidColorBrush x:Key="AccentColor" Color="MediumPurple"/>
+		</ResourceDictionary>
+		<ResourceDictionary x:Key="Dark">
+			<SolidColorBrush x:Key="BackgroundColor" Color="#040D12"/>
+			<SolidColorBrush x:Key="PrimaryColor" Color="White"/>
+			<SolidColorBrush x:Key="SecondaryColor" Color="#183D3D"/>	
+			<SolidColorBrush x:Key="AccentColor" Color="#807a49"/>
+		</ResourceDictionary>
+	</ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

@@ -1,0 +1,20 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Pinger3.TemplateControls">  
+  <Design.PreviewWith>
+    <Grid RowDefinitions="*, *, *, *" ColumnDefinitions="25, *" Width="200" Height="100"
+          Background="{StaticResource BackgroundColor}">
+		<TextBlock Grid.Column="1" Text="Samplename"/>
+		<TextBlock Grid.Column="1"/>
+        <Rectangle Fill="LightGray" Grid.Row="1" Width="15"/>
+    </Grid>
+  </Design.PreviewWith>
+ 
+  <ControlTheme x:Key="{x:Type controls:PingDisplay}" TargetType="controls:PingDisplay">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <TextBlock Text="Templated Control" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

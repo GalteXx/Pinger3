@@ -7,6 +7,8 @@
         x:Class="Pinger3.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
+        RequestedThemeVariant="Dark"
+        Background="{StaticResource BackgroundColor}"
         Title="Pinger3">
 
     <Design.DataContext>
