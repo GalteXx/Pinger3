@@ -1,8 +1,25 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:templatecontrols="using:Pinger3.TemplateControls">
+					xmlns:controls="using:Pinger3.TemplateControls">
 	<Design.PreviewWith>
-		<templatecontrols:PingDisplay />
+		<StackPanel Orientation="Horizontal">
+		<ThemeVariantScope RequestedThemeVariant="Light">
+			<StackPanel>
+				<Rectangle Fill="{DynamicResource BackgroundColor}" Width="200" Height="100"/>
+				<Rectangle Fill="{DynamicResource PrimaryColor}" Width="200" Height="100"/>
+				<Rectangle Fill="{DynamicResource SecondaryColor}" Width="200" Height="100"/>
+				<Rectangle Fill="{DynamicResource AccentColor}" Width="200" Height="100"/>
+			</StackPanel>
+		</ThemeVariantScope>
+		<ThemeVariantScope RequestedThemeVariant="Dark">
+			<StackPanel>
+				<Rectangle Fill="{DynamicResource BackgroundColor}" Width="200" Height="100"/>
+				<Rectangle Fill="{DynamicResource PrimaryColor}" Width="200" Height="100"/>
+				<Rectangle Fill="{DynamicResource SecondaryColor}" Width="200" Height="100"/>
+				<Rectangle Fill="{DynamicResource AccentColor}" Width="200" Height="100"/>
+			</StackPanel>
+		</ThemeVariantScope>
+		</StackPanel>
 	</Design.PreviewWith>
 	<!-- Add Resources Here -->
 	<ResourceDictionary.ThemeDictionaries>
@@ -15,7 +32,7 @@
 		<ResourceDictionary x:Key="Dark">
 			<SolidColorBrush x:Key="BackgroundColor" Color="#040D12"/>
 			<SolidColorBrush x:Key="PrimaryColor" Color="White"/>
-			<SolidColorBrush x:Key="SecondaryColor" Color="#183D3D"/>	
+			<SolidColorBrush x:Key="SecondaryColor" Color="#183D3D"/>
 			<SolidColorBrush x:Key="AccentColor" Color="#807a49"/>
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>

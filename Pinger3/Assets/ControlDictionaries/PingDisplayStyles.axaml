@@ -1,0 +1,48 @@
+<Styles xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:Pinger3.TemplateControls">
+	<Design.PreviewWith>
+		<StackPanel>
+			<controls:PingDisplay Classes="Full" />
+			<controls:PingDisplay Classes="Compact" />
+		</StackPanel>
+	</Design.PreviewWith>
+	<!-- Add Resources Here -->
+	<Style Selector ="controls|PingDisplay.Full">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border>
+					<Grid RowDefinitions="*, *, *, *" ColumnDefinitions="50, *" Width="200" Height="100"
+						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
+						<TextBlock Grid.Column="1" Text="IP Name"/>
+						<TextBlock Grid.Column="1" Grid.Row="1"
+								   Text="IP Address"/>
+						<TextBlock Grid.Column="1" Grid.Row="2"
+								   Text="Ping"/>
+						<TextBlock Grid.Column="1" Grid.Row="3"
+								   Text="Awaiting Response Time"/>
+						<Rectangle Fill="LightGray" Grid.Row="2" Margin="5, 2, 5, 2"/>
+						<Rectangle Fill="LightGray" Grid.Row="3" Margin="5, 2, 5, 2"/>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="controls|PingDisplay.Compact">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border>
+					<Grid RowDefinitions="*, *, *, *" ColumnDefinitions="50, *" Width="200" Height="100"
+						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
+						<TextBlock Grid.Column="1" Grid.Row="1"
+								   Text="IP Address"/>
+						<TextBlock Grid.Column="1" Grid.Row="2"
+								   Text="Ping"/>
+						<TextBlock Grid.Column="1" Grid.Row="3"
+								   Text="Awaiting Response Time"/>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

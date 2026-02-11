@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Assets\ControlDictionaries\PingDisplayStyles.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.11" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.11" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11" />
@@ -23,5 +27,11 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Update="Assets\ControlDictionaries\PingDisplayStyles.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
   </ItemGroup>
 </Project>

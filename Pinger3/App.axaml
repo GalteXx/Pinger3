@@ -17,5 +17,6 @@
 	</Application.Resources>
 	<Application.Styles>
 		<FluentTheme />
+		<StyleInclude Source="Assets/ControlDictionaries/PingDisplayStyles.axaml"/>
 	</Application.Styles>
 </Application>
