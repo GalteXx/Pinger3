@@ -7,8 +7,8 @@ public class PingDisplay : TemplatedControl
 {
     public static readonly StyledProperty<string> PingProperty =
         AvaloniaProperty.Register<PingDisplay, string>(nameof(PingProperty));
-    public static readonly StyledProperty<string> ResponsWaitingTimeProperty =
-        AvaloniaProperty.Register<PingDisplay, string>(nameof(ResponsWaitingTimeProperty));
+    public static readonly StyledProperty<string> ResponseWaitingTimeProperty =
+        AvaloniaProperty.Register<PingDisplay, string>(nameof(ResponseWaitingTimeProperty));
     public static readonly StyledProperty<string> AddressProperty =
         AvaloniaProperty.Register<PingDisplay, string>(nameof(AddressProperty));
     public static readonly StyledProperty<string> AddressNameProperty =
@@ -19,10 +19,10 @@ public class PingDisplay : TemplatedControl
         get => GetValue(PingProperty);
         set => SetValue(PingProperty, value);
     }
-    public string ResponsWaitingTime
+    public string ResponseWaitingTime
     {
-        get => GetValue(ResponsWaitingTimeProperty);
-        set => SetValue(ResponsWaitingTimeProperty, value);
+        get => GetValue(ResponseWaitingTimeProperty);
+        set => SetValue(ResponseWaitingTimeProperty, value);
     }
     public string Address
     {

@@ -12,8 +12,8 @@
 	</Design.PreviewWith>
 	<Styles.Resources>
 		<ResourceDictionary>
-			<converters:TimespanToStringConverter x:Key="PingTimeConverter"/>
-			<converters:TimespanToColorConverter x:Key="TimespanToStringConver"/>
+			<converters:TimespanToStringConverter x:Key="TimespanToStringConverter"/>
+			<converters:TimespanToColorConverter x:Key="TimespanToColorConver"/>
 		</ResourceDictionary>
 	</Styles.Resources>
 	<!-- Add Resources Here -->
@@ -27,13 +27,15 @@
 						<TextBlock Grid.Column="1" Grid.Row="1"
 								   Text="{TemplateBinding Address}"/>
 						<TextBlock Grid.Column="1" Grid.Row="2"
-								   Text="{TemplateBinding Ping, Converter={StaticResource PingTimeConverter}}"
+								   Text="{TemplateBinding Ping, Converter={StaticResource TimespanToStringConverter}}"
 								   />
 						<TextBlock Grid.Column="1" Grid.Row="3"
-								   Text="{TemplateBinding ResponsWaitingTime, Converter={StaticResource PingTimeConverter}}"
+								   Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
-						<Rectangle Fill="LightGray" Grid.Row="2" Margin="5, 2, 5, 2"/>
-						<Rectangle Fill="LightGray" Grid.Row="3" Margin="5, 2, 5, 2"/>
+						<Rectangle Fill="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConver}}"
+								   Grid.Row="2" Margin="5, 2, 5, 2" />
+						<Rectangle Fill="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}"
+								   Grid.Row="3" Margin="5, 2, 5, 2"/>
 					</Grid>
 				</Border>
 			</ControlTemplate>
@@ -46,9 +48,10 @@
 					<Grid RowDefinitions="*, *" ColumnDefinitions="50, *"
 						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
 						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
-						<Rectangle Fill="LightGray" Grid.Row="1" Margin="5, 2, 5, 2"/>
+						<Rectangle Fill="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConver}}"
+								   Grid.Row="1" Margin="5, 2, 5, 2"/>
 						<TextBlock Grid.Column="1" Grid.Row="1"
-								   Text="{TemplateBinding Ping, Converter={StaticResource PingTimeConverter}}"/>
+								   Text="{TemplateBinding Ping, Converter={StaticResource TimespanToStringConverter}}"/>
 					</Grid>
 				</Border>
 			</ControlTemplate>
@@ -62,9 +65,10 @@
 						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
 						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
 						<TextBlock Grid.Column="1" Grid.Row="1"
-								   Text="{TemplateBinding ResponsWaitingTime, Converter={StaticResource PingTimeConverter}}"
+								   Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
-						<Rectangle Fill="LightGray" Grid.Row="1" Margin="5, 2, 5, 2"/>
+						<Rectangle Fill="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}"
+								   Grid.Row="1" Margin="5, 2, 5, 2"/>
 					</Grid>
 				</Border>
 			</ControlTemplate>
@@ -75,9 +79,10 @@
 			<ControlTemplate>
 				<Border>
 					<StackPanel Orientation="Horizontal"
-						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
-						<Rectangle Fill="LightGray" Grid.Row="1" Margin="5, 2, 5, 2" Width ="40"/>
-						<TextBlock Text="{TemplateBinding ResponsWaitingTime, Converter={StaticResource PingTimeConverter}}"
+								Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
+						<Rectangle Fill="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}"
+								   Margin="5, 2, 5, 2" Width ="40"/>
+						<TextBlock Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
 					</StackPanel>
 				</Border>
