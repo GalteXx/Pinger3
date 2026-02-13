@@ -9,10 +9,10 @@ namespace Pinger3.Models
         public string Name { get; private set; }
         public string AddressOrDomain { get; private set; }
         public TimeSpan Ping { get; private set; }
-        public TimeSpan TimeSinceLastRequest { get; private set; }
+        public DateTime? LastRequest { get; private set; }
 
-        private IPAddress _address;
-        private IPingService _pingService;
+        private readonly IPAddress _address;
+        private readonly IPingService _pingService;
 
         public PingTargetModel(AddressConfig config, IPingService pingService)
         {
@@ -21,17 +21,15 @@ namespace Pinger3.Models
             _address = config.ResolvedIpAddress;
 
             Ping = TimeSpan.FromMilliseconds(-1);
-            TimeSinceLastRequest = TimeSpan.FromMilliseconds(-1);
+            LastRequest = DateTime.MinValue;
 
             _pingService = pingService;
             _pingService.PingReceived += (sender, e) =>
             {
                 Ping = e;
-                TimeSinceLastRequest = TimeSpan.Zero;
-                UpdateTimer();
+                LastRequest = DateTime.Now;
             };
         }
-        public void UpdateTimer() => TimeSinceLastRequest = _pingService.PingWaitingSpan;
         public void StartPinging() => _pingService.Start();
         public void StopPinging() => _pingService.Stop();
 

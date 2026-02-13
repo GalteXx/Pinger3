@@ -9,15 +9,19 @@ namespace Pinger3.ViewModels
     public class PingViewModel : INotifyPropertyChanged
     {
         PingTargetModel _model;
-        public PingViewModel(AddressConfig targetConfig)
+        public PingViewModel(AddressConfig targetConfig, RepsoneAwaitingTimeUpdaterService timeUpdater)
         {
             _model = new PingTargetModel(targetConfig, new ICMPPinger(targetConfig));
-
+            timeUpdater.Ticked += (sender, e) =>
+            {
+                TimeSinceLastRequest = _model.LastRequest is null ?
+                    TimeSinceLastRequest : DateTime.Now - (DateTime)_model.LastRequest;
+            };
             Name = _model.Name;
             DomainOrAddress = _model.AddressOrDomain;
         }
-        private string name;
-        private string domainOrAddress;
+        private string name = string.Empty;
+        private string domainOrAddress = string.Empty;
         private TimeSpan ping;
         private TimeSpan timeSinceLastRequest;
 

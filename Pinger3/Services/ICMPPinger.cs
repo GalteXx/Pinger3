@@ -13,24 +13,11 @@ namespace Pinger3.Services
         private CancellationTokenSource? _cts;
         private DateTime _lastRequest = DateTime.MinValue;
         private bool _updateSuppressed = false;
-        private TimeSpan _pingAwaitingTime;
 
         public event EventHandler<TimeSpan> PingReceived;
 
-        public TimeSpan PingWaitingSpan
-        {
-            get
-            {
-                if(_updateSuppressed)
-                    return _pingAwaitingTime;
+        public DateTime? LastRequestTime => _updateSuppressed ? null : _lastRequest;
 
-                if (_lastRequest == DateTime.MinValue)
-                    return TimeSpan.FromMilliseconds(-1);
-
-                _pingAwaitingTime = DateTime.Now -  _lastRequest;
-                return _pingAwaitingTime;
-            }
-        }
 
 
         public ICMPPinger(AddressConfig config)
