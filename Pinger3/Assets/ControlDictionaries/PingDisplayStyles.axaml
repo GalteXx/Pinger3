@@ -1,21 +1,57 @@
 <Styles xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:controls="using:Pinger3.TemplateControls"
-		xmlns:converters="using:Pinger3.Converters">
-	<Design.PreviewWith>
-		<StackPanel Background="Black">
-			<controls:PingDisplay Classes="Full" />
-			<controls:PingDisplay Classes="CompactPing" />
-			<controls:PingDisplay Classes="CompactAwaitngTime" />
-			<controls:PingDisplay Classes="ResponeTimeOnly" />
-		</StackPanel>
-	</Design.PreviewWith>
+		xmlns:converters="using:Pinger3.Converters"
+		xmlns:vm="using:Pinger3.ViewModels">
 	<Styles.Resources>
 		<ResourceDictionary>
 			<converters:TimespanToStringConverter x:Key="TimespanToStringConverter"/>
 			<converters:TimespanToColorConverter x:Key="TimespanToColorConver"/>
 		</ResourceDictionary>
 	</Styles.Resources>
+	<Design.PreviewWith>
+		<StackPanel Background="Black">
+			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="Full"
+							  AddressName="{Binding Name}"
+							  Address="{Binding DomainOrAddress}"
+							  Ping="{Binding Ping}"
+							  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
+				<controls:PingDisplay.DataContext>
+					<vm:PingViewModelDesign/>
+				</controls:PingDisplay.DataContext>
+			</controls:PingDisplay>
+
+			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="CompactPing"
+							  AddressName="{Binding Name}"
+							  Address="{Binding DomainOrAddress}"
+							  Ping="{Binding Ping}"
+							  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
+				<controls:PingDisplay.DataContext>
+					<vm:PingViewModelDesign/>
+				</controls:PingDisplay.DataContext>
+			</controls:PingDisplay>
+
+			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="CompactAwaitngTime"
+							  AddressName="{Binding Name}"
+							  Address="{Binding DomainOrAddress}"
+							  Ping="{Binding Ping}"
+							  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
+				<controls:PingDisplay.DataContext>
+					<vm:PingViewModelDesign/>
+				</controls:PingDisplay.DataContext>
+			</controls:PingDisplay>
+
+			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="ResponeTimeOnly"
+							  AddressName="{Binding Name}"
+							  Address="{Binding DomainOrAddress}"
+							  Ping="{Binding Ping}"
+							  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
+				<controls:PingDisplay.DataContext>
+					<vm:PingViewModelDesign/>
+				</controls:PingDisplay.DataContext>
+			</controls:PingDisplay>
+		</StackPanel>
+	</Design.PreviewWith>
 	<!-- Add Resources Here -->
 	<Style Selector ="controls|PingDisplay.Full">
 		<Setter Property="Template">

@@ -6,9 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace Pinger3.ViewModels
 {
-    public class PingViewModel : INotifyPropertyChanged
+    public class PingViewModel : INotifyPropertyChanged, IPingViewModel
     {
-        PingTargetModel _model;
+        private readonly PingTargetModel _model;
         public PingViewModel(AddressConfig targetConfig, RepsoneAwaitingTimeUpdaterService timeUpdater)
         {
             _model = new PingTargetModel(targetConfig, new ICMPPinger(targetConfig));
@@ -52,7 +52,7 @@ namespace Pinger3.ViewModels
         public TimeSpan Ping
         {
             get => ping;
-            set
+            private set
             {
                 if (ping != value)
                 {
@@ -64,7 +64,7 @@ namespace Pinger3.ViewModels
         public TimeSpan TimeSinceLastRequest
         {
             get => timeSinceLastRequest;
-            set
+            private set
             {
                 if (timeSinceLastRequest != value)
                 {

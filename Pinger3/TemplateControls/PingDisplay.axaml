@@ -4,10 +4,11 @@
 	<Design.PreviewWith>
 		<controls:PingDisplay Classes="Full" />
 	</Design.PreviewWith>
-	<ControlTheme x:Key="{x:Type controls:PingDisplay}" TargetType="controls:PingDisplay">
+	<ControlTheme x:Key="{x:Type controls:PingDisplay}"
+				  TargetType="controls:PingDisplay">
 		<Setter Property="Template">
 			<ControlTemplate>
-				<TextBlock Text="Templated Control" />
+				<ContentPresenter/>
 			</ControlTemplate>
 		</Setter>
 	</ControlTheme>

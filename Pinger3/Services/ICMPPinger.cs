@@ -1,6 +1,5 @@
 ﻿using Pinger3.Models;
 using System;
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
