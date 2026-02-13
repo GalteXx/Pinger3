@@ -20,7 +20,11 @@
 
 	<StackPanel>
 		<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-		<templatecontrols:PingDisplay Classes="Full"/>
+        <templatecontrols:PingDisplay Classes="Full"
+                                       AddressName="{Binding PingViewModel.Name}"
+                                       Address="{Binding PingViewModel.DomainOrAddress}"
+                                       Ping="{Binding PingViewModel.Ping}"
+                                       ResponseWaitingTime="{Binding PingViewModel.TimeSinceLastRequest}" />
 	</StackPanel>
 
 </Window>

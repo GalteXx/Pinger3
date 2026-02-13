@@ -34,7 +34,7 @@ namespace Pinger3.Converters
             }
             if (targetType == typeof(Color))
                 return Color.FromRgb(r, g, b);
-            else if (targetType == typeof(Brush))
+            else if (targetType == typeof(IBrush))
                 return new SolidColorBrush(Color.FromRgb(r, g, b));
             else
                 throw new ArgumentException("Invalid target type");

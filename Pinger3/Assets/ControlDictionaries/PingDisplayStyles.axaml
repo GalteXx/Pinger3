@@ -56,7 +56,8 @@
 	<Style Selector ="controls|PingDisplay.Full">
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
+				<Border CornerRadius="5" BorderThickness="1" 
+						BorderBrush="{DynamicResource PrimaryColor}" ClipToBounds="True">
 					<Grid RowDefinitions="*, *, *, *" ColumnDefinitions=" 40, *"
 						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
 						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
@@ -68,16 +69,10 @@
 						<TextBlock Grid.Column="1" Grid.Row="3"
 								   Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
-						<Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
-								Grid.Row="2" Margin="5, 2, 5, 2">
-							<Rectangle Fill="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConver}}"
-									   />
-						</Border>
-						<Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
-								Grid.Row="3" Margin="5, 2, 5, 2">
-							<Rectangle Fill="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}"
-									   Grid.Row="3" Margin="5, 2, 5, 2"/>
-						</Border>
+                        <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
+                                Grid.Row="2" Margin="5, 2, 5, 2" Background="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConver}}"/>
+                        <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
+                                Grid.Row="3" Margin="5, 2, 5, 2" Background="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}"/>
 					</Grid>
 				</Border>
 			</ControlTemplate>
@@ -86,14 +81,12 @@
 	<Style Selector="controls|PingDisplay.CompactPing">
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
+				<Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
 					<Grid RowDefinitions="*, *" ColumnDefinitions="40, *"
 						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
 						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
-						<Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
-								Grid.Row="1" Margin="5, 2, 5, 2">
-							<Rectangle Fill="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConver}}" />
-						</Border>
+                        <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
+                                Grid.Row="1" Margin="5, 2, 5, 2" Background="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConver}}"/>
 						<TextBlock Grid.Column="1" Grid.Row="1"
 								   Text="{TemplateBinding Ping, Converter={StaticResource TimespanToStringConverter}}"/>
 					</Grid>
@@ -104,17 +97,15 @@
 	<Style Selector="controls|PingDisplay.CompactAwaitngTime">
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
+				<Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
 					<Grid RowDefinitions="*, *" ColumnDefinitions="40, *"
 						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
 						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
 						<TextBlock Grid.Column="1" Grid.Row="1"
 								   Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
-						<Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
-								Grid.Row="1" Margin="5, 2, 5, 2">
-							<Rectangle Fill="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}" />
-						</Border>
+                        <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
+                                Grid.Row="1" Margin="5, 2, 5, 2" Background="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}"/>
 					</Grid>
 				</Border>
 			</ControlTemplate>
@@ -126,9 +117,7 @@
 				<Border CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
 					<StackPanel Orientation="Horizontal"
 								Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
-						<Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5" Margin="5, 2, 5, 2" Width="30">
-							<Rectangle Fill="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}" />
-						</Border>
+                        <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5" Margin="5, 2, 5, 2" Width="30" Background="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}" />
 						<TextBlock Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
 					</StackPanel>
