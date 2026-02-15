@@ -12,7 +12,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Remove="Assets\config.default.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AvaloniaXaml Remove="Assets\ControlDictionaries\PingDisplayStyles.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\config.default.xml" />
   </ItemGroup>
 
   <ItemGroup>

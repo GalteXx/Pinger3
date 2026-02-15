@@ -2,6 +2,7 @@
 
 namespace Pinger3.Models
 {
+
     public struct AddressConfig(string name, string addressOrDomain, IPAddress iPAddresse, int requestDelay)
     {
         public string Name { get; private set; } = name;
