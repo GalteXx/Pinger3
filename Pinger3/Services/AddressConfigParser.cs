@@ -16,7 +16,7 @@ namespace Pinger3.Services
         public IEnumerable<AddressConfig> TargetIPAddresses => _targetIPAddresses;
 
         private readonly List<AddressConfig> _targetIPAddresses;
-        private readonly List<AddressConfig> _invalidTargetIPAddresses;
+        private readonly List<(AddressConfig, ConfigValidationErrors)> _invalidTargetIPAddresses;
         private const string _configName = "config.xml"; // Hardcode goes brrr
 
         public static async Task<AddressesConfigParser> CreateAsync()
@@ -31,7 +31,7 @@ namespace Pinger3.Services
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Geckosystem", "Pinger");
 
-           Task<XDocument> doc = LoadConfigAsync(path);
+            Task<XDocument> doc = LoadConfigAsync(path);
             var fileStream = new FileStream(Path.Combine(path, _configName), FileMode.Open);
             await ValidateConfigAsync(await doc, fileStream);
             await ParseConfigAsync(await doc);
@@ -80,24 +80,18 @@ namespace Pinger3.Services
             }
         }
 
-        private static async Task ValidateConfigAsync(XDocument doc, FileStream fileStream)
+        private async Task ValidateConfigAsync(XDocument doc, FileStream fileStream)
         {
-            if (doc.Root == null)
-            {
-                doc = await LoadDefaultConfigAsync();
-            }
-
             var targets = doc.Root!.Element("TargetIPs");
             if (targets == null) return;
-
+            //i should really parse them async
             foreach (var el in targets.Elements("TargetIP").ToList())
             {
-                await ValidateConfigElement(targets, el);
+                await ParseValidatedConfigElement(el, await ValidateConfigElement(el));
             }
-            await doc.SaveAsync(fileStream, SaveOptions.None, CancellationToken.None);
         }
 
-        private static async Task<ConfigValidationErrors> ValidateConfigElement(XElement targets, XElement el)
+        private static async Task<ConfigValidationErrors> ValidateConfigElement(XElement el)
         {
             ConfigValidationErrors errors = ConfigValidationErrors.None;
             if (el.Attribute("Name") == null)
@@ -109,7 +103,6 @@ namespace Pinger3.Services
             var ipAttr = el.Attribute("IP")?.Value;
             var domainAttr = el.Attribute("Domain")?.Value;
 
-            //missing IP and Domain
             if (string.IsNullOrWhiteSpace(ipAttr) && string.IsNullOrWhiteSpace(domainAttr))
             {
                 errors |= ConfigValidationErrors.MissingAddress;
@@ -124,7 +117,7 @@ namespace Pinger3.Services
             }
             if (!string.IsNullOrWhiteSpace(domainAttr))
             {
-                if(!await TryResolveDomain(el, domainAttr))
+                if (!await TryResolveDomain(el, domainAttr))
                     errors |= ConfigValidationErrors.DomainUnresolvable;
             }
             return errors;
@@ -176,6 +169,41 @@ namespace Pinger3.Services
                     { }
                 }
             }
+        }
+
+        private async Task ParseValidatedConfigElement(XElement element, ConfigValidationErrors errors)
+        {
+            IPAddress resolvedIP;
+            string addressOrDomain;
+            string name = errors.HasFlag(ConfigValidationErrors.MissingName)
+                ? element.Attribute("Name")!.Value : "AddressName";
+
+            if (errors.HasFlag(ConfigValidationErrors.MissingAddress) ||
+                errors.HasFlag(ConfigValidationErrors.InvalidIpFormat) ||
+                errors.HasFlag(ConfigValidationErrors.DomainUnresolvable))
+            {
+                addressOrDomain = "InvalidAddress";
+                resolvedIP = IPAddress.None;
+            }
+            else
+            {
+                addressOrDomain = element.Attribute("IP") is null ?
+                    element.Attribute("Domain")!.Value : element.Attribute("IP")!.Value;
+                resolvedIP = element.Attribute("IP") is null ?
+                    (await Dns.GetHostAddressesAsync(element.Attribute("Domain")!.Value))[0]
+                    : IPAddress.Parse(element.Attribute("IP")!.Value);
+            }
+
+            TimeSpan delay = element.Attribute("Delay") is null ? TimeSpan.FromSeconds(1) :
+                    TimeSpan.FromMilliseconds(Convert.ToDouble(element.Attribute("Delay")!.Value));
+
+            var parsedAddress = new AddressConfig(name, addressOrDomain, resolvedIP, delay);
+
+            if (errors == ConfigValidationErrors.None)
+                _targetIPAddresses.Add(parsedAddress);
+            else
+                _invalidTargetIPAddresses.Add((parsedAddress, errors));
+
         }
 
     }
