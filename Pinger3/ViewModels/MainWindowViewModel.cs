@@ -9,8 +9,8 @@ namespace Pinger3.ViewModels
 
         public ObservableCollection<IPingViewModel> PingTargets { get; }
 
-        private AddressesConfigParser _parser;
-        private ResponeAwaitingTimeUpdaterService _timeUpdater;
+        private readonly AddressesConfigParser _parser;
+        private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
 
         public MainWindowViewModel()
         {

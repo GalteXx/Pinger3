@@ -9,11 +9,11 @@ namespace Pinger3.ViewModels
 {
     internal class TopmostWindowViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<PingViewModel> _pingViewModels { get; }
+        public ObservableCollection<PingViewModel> PingViewModels { get; }
 
         public TopmostWindowViewModel(ObservableCollection<PingTargetModel> pingModels, ResponeAwaitingTimeUpdaterService timeUpdater)
         {
-            _pingViewModels = new(pingModels.Select(x => new PingViewModel(x, timeUpdater)));
+            PingViewModels = new(pingModels.Select(x => new PingViewModel(x, timeUpdater)));
         }
 
 

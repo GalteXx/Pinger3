@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:vm="using:Pinger3.ViewModels"
+		xmlns:vmd="using:Pinger3.ViewModels.Design"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:templatecontrols="using:Pinger3.TemplateControls"
@@ -13,9 +14,7 @@
 		Title="Pinger3">
 
 	<Design.DataContext>
-		<!-- This only sets the DataContext for the previewer in an IDE,
-		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-		<vm:MainWindowViewModel/>
+		<vmd:MainWindowViewModelDesign/>
 	</Design.DataContext>
 
 	<StackPanel>
@@ -25,7 +24,7 @@
 				<ListBox ItemsSource="{Binding PingTargets}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
-							<templatecontrols:PingDisplay AddressName="{Binding Name}"/>
+							<templatecontrols:PingDisplay AddressName="{Binding Name}" Ping="{Binding Ping}" ResponseWaitingTime="{Binding TimeSinceLastRequest}"/>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>

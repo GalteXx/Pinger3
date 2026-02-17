@@ -1,7 +1,6 @@
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Pinger3.ViewModels;
@@ -25,7 +24,8 @@ namespace Pinger3
                 DisableAvaloniaDataAnnotationValidation();
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    //DataContext = new MainWindowViewModel(),
+                    DataContext = new ViewModels.Design.MainWindowViewModelDesign(),
                 };
             }
 
