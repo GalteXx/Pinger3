@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Pinger3.ViewModels
 {
-    public partial class MainWindowViewModel : ViewModelBase
+    public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
 
         public ObservableCollection<IPingViewModel> PingTargets { get; }

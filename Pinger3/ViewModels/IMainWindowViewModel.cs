@@ -1,0 +1,9 @@
+﻿using System.Collections.ObjectModel;
+
+namespace Pinger3.ViewModels
+{
+    public interface IMainWindowViewModel
+    {
+        ObservableCollection<IPingViewModel> PingTargets { get; }
+    }
+}

@@ -1,9 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Design
 {
-    public class MainWindowViewModelDesign : ViewModelBase
+    public class MainWindowViewModelDesign : IMainWindowViewModel
     {
         public ObservableCollection<IPingViewModel> PingTargets { get; }
 
@@ -14,7 +13,6 @@ namespace Pinger3.ViewModels.Design
             {
                 PingTargets.Add(new PingViewModelDesign());
             }
-
         }
     }
 }

@@ -7,7 +7,7 @@
 		xmlns:templatecontrols="using:Pinger3.TemplateControls"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="Pinger3.Views.MainWindow"
-		x:DataType="vm:MainWindowViewModel"
+		x:DataType="vm:IMainWindowViewModel"
 		Icon="/Assets/avalonia-logo.ico"
 		RequestedThemeVariant="Dark"
 		Background="{DynamicResource BackgroundColor}"
@@ -24,7 +24,7 @@
 				<ListBox ItemsSource="{Binding PingTargets}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
-							<templatecontrols:PingDisplay AddressName="{Binding Name}" Ping="{Binding Ping}" ResponseWaitingTime="{Binding TimeSinceLastRequest}"/>
+							<templatecontrols:PingDisplay Classes="Full" AddressName="{Binding Name}" Ping="{Binding Ping}" ResponseWaitingTime="{Binding TimeSinceLastRequest}"/>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
