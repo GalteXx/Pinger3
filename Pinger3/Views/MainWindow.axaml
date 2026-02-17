@@ -3,13 +3,13 @@
 		xmlns:vm="using:Pinger3.ViewModels"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:templatecontrols="using:Pinger3.TemplateControls"
+		xmlns:templatecontrols="using:Pinger3.TemplateControls"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		x:Class="Pinger3.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
 		Icon="/Assets/avalonia-logo.ico"
 		RequestedThemeVariant="Dark"
-		Background="{StaticResource BackgroundColor}"
+		Background="{DynamicResource BackgroundColor}"
 		Title="Pinger3">
 
 	<Design.DataContext>
@@ -19,12 +19,21 @@
 	</Design.DataContext>
 
 	<StackPanel>
-		<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <templatecontrols:PingDisplay Classes="Full"
-                                       AddressName="{Binding PingViewModel.Name}"
-                                       Address="{Binding PingViewModel.DomainOrAddress}"
-                                       Ping="{Binding PingViewModel.Ping}"
-                                       ResponseWaitingTime="{Binding PingViewModel.TimeSinceLastRequest}" />
+		<Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="10">
+			<StackPanel Margin="15,5,15,5">
+				<TextBlock Text="Active Pinging Targets"/>
+				<ListBox ItemsSource="{Binding PingTargets}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<templatecontrols:PingDisplay AddressName="{Binding Name}"/>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</StackPanel>
+		</Border>
+		<Border>
+
+		</Border>
 	</StackPanel>
 
 </Window>

@@ -4,7 +4,7 @@ using System.Net;
 
 namespace Pinger3.Models
 {
-    internal class PingTargetModel
+    public class PingTargetModel
     {
         public string Name { get; private set; }
         public string AddressOrDomain { get; private set; }
