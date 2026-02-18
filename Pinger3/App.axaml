@@ -18,5 +18,10 @@
 	<Application.Styles>
 		<FluentTheme />
 		<StyleInclude Source="Assets\ControlDictionaries\PingDisplayStyles.axaml"/>
+		<Style Selector="TemplatedControl">
+			<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+	</Style>
+
 	</Application.Styles>
 </Application>

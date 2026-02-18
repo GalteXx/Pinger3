@@ -8,7 +8,7 @@ namespace Pinger3.ViewModels.Design
         public PingViewModelDesign()
         {
             Ping = TimeSpan.FromMilliseconds(Random.Shared.Next(1, 120));
-            TimeSinceLastRequest = TimeSpan.FromSeconds(Random.Shared.Next(1, 100));
+            TimeSinceLastRequest = TimeSpan.FromMilliseconds(Random.Shared.Next(1, 100));
         }
 
         public string DomainOrAddress => "192.168.2.1";
