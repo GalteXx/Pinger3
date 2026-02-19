@@ -20,10 +20,10 @@
 		<Border BorderThickness="1" CornerRadius="10">
 			<StackPanel Margin="15,5,15,5">
 				<TextBlock Text="Active Pinging Targets"/>
-				<ListBox ItemsSource="{Binding PingTargets}">
+				<ListBox Background="{DynamicResource BackgroundColor}" ItemsSource="{Binding PingTargets}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
-							<templatecontrols:PingDisplay Classes="Full" AddressName="{Binding Name}" Ping="{Binding Ping}" ResponseWaitingTime="{Binding TimeSinceLastRequest}"/>
+							<templatecontrols:PingDisplay Classes="Full" AddressName="{Binding Name}" Address="{Binding DomainOrAddress}" Ping="{Binding Ping}" ResponseWaitingTime="{Binding TimeSinceLastRequest}"/>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>

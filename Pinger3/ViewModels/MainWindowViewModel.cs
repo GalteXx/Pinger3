@@ -1,6 +1,7 @@
 ﻿using Pinger3.Models;
 using Pinger3.Services;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Pinger3.ViewModels
 {
@@ -9,16 +10,19 @@ namespace Pinger3.ViewModels
 
         public ObservableCollection<IPingViewModel> PingTargets { get; }
 
-        private readonly AddressesConfigParser _parser;
+        private IAddressesConfigParser _parser;
         private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IAddressesConfigParser parser, ResponeAwaitingTimeUpdaterService timeUpdaterService)
         {
-            //To be DI
-            _parser = AddressesConfigParser.CreateAsync().Result;
-            _timeUpdater = new ResponeAwaitingTimeUpdaterService();
+            //To be DI 
             PingTargets = [];
+            _timeUpdater = timeUpdaterService;
+            _parser = parser;
+        }
 
+        public async Task InitializeAsync()
+        {
             var addresses = _parser.TargetIPAddresses;
             foreach (var address in addresses)
             {

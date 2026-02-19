@@ -7,6 +7,8 @@ namespace Pinger3.Views
         public MainWindow()
         {
             InitializeComponent();
+            var vm = DataContext as ViewModels.MainWindowViewModel;
+            //Loaded += async (_, __) => await vm!.InitializeAsync();
         }
     }
 }

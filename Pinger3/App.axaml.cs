@@ -1,10 +1,12 @@
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
+using Pinger3.Services.DependencyInjection;
 using Pinger3.ViewModels;
 using Pinger3.Views;
+using System.Linq;
 
 namespace Pinger3
 {
@@ -22,10 +24,15 @@ namespace Pinger3
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
-                desktop.MainWindow = new MainWindow
+
+                var collection = new ServiceCollection();
+                collection.AddCommonServices();
+                var services = collection.BuildServiceProvider();
+
+                var vm = services.GetRequiredService<MainWindowViewModel>();
+                desktop.MainWindow = new MainWindow()
                 {
-                    //DataContext = new MainWindowViewModel(),
-                    DataContext = new ViewModels.Design.MainWindowViewModelDesign(),
+                    DataContext = vm,
                 };
             }
 

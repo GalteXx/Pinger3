@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Pinger3.Services
 {
-    internal class AddressesConfigParser : IAddressesConfigParser
+    public class AddressesConfigParser : IAddressesConfigParser
     {
 
         public IEnumerable<AddressConfig> TargetIPAddresses => [.. _targetIPAddresses];
@@ -35,8 +35,9 @@ namespace Pinger3.Services
                 "Geckosystem", "Pinger");
 
             Task<XDocument> doc = LoadConfigAsync(path);
-            await ValidateConfigAsync(await doc);
-            await ParseConfigAsync(await doc);
+            XDocument loadedDocc = await doc;
+            await ValidateConfigAsync(loadedDocc);
+            await ParseConfigAsync(loadedDocc);
             return this;
         }
         public AddressesConfigParser()
