@@ -9,7 +9,8 @@ namespace Pinger3.ViewModels
     public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
 
-        public ObservableCollection<IPingViewModel> ValidPingingTargets { get; }
+        public ObservableCollection<PingingTargetViewModel> ValidPingingTargets { get; }
+        public ObservableCollection<IPingViewModel> InvalidPingingTargets { get; }
 
         private readonly IAddressesConfigParser _parser;
         private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
@@ -26,8 +27,8 @@ namespace Pinger3.ViewModels
             var addresses = await _parser.ParseConfigAsync();
             foreach (var address in addresses)
             {
-                if(address.Item2 == ConfigValidationErrors.None)
-                    ValidPingingTargets.Add(new PingViewModel(new PingTargetModel(address.Item1, new ICMPPinger(address.Item1)), _timeUpdater));
+                if(address.ValidationErrors == ConfigValidationErrors.None)
+                    ValidPingingTargets.Add(new PingingTargetViewModel(new PingTargetModel(address, new ICMPPinger(address)), _timeUpdater));
                 //invalid entries for later
             }
         }
@@ -36,7 +37,7 @@ namespace Pinger3.ViewModels
         {
             foreach (var target in ValidPingingTargets)
             {
-                target.;
+                target;
             }
         }
 

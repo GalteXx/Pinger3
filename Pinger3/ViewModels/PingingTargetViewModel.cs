@@ -6,10 +6,10 @@ using System.Runtime.CompilerServices;
 
 namespace Pinger3.ViewModels
 {
-    public class PingViewModel : INotifyPropertyChanged, IPingViewModel
+    public class PingingTargetViewModel : INotifyPropertyChanged, IPingViewModel
     {
         private readonly PingTargetModel _model;
-        public PingViewModel(PingTargetModel model, ResponeAwaitingTimeUpdaterService timeUpdater)
+        public PingingTargetViewModel(PingTargetModel model, ResponeAwaitingTimeUpdaterService timeUpdater)
         {
             _model = model;
             timeUpdater.Ticked += (sender, e) =>

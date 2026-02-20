@@ -16,7 +16,7 @@ namespace Pinger3.Services
         private readonly object _docLock = new();
         private const string _configName = "config.xml"; // Hardcode goes brrr
 
-        public async Task<IEnumerable<(AddressConfig, ConfigValidationErrors)>> ParseConfigAsync()
+        public async Task<IEnumerable<AddressConfig>> ParseConfigAsync()
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Geckosystem", "Pinger");
@@ -65,7 +65,7 @@ namespace Pinger3.Services
             }
         }
 
-        private async Task<IEnumerable<(AddressConfig, ConfigValidationErrors)>> ValidateConfigAsync(XDocument doc)
+        private async Task<IEnumerable<AddressConfig>> ValidateConfigAsync(XDocument doc)
         {
             var targets = doc.Root!.Element("TargetIPs");
             if (targets == null) return [];
@@ -76,7 +76,7 @@ namespace Pinger3.Services
             {
                 var errors = await ValidateConfigElement(el);
                 var config = await ParseValidatedConfigElement(el, errors);
-                return (config, errors);
+                return config;
             });
 
             var results = await Task.WhenAll(tasks);
@@ -161,7 +161,7 @@ namespace Pinger3.Services
             TimeSpan delay = element.Attribute("Delay") is null ? TimeSpan.FromSeconds(1) :
                     TimeSpan.FromMilliseconds(Convert.ToDouble(element.Attribute("Delay")!.Value));
 
-            return new AddressConfig(name, addressOrDomain, resolvedIP, delay);
+            return new AddressConfig(name, addressOrDomain, resolvedIP, delay, errors);
         }
 
     }

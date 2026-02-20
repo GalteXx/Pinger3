@@ -6,6 +6,6 @@ namespace Pinger3.Services
 {
     public interface IAddressesConfigParser
     {
-        public Task<IEnumerable<(AddressConfig, ConfigValidationErrors)>> ParseConfigAsync();
+        public Task<IEnumerable<AddressConfig>> ParseConfigAsync();
     }
 }
