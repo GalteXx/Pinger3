@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Pinger3.ViewModels;
-using System;
-using System.Threading.Tasks;
+using Pinger3.ViewModels.PageViewModels;
 
 namespace Pinger3.Views
 {
@@ -17,7 +15,7 @@ namespace Pinger3.Views
         private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel vm)
-                await vm!.LoadPingingTargets();
+                await vm!.OnMainWindowLoaded();
         }
     }
 }

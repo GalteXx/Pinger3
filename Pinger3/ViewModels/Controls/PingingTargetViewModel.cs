@@ -1,17 +1,27 @@
-﻿using Pinger3.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.Models;
 using Pinger3.Services;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Pinger3.ViewModels
+namespace Pinger3.ViewModels.Controls
 {
-    public class PingingTargetViewModel : INotifyPropertyChanged, IPingViewModel
+    public partial class PingingTargetViewModel : INotifyPropertyChanged, IPingViewModel
     {
         private readonly PingTargetModel _model;
-        public PingingTargetViewModel(PingTargetModel model, ResponeAwaitingTimeUpdaterService timeUpdater)
+        private readonly IPingService _pingService;
+
+        public PingingTargetViewModel(PingTargetModel model, ResponeAwaitingTimeUpdaterService timeUpdater, IPingService pinger)
         {
             _model = model;
+            _pingService = pinger;
+            _pingService.PingReceived += (sender, e) =>
+            {
+                Ping = e;
+                _model.LastRequest = DateTime.Now;
+            };
+
             timeUpdater.Ticked += (sender, e) =>
             {
                 TimeSinceLastRequest = _model.LastRequest is null ?
@@ -24,7 +34,37 @@ namespace Pinger3.ViewModels
         private string name = string.Empty;
         private string domainOrAddress = string.Empty;
         private TimeSpan ping;
+        private bool isActive;
         private TimeSpan timeSinceLastRequest;
+
+
+        [RelayCommand]
+        private void StartPinging()
+        {
+            _pingService.Start();
+            IsActive = true;
+        }
+        [RelayCommand]
+        private void StopPinging()
+        {
+            _pingService.Stop();
+            IsActive = false;
+        }
+
+        [RelayCommand]
+        private void TogglePinging()
+        {
+            if (isActive)
+            {
+                _pingService.Stop();
+                IsActive = false;
+            }
+            else
+            {
+                _pingService.Start();
+                IsActive = true;
+            }
+        }
 
         public string Name
         {
@@ -72,6 +112,16 @@ namespace Pinger3.ViewModels
                     timeSinceLastRequest = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        public bool IsActive
+        {
+            get => isActive;
+            private set
+            {
+                isActive = value;
+                OnPropertyChanged();
             }
         }
 

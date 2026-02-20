@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Pinger3.ViewModels;
+using Pinger3.ViewModels.PageViewModels;
 
 namespace Pinger3.Services.DependencyInjection
 {

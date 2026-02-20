@@ -1,0 +1,42 @@
+﻿using Pinger3.Models;
+using System;
+using System.ComponentModel;
+
+namespace Pinger3.ViewModels.Controls
+{
+    internal class InvaligPingingTargetViewModel : IPingViewModel
+    {
+        private ConfigValidationErrors validationErrors;
+
+        public InvaligPingingTargetViewModel(AddressConfig address)
+        {
+            Name = address.Name;
+            DomainOrAddress = address.AddressOrDomain;
+            ValidationErrors = address.ValidationErrors;
+
+        }
+
+
+        public ConfigValidationErrors ValidationErrors
+        {
+            get => validationErrors;
+            private set
+            {
+                validationErrors = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
+
+            }
+        }
+        public string DomainOrAddress { get; private set; }
+
+        public string Name { get; private set; }
+
+        public TimeSpan Ping => TimeSpan.FromMilliseconds(-1d);
+
+        public TimeSpan TimeSinceLastRequest => TimeSpan.FromMilliseconds(-1d);
+
+
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+    }
+}

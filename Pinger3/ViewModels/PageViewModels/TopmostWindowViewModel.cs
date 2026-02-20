@@ -1,19 +1,19 @@
 ﻿using Pinger3.Models;
 using Pinger3.Services;
+using Pinger3.ViewModels.Controls;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Pinger3.ViewModels
+namespace Pinger3.ViewModels.WindowViewModels
 {
-    internal class TopmostWindowViewModel : INotifyPropertyChanged
+    internal class TopmostWindowViewModel : INotifyPropertyChanged //rename to Popout
     {
         public ObservableCollection<PingingTargetViewModel> PingViewModels { get; }
 
         public TopmostWindowViewModel(ObservableCollection<PingTargetModel> pingModels, ResponeAwaitingTimeUpdaterService timeUpdater)
         {
-            PingViewModels = new(pingModels.Select(x => new PingingTargetViewModel(x, timeUpdater)));
         }
 
 

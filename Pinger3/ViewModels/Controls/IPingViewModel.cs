@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Input;
 
-namespace Pinger3.ViewModels
+namespace Pinger3.ViewModels.Controls
 {
     public interface IPingViewModel
     {

@@ -1,10 +1,22 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.ViewModels.Controls;
+using Pinger3.ViewModels.PageViewModels;
+using System.Collections.ObjectModel;
 
 namespace Pinger3.ViewModels.Design
 {
-    public class MainWindowViewModelDesign : IMainWindowViewModel
+    public partial class MainWindowViewModelDesign : IMainWindowViewModel
     {
         public ObservableCollection<IPingViewModel> ValidPingingTargets { get; }
+
+        public ObservableCollection<IPingViewModel> InvalidPingingTargets { get; }
+
+        [RelayCommand]
+        private void StartPinging()
+        { }
+        [RelayCommand]
+        private void StopPinging()
+        { }
 
         public MainWindowViewModelDesign()
         {
@@ -13,6 +25,7 @@ namespace Pinger3.ViewModels.Design
             {
                 ValidPingingTargets.Add(new PingViewModelDesign());
             }
+            InvalidPingingTargets = [];
         }
     }
 }

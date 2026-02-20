@@ -1,15 +1,16 @@
-﻿using Pinger3.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.Models;
 using Pinger3.Services;
-using System.Collections.Generic;
+using Pinger3.ViewModels.Controls;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Pinger3.ViewModels
+namespace Pinger3.ViewModels.PageViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
 
-        public ObservableCollection<PingingTargetViewModel> ValidPingingTargets { get; }
+        public ObservableCollection<IPingViewModel> ValidPingingTargets { get; }
         public ObservableCollection<IPingViewModel> InvalidPingingTargets { get; }
 
         private readonly IAddressesConfigParser _parser;
@@ -18,28 +19,40 @@ namespace Pinger3.ViewModels
         public MainWindowViewModel(IAddressesConfigParser parser, ResponeAwaitingTimeUpdaterService timeUpdaterService)
         {
             ValidPingingTargets = [];
+            InvalidPingingTargets = [];
             _timeUpdater = timeUpdaterService;
             _parser = parser;
         }
-        
-        public async Task LoadPingingTargets()
+
+        public async Task OnMainWindowLoaded()
         {
+            _timeUpdater.Start();
             var addresses = await _parser.ParseConfigAsync();
             foreach (var address in addresses)
             {
-                if(address.ValidationErrors == ConfigValidationErrors.None)
-                    ValidPingingTargets.Add(new PingingTargetViewModel(new PingTargetModel(address, new ICMPPinger(address)), _timeUpdater));
+                if (address.ValidationErrors == ConfigValidationErrors.None)
+                    ValidPingingTargets.Add(new PingingTargetViewModel(new PingTargetModel(address), _timeUpdater, new ICMPPinger(address)));
                 //invalid entries for later
             }
         }
 
+        [RelayCommand]
         public void StartPinging()
         {
             foreach (var target in ValidPingingTargets)
             {
-                target;
+                (target as PingingTargetViewModel)!.StartPingingCommand.Execute(null);
             }
         }
 
+        [RelayCommand]
+        public void StopPinging()
+        {
+            foreach (var target in ValidPingingTargets)
+            {
+                (target as PingingTargetViewModel)!.StopPingingCommand.Execute(null);
+            }
+
+        }
     }
 }

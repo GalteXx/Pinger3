@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:vm="using:Pinger3.ViewModels"
+		xmlns:vm="using:Pinger3.ViewModels.PageViewModels"
+		xmlns:vmc="using:Pinger3.ViewModels.Controls"
 		xmlns:vmd="using:Pinger3.ViewModels.Design"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,10 +18,24 @@
 	</Design.DataContext>
 
 	<StackPanel>
-		<Border BorderThickness="1" CornerRadius="10">
+		<Border BorderThickness="1" CornerRadius="10" BorderBrush="{DynamicResource PrimaryColor}">
 			<StackPanel Margin="15,5,15,5">
-				<TextBlock Text="Active Pinging Targets"/>
-				<ListBox Background="{DynamicResource BackgroundColor}" ItemsSource="{Binding PingTargets}">
+				<Grid ColumnDefinitions="*, *, 100, 100">
+					<TextBlock Text="Active Pinging Targets"/>
+					<Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+							Command="{Binding StartPingingCommand}">
+						<Button.Content>
+							<TextBlock Text="Start All" HorizontalAlignment="Center"/>
+						</Button.Content>
+					</Button>
+					<Button Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+							Command="{Binding StopPingingCommand}">
+						<Button.Content>
+							<TextBlock Text="Stop All" HorizontalAlignment="Center"/>
+						</Button.Content>
+					</Button>
+				</Grid>
+				<ListBox Background="{DynamicResource BackgroundColor}" ItemsSource="{Binding ValidPingingTargets}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<templatecontrols:PingDisplay Classes="Full" AddressName="{Binding Name}" Address="{Binding DomainOrAddress}" Ping="{Binding Ping}" ResponseWaitingTime="{Binding TimeSinceLastRequest}"/>

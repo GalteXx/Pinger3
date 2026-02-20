@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pinger3.ViewModels.Controls;
+using System;
 using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Design
