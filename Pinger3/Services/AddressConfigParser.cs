@@ -18,12 +18,10 @@ namespace Pinger3.Services
 
         public async Task<IEnumerable<(AddressConfig, ConfigValidationErrors)>> ParseConfigAsync()
         {
-            ConcurrentBag<(AddressConfig, ConfigValidationErrors)> configs = [];
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Geckosystem", "Pinger");
 
             Task<XDocument> doc = LoadConfigAsync(path);
-            
 
             return await ValidateConfigAsync(await doc);
         }

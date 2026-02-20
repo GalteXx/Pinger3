@@ -6,7 +6,7 @@ namespace Pinger3.Services
 {
     public sealed class ResponeAwaitingTimeUpdaterService
     {
-        private readonly TimeSpan TimerInterval = TimeSpan.FromMicroseconds(60);
+        private readonly TimeSpan TimerInterval = TimeSpan.FromMilliseconds(60);
 
         private readonly DispatcherTimer _timer;
         public event EventHandler? Ticked;

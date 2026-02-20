@@ -4,14 +4,14 @@ namespace Pinger3.ViewModels.Design
 {
     public class MainWindowViewModelDesign : IMainWindowViewModel
     {
-        public ObservableCollection<IPingViewModel> PingTargets { get; }
+        public ObservableCollection<IPingViewModel> ValidPingingTargets { get; }
 
         public MainWindowViewModelDesign()
         {
-            PingTargets = [];
+            ValidPingingTargets = [];
             for (int i = 0; i < 4; i++)
             {
-                PingTargets.Add(new PingViewModelDesign());
+                ValidPingingTargets.Add(new PingViewModelDesign());
             }
         }
     }

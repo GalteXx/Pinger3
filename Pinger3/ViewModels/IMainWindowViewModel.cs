@@ -4,6 +4,6 @@ namespace Pinger3.ViewModels
 {
     public interface IMainWindowViewModel
     {
-        ObservableCollection<IPingViewModel> PingTargets { get; }
+        ObservableCollection<IPingViewModel> ValidPingingTargets { get; }
     }
 }
