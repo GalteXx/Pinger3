@@ -14,18 +14,18 @@ namespace Pinger3.ViewModels.Controls
 
         public PingingTargetViewModel(PingTargetModel model, ResponeAwaitingTimeUpdaterService timeUpdater, IPingService pinger)
         {
+            TimeSinceLastRequest = TimeSpan.Zero;
             _model = model;
             _pingService = pinger;
             _pingService.PingReceived += (sender, e) =>
             {
                 Ping = e;
-                _model.LastRequest = DateTime.Now;
             };
 
             timeUpdater.Ticked += (sender, e) =>
             {
-                TimeSinceLastRequest = _model.LastRequest is null ?
-                    TimeSinceLastRequest : DateTime.Now - (DateTime)_model.LastRequest;
+                TimeSinceLastRequest = _pingService.LastRequestTime is null ?
+                    TimeSinceLastRequest : DateTime.Now - (DateTime)_pingService.LastRequestTime;
             };
             Name = _model.Name;
             DomainOrAddress = _model.AddressOrDomain;
@@ -107,11 +107,8 @@ namespace Pinger3.ViewModels.Controls
             get => timeSinceLastRequest;
             private set
             {
-                if (timeSinceLastRequest != value)
-                {
                     timeSinceLastRequest = value;
                     OnPropertyChanged();
-                }
             }
         }
 

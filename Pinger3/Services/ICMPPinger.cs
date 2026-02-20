@@ -10,8 +10,8 @@ namespace Pinger3.Services
     {
         private readonly AddressConfig _config;
         private CancellationTokenSource? _cts;
-        private DateTime _lastRequest = DateTime.MinValue;
-        private bool _updateSuppressed = false;
+        private DateTime _lastRequest = DateTime.Now;
+        private bool _updateSuppressed = true;
 
         public event EventHandler<TimeSpan> PingReceived;
 
