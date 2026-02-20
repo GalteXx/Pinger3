@@ -13,38 +13,22 @@ namespace Pinger3.Services
 {
     public class AddressesConfigParser : IAddressesConfigParser
     {
-
-        public IEnumerable<AddressConfig> TargetIPAddresses => [.. _targetIPAddresses];
-        public IEnumerable<(AddressConfig, ConfigValidationErrors)> InvalidTargetIPAddresses => [.. _invalidTargetIPAddresses];
-
-        private ConcurrentBag<AddressConfig> _targetIPAddresses;
-        private ConcurrentBag<(AddressConfig, ConfigValidationErrors)> _invalidTargetIPAddresses;
         private readonly object _docLock = new();
         private const string _configName = "config.xml"; // Hardcode goes brrr
 
-        public static async Task<AddressesConfigParser> CreateAsync()
+        public async Task<IEnumerable<(AddressConfig, ConfigValidationErrors)>> ParseConfigAsync()
         {
-            var service = new AddressesConfigParser();
-            return await service.InitializeAsync();
-        }
-
-        private async Task<AddressesConfigParser> InitializeAsync()
-        {
-
+            ConcurrentBag<(AddressConfig, ConfigValidationErrors)> configs = [];
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Geckosystem", "Pinger");
 
             Task<XDocument> doc = LoadConfigAsync(path);
-            XDocument loadedDocc = await doc;
-            await ValidateConfigAsync(loadedDocc);
-            await ParseConfigAsync(loadedDocc);
-            return this;
+            
+
+            return await ValidateConfigAsync(await doc);
         }
         public AddressesConfigParser()
-        {
-            _targetIPAddresses = [];
-            _invalidTargetIPAddresses = [];
-        }
+        { }
 
         private static async Task<XDocument> LoadDefaultConfigAsync()
         {
@@ -83,20 +67,22 @@ namespace Pinger3.Services
             }
         }
 
-        private async Task ValidateConfigAsync(XDocument doc)
+        private async Task<IEnumerable<(AddressConfig, ConfigValidationErrors)>> ValidateConfigAsync(XDocument doc)
         {
             var targets = doc.Root!.Element("TargetIPs");
-            if (targets == null) return;
+            if (targets == null) return [];
 
             var elements = targets.Elements("TargetIP").ToList();
 
             var tasks = elements.Select(async el =>
             {
                 var errors = await ValidateConfigElement(el);
-                await ParseValidatedConfigElement(el, errors);
+                var config = await ParseValidatedConfigElement(el, errors);
+                return (config, errors);
             });
 
-            await Task.WhenAll(tasks);
+            var results = await Task.WhenAll(tasks);
+            return results;
         }
 
         private async Task<ConfigValidationErrors> ValidateConfigElement(XElement el)
@@ -150,47 +136,8 @@ namespace Pinger3.Services
             }
         }
 
-        private async Task ParseConfigAsync(XDocument doc)
-        {
-            _targetIPAddresses = [];
-            _invalidTargetIPAddresses = [];
 
-            var targets = doc.Root?.Element("TargetIPs");
-            if (targets == null) return;
-
-            foreach (var el in targets.Elements("TargetIP"))
-            {
-                var ipAttr = el.Attribute("IP")?.Value;
-                var domainAttr = el.Attribute("Domain")?.Value;
-
-                if (!string.IsNullOrWhiteSpace(ipAttr) && IPAddress.TryParse(ipAttr, out var ip))
-                {
-                    TimeSpan delay = el.Attribute("Delay") is null ? TimeSpan.FromSeconds(1) :
-                        TimeSpan.FromMilliseconds(Convert.ToDouble(el.Attribute("Delay")!.Value));
-
-                    _targetIPAddresses.Add(
-                        new AddressConfig(el.Attribute("Name")!.Value,
-                                          ip.ToString(), ip,
-                                          delay));
-                }
-                else if (!string.IsNullOrWhiteSpace(domainAttr))
-                {
-                    try
-                    {
-                        var resolved = await Dns.GetHostAddressesAsync(domainAttr);
-                        TimeSpan delay = el.Attribute("Delay") is null ? TimeSpan.FromSeconds(1) :
-                            TimeSpan.FromMilliseconds(Convert.ToDouble(el.Attribute("Delay")!.Value));
-
-                        _targetIPAddresses.Add(
-                            new AddressConfig(el.Attribute("Name")!.Value, el.Attribute("Domain")!.Value, resolved[0], delay)); 
-                    }
-                    catch
-                    { }
-                }
-            }
-        }
-
-        private async Task ParseValidatedConfigElement(XElement element, ConfigValidationErrors errors)
+        private static async Task<AddressConfig> ParseValidatedConfigElement(XElement element, ConfigValidationErrors errors)
         {
             IPAddress resolvedIP;
             string addressOrDomain;
@@ -216,13 +163,7 @@ namespace Pinger3.Services
             TimeSpan delay = element.Attribute("Delay") is null ? TimeSpan.FromSeconds(1) :
                     TimeSpan.FromMilliseconds(Convert.ToDouble(element.Attribute("Delay")!.Value));
 
-            var parsedAddress = new AddressConfig(name, addressOrDomain, resolvedIP, delay);
-
-            if (errors == ConfigValidationErrors.None)
-                _targetIPAddresses.Add(parsedAddress);
-            else
-                _invalidTargetIPAddresses.Add((parsedAddress, errors));
-
+            return new AddressConfig(name, addressOrDomain, resolvedIP, delay);
         }
 
     }
