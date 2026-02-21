@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Pinger3.ViewModels.Controls
 {
-    public partial class PingingTargetViewModel : INotifyPropertyChanged, IPingViewModel
+    public partial class PingingTargetViewModel : INotifyPropertyChanged, IPingingTargetViewModel
     {
         private readonly PingTargetModel _model;
         private readonly IPingService _pingService;

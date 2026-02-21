@@ -7,9 +7,9 @@ namespace Pinger3.ViewModels.Design
 {
     public partial class MainWindowViewModelDesign : IMainWindowViewModel
     {
-        public ObservableCollection<IPingViewModel> ValidPingingTargets { get; }
+        public ObservableCollection<IPingingTargetViewModel> ValidPingingTargets { get; }
 
-        public ObservableCollection<IPingViewModel> InvalidPingingTargets { get; }
+        public ObservableCollection<IPingingTargetViewModel> InvalidPingingTargets { get; }
 
         [RelayCommand]
         private void StartPinging()

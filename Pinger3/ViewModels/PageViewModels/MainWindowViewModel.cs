@@ -10,8 +10,8 @@ namespace Pinger3.ViewModels.PageViewModels
     public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
 
-        public ObservableCollection<IPingViewModel> ValidPingingTargets { get; }
-        public ObservableCollection<IPingViewModel> InvalidPingingTargets { get; }
+        public ObservableCollection<IPingingTargetViewModel> ValidPingingTargets { get; }
+        public ObservableCollection<IPingingTargetViewModel> InvalidPingingTargets { get; }
 
         private readonly IAddressesConfigParser _parser;
         private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;

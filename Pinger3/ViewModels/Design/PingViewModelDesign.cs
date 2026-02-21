@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Design
 {
-    public class PingViewModelDesign : IPingViewModel
+    public class PingViewModelDesign : IPingingTargetViewModel
     {
         public PingViewModelDesign()
         {

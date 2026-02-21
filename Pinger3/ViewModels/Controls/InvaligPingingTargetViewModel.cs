@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Controls
 {
-    internal class InvaligPingingTargetViewModel : IPingViewModel
+    internal class InvaligPingingTargetViewModel : IPingingTargetViewModel
     {
         private ConfigValidationErrors validationErrors;
 

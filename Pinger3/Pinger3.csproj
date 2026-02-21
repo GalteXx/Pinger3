@@ -42,4 +42,10 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\PopoutWindow.axaml.cs">
+      <DependentUpon>PopoutWindow.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
