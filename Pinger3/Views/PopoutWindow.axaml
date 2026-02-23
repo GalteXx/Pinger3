@@ -1,14 +1,16 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:Pinger3.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:Pinger3.ViewModels.PageViewModels"
         xmlns:vmc="using:Pinger3.ViewModels.Controls"
         xmlns:controls="using:Pinger3.TemplateControls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Pinger3.Views.PopoutWindow">
-  <StackPanel>
-	  <ListBox>
+        x:Class="Pinger3.Views.PopoutWindow"
+        x:DataType="vm:PopoutWindowViewModel">
+  <StackPanel IsHitTestVisible="{Binding ClickThrough}">
+	  <ListBox ItemsSource="{Binding PingViewModels}">
 		  <ListBox.ItemTemplate>
 			  <DataTemplate>
 				  <controls:PingDisplay Classes="Compact"/>

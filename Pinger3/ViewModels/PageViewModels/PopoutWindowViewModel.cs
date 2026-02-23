@@ -1,19 +1,50 @@
-﻿using Pinger3.Services;
-using Pinger3.ViewModels.Controls;
+﻿using Pinger3.ViewModels.Controls;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Pinger3.ViewModels.WindowViewModels
+namespace Pinger3.ViewModels.PageViewModels
 {
-    internal class PopoutWindowViewModel : INotifyPropertyChanged
+    public partial class PopoutWindowViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<PingingTargetViewModel> PingViewModels { get; }
+        //TODO: BindStyles
+        private double _transparency = 0.8;
+        private bool _clickThrough = false;
 
-        public PopoutWindowViewModel(IEnumerable<IPingingTargetViewModel> pingModels, ResponeAwaitingTimeUpdaterService timeUpdater)
+        public bool ClickThrough
         {
-            ;
+            get => _clickThrough;
+            set
+            {
+                _clickThrough = value;
+                OnPropertyChanged();
+            }
+        }
+        public double Transparency
+        {
+            get => _transparency;
+            set
+            {
+                if (value >= 0 && value <= 1)
+                {
+                    _transparency = value;
+                    OnPropertyChanged();
+                }
+                else
+                {
+                    throw new System.ArgumentOutOfRangeException($"{value} is not in [0;1] range");
+                }
+            }
+        }
+
+        public ObservableCollection<IPingingTargetViewModel> PingViewModels { get; }
+
+        public PopoutWindowViewModel(IEnumerable<IPingingTargetViewModel> pingModels)
+        {
+            //PingViewModels = [.. pingModels.Select(vm => vm as PingingTargetViewModel)];
+            PingViewModels = [.. pingModels];
+            OnPropertyChanged(nameof(PingViewModels));
         }
 
 
