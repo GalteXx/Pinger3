@@ -17,5 +17,9 @@ namespace Pinger3.Views
             if (DataContext is MainWindowViewModel vm)
                 await vm!.OnMainWindowLoaded();
         }
+
+        private void NativeMenuItem_Click(object? sender, System.EventArgs e)
+        {
+        }
     }
 }

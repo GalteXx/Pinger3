@@ -6,8 +6,8 @@ namespace Pinger3.ViewModels.PageViewModels
 {
     public interface IMainWindowViewModel
     {
-        public ObservableCollection<IPingingTargetViewModel> ValidPingingTargets { get; }
-        public ObservableCollection<IPingingTargetViewModel> InvalidPingingTargets { get; }
+        public SelectedGroupOfTargets SelectedGroupOfTargets { get; set; }
+        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup { get; }
 
         public IRelayCommand StartPingingCommand { get; }
         public IRelayCommand StopPingingCommand { get; }

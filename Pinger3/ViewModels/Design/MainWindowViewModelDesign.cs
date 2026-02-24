@@ -10,6 +10,11 @@ namespace Pinger3.ViewModels.Design
         public ObservableCollection<IPingingTargetViewModel> ValidPingingTargets { get; }
 
         public ObservableCollection<IPingingTargetViewModel> InvalidPingingTargets { get; }
+        
+
+        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup => throw new System.NotImplementedException();
+
+        public SelectedGroupOfTargets SelectedGroupOfTargets { get => SelectedGroupOfTargets.ValidTargets; set { } }
 
         [RelayCommand]
         private void StartPinging()

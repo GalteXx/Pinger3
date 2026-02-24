@@ -4,16 +4,15 @@ using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Controls
 {
-    internal class InvaligPingingTargetViewModel : IPingingTargetViewModel
+    public class InvalidPingingTargetViewModel : IPingingTargetViewModel
     {
         private ConfigValidationErrors validationErrors;
 
-        public InvaligPingingTargetViewModel(AddressConfig address)
+        public InvalidPingingTargetViewModel(AddressConfig address)
         {
             Name = address.Name;
             DomainOrAddress = address.AddressOrDomain;
             ValidationErrors = address.ValidationErrors;
-
         }
 
 

@@ -1,18 +1,35 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Pinger3.Models;
 using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Pinger3.ViewModels.PageViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
+        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup
+        {
+            get
+            {
+                return SelectedGroupOfTargets switch
+                {
+                    SelectedGroupOfTargets.ValidTargets => [.. ValidPingingTargets],
+                    SelectedGroupOfTargets.InvalidTargets => [.. InvalidPingingTargets],
+                    SelectedGroupOfTargets.Everything => [.. ValidPingingTargets.Concat(InvalidPingingTargets)],
+                    _ => [],
+                };
+            }
+        }
+        [ObservableProperty]
+        private SelectedGroupOfTargets _selectedGroupOfTargets = SelectedGroupOfTargets.ValidTargets;
 
-        public ObservableCollection<IPingingTargetViewModel> ValidPingingTargets { get; }
-        public ObservableCollection<IPingingTargetViewModel> InvalidPingingTargets { get; }
-
+        private readonly List<IPingingTargetViewModel> ValidPingingTargets;
+        private readonly List<IPingingTargetViewModel> InvalidPingingTargets;
         private readonly IAddressesConfigParser _parser;
         private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
 
@@ -32,7 +49,8 @@ namespace Pinger3.ViewModels.PageViewModels
             {
                 if (address.ValidationErrors == ConfigValidationErrors.None)
                     ValidPingingTargets.Add(new PingingTargetViewModel(new PingTargetModel(address), _timeUpdater, new ICMPPinger(address)));
-                //invalid entries for later
+                else
+                    InvalidPingingTargets.Add(new InvalidPingingTargetViewModel(address));
             }
         }
 
