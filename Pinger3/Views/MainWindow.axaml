@@ -16,24 +16,26 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<converters:FractionSizeConverter x:Key="WindowSizeDivider"/>
+			<converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter"/>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Design.DataContext>
 		<vmd:MainWindowViewModelDesign/>
 	</Design.DataContext>
 
-	<NativeMenu.Menu>
-		<NativeMenu>
-			<NativeMenuItem Header="Windows" IsVisible="True">
-				<NativeMenu>
-					<NativeMenuItem Header="PopoutWindowSettings" Click="NativeMenuItem_Click"/>
-				</NativeMenu>
-			</NativeMenuItem>
-		</NativeMenu>
-	</NativeMenu.Menu>
 
-	<Grid RowDefinitions="*,Auto">
-		<DataGrid ItemsSource="{Binding CurrentPingingTargetsGroup}">
+	<Grid>
+		<DataGrid Margin="10" BorderBrush="{DynamicResource AccentColor}" BorderThickness="1" GridLinesVisibility="Horizontal"
+				  Background="{DynamicResource BackgroundColor}"
+				  ItemsSource="{Binding CurrentPingingTargetsGroup}">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+				<DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}"/>
+				<DataGridTextColumn Header="Delay"/>
+				<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive, Mode=TwoWay}" IsReadOnly="False"/>
+				<DataGridTextColumn Header="Time Since Request" Binding="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+				<DataGridTextColumn Header="Ping" Binding="{Binding Ping, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+			</DataGrid.Columns>
 		</DataGrid>
 	</Grid>
 

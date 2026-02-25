@@ -12,7 +12,7 @@ namespace Pinger3.ViewModels.Design
         public ObservableCollection<IPingingTargetViewModel> InvalidPingingTargets { get; }
         
 
-        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup => throw new System.NotImplementedException();
+        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup => ValidPingingTargets;
 
         public SelectedGroupOfTargets SelectedGroupOfTargets { get => SelectedGroupOfTargets.ValidTargets; set { } }
 

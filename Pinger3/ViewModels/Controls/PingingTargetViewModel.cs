@@ -1,13 +1,12 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Pinger3.Models;
 using Pinger3.Services;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace Pinger3.ViewModels.Controls
 {
-    public partial class PingingTargetViewModel : INotifyPropertyChanged, IPingingTargetViewModel
+    public partial class PingingTargetViewModel : ObservableObject, IPingingTargetViewModel
     {
         private readonly PingTargetModel _model;
         private readonly IPingService _pingService;
@@ -31,11 +30,25 @@ namespace Pinger3.ViewModels.Controls
             DomainOrAddress = _model.AddressOrDomain;
         }
 
+        [ObservableProperty]
         private string name = string.Empty;
+        [ObservableProperty]
         private string domainOrAddress = string.Empty;
+        [ObservableProperty]
         private TimeSpan ping;
+        [ObservableProperty]
         private bool isActive;
+        [ObservableProperty]
         private TimeSpan timeSinceLastRequest;
+
+
+        partial void OnIsActiveChanged(bool value)
+        {
+            if(value)
+                _pingService.Start();
+            else
+                _pingService.Stop();
+        }
 
 
         [RelayCommand]
@@ -54,7 +67,7 @@ namespace Pinger3.ViewModels.Controls
         [RelayCommand]
         private void TogglePinging()
         {
-            if (isActive)
+            if (IsActive)
             {
                 _pingService.Stop();
                 IsActive = false;
@@ -64,68 +77,6 @@ namespace Pinger3.ViewModels.Controls
                 _pingService.Start();
                 IsActive = true;
             }
-        }
-
-        public string Name
-        {
-            get => name;
-            private set
-            {
-                if (name != value)
-                {
-                    name = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string DomainOrAddress
-        {
-            get => domainOrAddress;
-            private set
-            {
-                if (domainOrAddress != value)
-                {
-                    domainOrAddress = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public TimeSpan Ping
-        {
-            get => ping;
-            private set
-            {
-                if (ping != value)
-                {
-                    ping = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public TimeSpan TimeSinceLastRequest
-        {
-            get => timeSinceLastRequest;
-            private set
-            {
-                    timeSinceLastRequest = value;
-                    OnPropertyChanged();
-            }
-        }
-
-        public bool IsActive
-        {
-            get => isActive;
-            private set
-            {
-                isActive = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string callerName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(callerName));
         }
     }
 }

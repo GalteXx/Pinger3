@@ -19,8 +19,9 @@ namespace Pinger3.ViewModels.Design
         public TimeSpan Ping { get; }
         public TimeSpan TimeSinceLastRequest { get; }
 
+        public bool IsActive => Random.Shared.Next(0, 2) == 0;
+
 #pragma warning disable CS0067 // The event is never used
         public event PropertyChangedEventHandler? PropertyChanged;
-#pragma warning restore CS0067z
     }
 }

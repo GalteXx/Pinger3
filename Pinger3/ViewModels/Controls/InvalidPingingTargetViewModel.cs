@@ -34,6 +34,7 @@ namespace Pinger3.ViewModels.Controls
 
         public TimeSpan TimeSinceLastRequest => TimeSpan.FromMilliseconds(-1d);
 
+        public bool IsActive { get => false; }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;

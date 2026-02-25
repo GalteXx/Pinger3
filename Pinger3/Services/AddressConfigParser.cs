@@ -138,7 +138,7 @@ namespace Pinger3.Services
         {
             IPAddress resolvedIP;
             string addressOrDomain;
-            string name = errors.HasFlag(ConfigValidationErrors.MissingName)
+            string name = !errors.HasFlag(ConfigValidationErrors.MissingName)
                 ? element.Attribute("Name")!.Value : "AddressName";
 
             if (errors.HasFlag(ConfigValidationErrors.MissingAddress) ||

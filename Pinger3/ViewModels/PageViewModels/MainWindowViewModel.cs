@@ -52,6 +52,7 @@ namespace Pinger3.ViewModels.PageViewModels
                 else
                     InvalidPingingTargets.Add(new InvalidPingingTargetViewModel(address));
             }
+            OnPropertyChanged(nameof(CurrentPingingTargetsGroup));
         }
 
         [RelayCommand]
