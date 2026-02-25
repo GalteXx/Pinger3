@@ -10,7 +10,7 @@ namespace Pinger3.ViewModels.Controls
         TimeSpan Ping { get; }
         TimeSpan TimeSinceLastRequest { get; }
 
-        bool IsActive { get; }
+        bool IsActive { get; set; }
 
         event PropertyChangedEventHandler? PropertyChanged;
     }

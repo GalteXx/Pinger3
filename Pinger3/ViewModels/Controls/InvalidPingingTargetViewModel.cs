@@ -1,6 +1,7 @@
 ﻿using Pinger3.Models;
 using System;
 using System.ComponentModel;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Pinger3.ViewModels.Controls
 {
@@ -34,7 +35,7 @@ namespace Pinger3.ViewModels.Controls
 
         public TimeSpan TimeSinceLastRequest => TimeSpan.FromMilliseconds(-1d);
 
-        public bool IsActive { get => false; }
+        public bool IsActive { get => false; set { } }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
