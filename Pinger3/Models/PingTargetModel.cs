@@ -1,6 +1,4 @@
-﻿using Pinger3.Services;
-using System;
-using System.Net;
+﻿using System;
 
 namespace Pinger3.Models
 {
@@ -10,5 +8,6 @@ namespace Pinger3.Models
         public string AddressOrDomain { get; private set; } = config.AddressOrDomain;
         public TimeSpan Ping { get; set; } = TimeSpan.FromMilliseconds(-1);
         public DateTime? LastRequest { get; set; } = null;
+        public TimeSpan DelayBetweenRequests { get; } = config.RequestDelay;
     }
 }

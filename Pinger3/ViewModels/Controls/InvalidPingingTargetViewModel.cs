@@ -15,6 +15,7 @@ namespace Pinger3.ViewModels.Controls
             Name = address.Name;
             DomainOrAddress = address.AddressOrDomain;
             ValidationErrors = address.ValidationErrors;
+            DelayBetweenRequests = address.RequestDelay;
         }
 
 
@@ -25,7 +26,6 @@ namespace Pinger3.ViewModels.Controls
             {
                 validationErrors = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
-
             }
         }
         public string DomainOrAddress { get; private set; }
@@ -43,6 +43,8 @@ namespace Pinger3.ViewModels.Controls
         public IRelayCommand StopPingingCommand => throw new NotSupportedException();
 
         public IRelayCommand TogglePingingCommand => throw new NotSupportedException();
+
+        public TimeSpan DelayBetweenRequests { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

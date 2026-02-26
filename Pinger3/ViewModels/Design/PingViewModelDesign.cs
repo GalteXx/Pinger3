@@ -35,6 +35,8 @@ namespace Pinger3.ViewModels.Design
 
         public IRelayCommand TogglePingingCommand => throw new NotImplementedException();
 
+        public TimeSpan DelayBetweenRequests => TimeSpan.FromMilliseconds(Random.Shared.Next(30, ((int)TimeSpan.FromHours(2).TotalMilliseconds)));
+
 #pragma warning disable CS0067 // The event is never used
         public event PropertyChangedEventHandler? PropertyChanged;
     }

@@ -18,15 +18,15 @@ namespace Pinger3.ViewModels.PageViewModels
             {
                 return SelectedGroupOfTargets switch
                 {
-                    SelectedGroupOfTargets.ValidTargets => [.. ValidPingingTargets],
-                    SelectedGroupOfTargets.InvalidTargets => [.. InvalidPingingTargets],
-                    SelectedGroupOfTargets.Everything => [.. ValidPingingTargets.Concat(InvalidPingingTargets)],
+                    PingingTargetCategory.ValidTargets => [.. ValidPingingTargets],
+                    PingingTargetCategory.InvalidTargets => [.. InvalidPingingTargets],
+                    PingingTargetCategory.Everything => [.. ValidPingingTargets.Concat(InvalidPingingTargets)],
                     _ => [],
                 };
             }
         }
         [ObservableProperty]
-        private SelectedGroupOfTargets _selectedGroupOfTargets = SelectedGroupOfTargets.ValidTargets;
+        private PingingTargetCategory _selectedGroupOfTargets = PingingTargetCategory.ValidTargets;
 
         private readonly List<IPingingTargetViewModel> ValidPingingTargets;
         private readonly List<IPingingTargetViewModel> InvalidPingingTargets;
@@ -39,6 +39,11 @@ namespace Pinger3.ViewModels.PageViewModels
             InvalidPingingTargets = [];
             _timeUpdater = timeUpdaterService;
             _parser = parser;
+        }
+
+        partial void OnSelectedGroupOfTargetsChanged(PingingTargetCategory value)
+        {
+            OnPropertyChanged(nameof(CurrentPingingTargetsGroup));
         }
 
         public async Task OnMainWindowLoaded()
