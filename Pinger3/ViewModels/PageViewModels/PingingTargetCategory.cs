@@ -1,6 +1,6 @@
 ﻿namespace Pinger3.ViewModels.PageViewModels
 {
-    public enum SelectedGroupOfTargets
+    public enum PingingTargetCategory
     {
         Everything,
         ValidTargets,

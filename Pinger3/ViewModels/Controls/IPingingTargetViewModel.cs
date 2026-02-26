@@ -11,6 +11,8 @@ namespace Pinger3.ViewModels.Controls
         TimeSpan Ping { get; }
         TimeSpan TimeSinceLastRequest { get; }
 
+        TimeSpan DelayBetweenRequests { get; }
+
         bool IsActive { get; set; }
 
         public IRelayCommand StartPingingCommand { get; }

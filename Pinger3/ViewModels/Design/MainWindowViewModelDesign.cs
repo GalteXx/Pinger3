@@ -14,7 +14,7 @@ namespace Pinger3.ViewModels.Design
 
         public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup => ValidPingingTargets;
 
-        public SelectedGroupOfTargets SelectedGroupOfTargets { get => SelectedGroupOfTargets.ValidTargets; set { } }
+        public PingingTargetCategory SelectedGroupOfTargets { get => PingingTargetCategory.ValidTargets; set { } }
 
         [RelayCommand]
         private void StartPinging()

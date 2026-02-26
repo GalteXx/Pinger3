@@ -41,6 +41,7 @@ namespace Pinger3.ViewModels.Controls
         [ObservableProperty]
         private TimeSpan timeSinceLastRequest;
 
+        public TimeSpan DelayBetweenRequests => _model.DelayBetweenRequests;
 
         partial void OnIsActiveChanged(bool value)
         {
