@@ -14,6 +14,7 @@ namespace Pinger3.Views
             AddressCategories = [.. Enum.GetValues<PingingTargetCategory>()];
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            AddressCategorySelectorBox.ItemsSource = AddressCategories; //you cant bind to code-behind from xaml??
         }
 
         private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
