@@ -17,6 +17,7 @@
 		<converters:FractionSizeConverter x:Key="WindowSizeDivider"/>
 		<converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter"/>
 		<converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter"/>
+		<converters:BoolToToggleStringConverter x:Key="BoolToToggleStringConverter"/>
 	</Window.Resources>
 	<Design.DataContext>
 		<vmd:MainWindowViewModelDesign/>
@@ -55,7 +56,7 @@
 				<DataGridTemplateColumn>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Button Content="Toggle" Command="{Binding TogglePingingCommand}" />
+							<Button Content="{Binding IsActive, Converter={StaticResource BoolToToggleStringConverter}, ConverterParameter=Stop|Start}" Command="{Binding TogglePingingCommand}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
