@@ -14,27 +14,45 @@
 		RequestedThemeVariant="Dark"
 		Title="Pinger3">
 	<Window.Resources>
-		<ResourceDictionary>
-			<converters:FractionSizeConverter x:Key="WindowSizeDivider"/>
-			<converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter"/>
-		</ResourceDictionary>
+		<converters:FractionSizeConverter x:Key="WindowSizeDivider"/>
+		<converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter"/>
+		<converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter"/>
+		<DataTemplate x:Key="TimeSpanDisplayColumn">
+			<StackPanel Orientation="Horizontal">
+				<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding ., Converter={StaticResource TimeSpanToColorConverter}}"/>
+				<TextBlock Text="{Binding ., Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
+			</StackPanel>
+		</DataTemplate>
 	</Window.Resources>
 	<Design.DataContext>
 		<vmd:MainWindowViewModelDesign/>
 	</Design.DataContext>
 
 
-	<Grid>
-		<DataGrid Margin="10" BorderBrush="{DynamicResource AccentColor}" BorderThickness="1" GridLinesVisibility="Horizontal"
-				  Background="{DynamicResource BackgroundColor}"
+	<Grid RowDefinitions="50 *">
+		<DataGrid Margin="10" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" GridLinesVisibility="Horizontal"
+				  Background="{DynamicResource BackgroundColor}" Grid.Row="1"
 				  ItemsSource="{Binding CurrentPingingTargetsGroup}">
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 				<DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}"/>
 				<DataGridTextColumn Header="Delay"/>
-				<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive, Mode=TwoWay}" IsReadOnly="False"/>
-				<DataGridTextColumn Header="Time Since Request" Binding="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
-				<DataGridTextColumn Header="Ping" Binding="{Binding Ping, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+				<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True"/>
+				<DataGridTemplateColumn Header="Awaiting Response Time">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ContentControl Content="{Binding TimeSinceLastRequest}" ContentTemplate="{StaticResource TimeSpanDisplayColumn}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="Ping">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ContentControl Content="{Binding Ping}" ContentTemplate="{StaticResource TimeSpanDisplayColumn}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
 			</DataGrid.Columns>
 		</DataGrid>
 	</Grid>
