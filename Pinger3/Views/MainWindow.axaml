@@ -11,11 +11,9 @@
 		x:Class="Pinger3.Views.MainWindow"
 		x:DataType="vm:IMainWindowViewModel"
 		Icon="/Assets/avalonia-logo.ico"
-		RequestedThemeVariant="Dark"
 		x:Name="mainWindow"
 		Title="Pinger3">
 	<Window.Resources>
-		<converters:FractionSizeConverter x:Key="WindowSizeDivider"/>
 		<converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter"/>
 		<converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter"/>
 		<converters:BoolToToggleStringConverter x:Key="BoolToToggleStringConverter"/>
@@ -27,21 +25,36 @@
 		<vmd:MainWindowViewModelDesign/>
 	</Design.DataContext>
 
+	
 
-	<Grid RowDefinitions="50 *">
-		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15">
+	<Grid RowDefinitions="25, 50 *">
+		<DockPanel>
+			<Menu>
+			<MenuItem Header="Settings" IsVisible="True">
+				<Menu>
+					<MenuItem Header="PopoutMenuSettings" Command="{Binding NavigationVM.OpenPopoutSettingsWindowCommand}"/>
+				</Menu>
+			</MenuItem>
+			<MenuItem Header="Windows" IsVisible="True">
+				<Menu>
+					<MenuItem Header="PopoutWidget" Command="{Binding NavigationVM.OpenPopoutWindowCommand}"/>
+				</Menu>
+			</MenuItem>
+		</Menu>
+		</DockPanel>
+		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15" Grid.Row="1">
 			<ComboBox SelectedItem="{Binding SelectedGroupOfTargets, Mode=TwoWay}" x:Name="AddressCategorySelectorBox"
 					  ItemsSource="{Binding AddressCategories, ElementName=mainWindow}"/>
 		</StackPanel>
 		<DataGrid Margin="10" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" GridLinesVisibility="Horizontal"
-				  Background="{DynamicResource BackgroundColor}" Grid.Row="1"
+				  Background="{DynamicResource BackgroundColor}" Grid.Row="2"
 				  ItemsSource="{Binding CurrentPingingTargetsGroup}">
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 				<DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}"/>
 				<DataGridTextColumn Header="Delay" Binding="{Binding DelayBetweenRequests, Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}"/>
-				<DataGridCheckBoxColumn Header="Active" 
-										Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True" 
+				<DataGridCheckBoxColumn Header="Active"
+										Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True"
 										IsVisible="{Binding $parent.DataContext.SelectedGroupOfTargets, Converter={StaticResource AddressCategoryToBoolConverter}}"/>
 				<DataGridTemplateColumn Header="Awaiting Response Time">
 					<DataGridTemplateColumn.CellTemplate>

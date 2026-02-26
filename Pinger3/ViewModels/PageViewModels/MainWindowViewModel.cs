@@ -28,17 +28,21 @@ namespace Pinger3.ViewModels.PageViewModels
         [ObservableProperty]
         private PingingTargetCategory _selectedGroupOfTargets = PingingTargetCategory.ValidTargets;
 
+        public INavigationViewModel NavigationVM { get; }
+
         private readonly List<IPingingTargetViewModel> ValidPingingTargets;
         private readonly List<IPingingTargetViewModel> InvalidPingingTargets;
         private readonly IAddressesConfigParser _parser;
         private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
 
-        public MainWindowViewModel(IAddressesConfigParser parser, ResponeAwaitingTimeUpdaterService timeUpdaterService)
+        public MainWindowViewModel(IAddressesConfigParser parser, 
+            ResponeAwaitingTimeUpdaterService timeUpdaterService, INavigationViewModel navigationVM)
         {
             ValidPingingTargets = [];
             InvalidPingingTargets = [];
             _timeUpdater = timeUpdaterService;
             _parser = parser;
+            NavigationVM = navigationVM;
         }
 
         partial void OnSelectedGroupOfTargetsChanged(PingingTargetCategory value)

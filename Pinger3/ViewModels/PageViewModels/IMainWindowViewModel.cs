@@ -11,6 +11,6 @@ namespace Pinger3.ViewModels.PageViewModels
 
         public IRelayCommand StartPingingCommand { get; }
         public IRelayCommand StopPingingCommand { get; }
-
+        public INavigationViewModel NavigationVM { get; }
     }
 }

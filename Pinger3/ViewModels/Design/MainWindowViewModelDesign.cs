@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
 using Pinger3.ViewModels.PageViewModels;
 using System.Collections.ObjectModel;
@@ -15,6 +16,8 @@ namespace Pinger3.ViewModels.Design
         public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup => ValidPingingTargets;
 
         public PingingTargetCategory SelectedGroupOfTargets { get => PingingTargetCategory.ValidTargets; set { } }
+
+        public INavigationViewModel NavigationVM => new NavigationViewModelDesign();
 
         [RelayCommand]
         private void StartPinging()
