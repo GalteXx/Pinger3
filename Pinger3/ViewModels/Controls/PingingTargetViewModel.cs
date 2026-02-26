@@ -43,6 +43,8 @@ namespace Pinger3.ViewModels.Controls
 
         public TimeSpan DelayBetweenRequests => _model.DelayBetweenRequests;
 
+        public ConfigValidationErrors ValidationErrors => ConfigValidationErrors.None;
+
         partial void OnIsActiveChanged(bool value)
         {
             if(value)

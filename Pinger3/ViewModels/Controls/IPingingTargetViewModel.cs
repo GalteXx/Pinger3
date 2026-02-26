@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.Models;
 using System;
 using System.ComponentModel;
 
@@ -18,6 +19,7 @@ namespace Pinger3.ViewModels.Controls
         public IRelayCommand StartPingingCommand { get; }
         public IRelayCommand StopPingingCommand { get; }
         public IRelayCommand TogglePingingCommand { get; }
+        ConfigValidationErrors ValidationErrors { get; }
 
         event PropertyChangedEventHandler? PropertyChanged;
     }

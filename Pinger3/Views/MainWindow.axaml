@@ -20,6 +20,8 @@
 		<converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter"/>
 		<converters:BoolToToggleStringConverter x:Key="BoolToToggleStringConverter"/>
 		<converters:TimeSpanToLargestUnitConverter x:Key="TimeSpanToLargestUnitConverter"/>
+		<converters:AddressCategoryToBoolConverter x:Key="AddressCategoryToBoolConverter"/>
+		<converters:ValidationErrorsToBoolConverter x:Key="ValidationErrorsToBoolConverter"/>
 	</Window.Resources>
 	<Design.DataContext>
 		<vmd:MainWindowViewModelDesign/>
@@ -27,7 +29,7 @@
 
 
 	<Grid RowDefinitions="50 *">
-		<StackPanel Orientation="Horizontal">
+		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15">
 			<ComboBox SelectedItem="{Binding SelectedGroupOfTargets, Mode=TwoWay}" x:Name="AddressCategorySelectorBox"
 					  ItemsSource="{Binding AddressCategories, ElementName=mainWindow}"/>
 		</StackPanel>
@@ -38,7 +40,9 @@
 				<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 				<DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}"/>
 				<DataGridTextColumn Header="Delay" Binding="{Binding DelayBetweenRequests, Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}"/>
-				<DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True"/>
+				<DataGridCheckBoxColumn Header="Active" 
+										Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True" 
+										IsVisible="{Binding $parent.DataContext.SelectedGroupOfTargets, Converter={StaticResource AddressCategoryToBoolConverter}}"/>
 				<DataGridTemplateColumn Header="Awaiting Response Time">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -63,6 +67,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<Button Foreground="{DynamicResource PrimaryColor}" Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" Padding="2"
+									IsEnabled="{Binding ValidationErrors, Converter={StaticResource ValidationErrorsToBoolConverter}}"
 									Content="{Binding IsActive, Converter={StaticResource BoolToToggleStringConverter}, ConverterParameter=Stop|Start}" Command="{Binding TogglePingingCommand}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>

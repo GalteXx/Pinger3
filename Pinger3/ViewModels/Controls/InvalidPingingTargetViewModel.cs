@@ -21,12 +21,7 @@ namespace Pinger3.ViewModels.Controls
 
         public ConfigValidationErrors ValidationErrors
         {
-            get => validationErrors;
-            private set
-            {
-                validationErrors = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
-            }
+            get => validationErrors; private set => validationErrors = value;
         }
         public string DomainOrAddress { get; private set; }
 
@@ -38,11 +33,11 @@ namespace Pinger3.ViewModels.Controls
 
         public bool IsActive { get => false; set { } }
 
-        public IRelayCommand StartPingingCommand => throw new NotSupportedException();
+        public IRelayCommand StartPingingCommand => new RelayCommand(() => { });
 
-        public IRelayCommand StopPingingCommand => throw new NotSupportedException();
+        public IRelayCommand StopPingingCommand => new RelayCommand(() => { });
 
-        public IRelayCommand TogglePingingCommand => throw new NotSupportedException();
+        public IRelayCommand TogglePingingCommand => new RelayCommand(() => { });
 
         public TimeSpan DelayBetweenRequests { get; }
 
