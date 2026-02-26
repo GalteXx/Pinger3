@@ -1,4 +1,5 @@
-﻿using Pinger3.ViewModels.Controls;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.ViewModels.Controls;
 using System;
 using System.ComponentModel;
 
@@ -27,6 +28,12 @@ namespace Pinger3.ViewModels.Design
             }
             set { }
         }
+
+        public IRelayCommand StartPingingCommand => throw new NotImplementedException();
+
+        public IRelayCommand StopPingingCommand => throw new NotImplementedException();
+
+        public IRelayCommand TogglePingingCommand => throw new NotImplementedException();
 
 #pragma warning disable CS0067 // The event is never used
         public event PropertyChangedEventHandler? PropertyChanged;

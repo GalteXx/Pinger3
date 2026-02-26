@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using System;
 using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Controls
@@ -11,6 +12,10 @@ namespace Pinger3.ViewModels.Controls
         TimeSpan TimeSinceLastRequest { get; }
 
         bool IsActive { get; set; }
+
+        public IRelayCommand StartPingingCommand { get; }
+        public IRelayCommand StopPingingCommand { get; }
+        public IRelayCommand TogglePingingCommand { get; }
 
         event PropertyChangedEventHandler? PropertyChanged;
     }

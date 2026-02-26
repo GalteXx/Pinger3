@@ -1,4 +1,5 @@
-﻿using Pinger3.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.Models;
 using System;
 using System.ComponentModel;
 using System.Reflection.Metadata.Ecma335;
@@ -37,6 +38,11 @@ namespace Pinger3.ViewModels.Controls
 
         public bool IsActive { get => false; set { } }
 
+        public IRelayCommand StartPingingCommand => throw new NotSupportedException();
+
+        public IRelayCommand StopPingingCommand => throw new NotSupportedException();
+
+        public IRelayCommand TogglePingingCommand => throw new NotSupportedException();
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

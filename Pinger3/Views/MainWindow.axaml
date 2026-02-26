@@ -17,12 +17,6 @@
 		<converters:FractionSizeConverter x:Key="WindowSizeDivider"/>
 		<converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter"/>
 		<converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter"/>
-		<DataTemplate x:Key="TimeSpanDisplayColumn">
-			<StackPanel Orientation="Horizontal">
-				<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding ., Converter={StaticResource TimeSpanToColorConverter}}"/>
-				<TextBlock Text="{Binding ., Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
-			</StackPanel>
-		</DataTemplate>
 	</Window.Resources>
 	<Design.DataContext>
 		<vmd:MainWindowViewModelDesign/>
@@ -41,14 +35,27 @@
 				<DataGridTemplateColumn Header="Awaiting Response Time">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ContentControl Content="{Binding TimeSinceLastRequest}" ContentTemplate="{StaticResource TimeSpanDisplayColumn}"/>
+							<StackPanel Orientation="Horizontal">
+								<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToColorConverter}}"/>
+								<TextBlock Text="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
+							</StackPanel>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="Ping">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ContentControl Content="{Binding Ping}" ContentTemplate="{StaticResource TimeSpanDisplayColumn}"/>
+							<StackPanel Orientation="Horizontal">
+								<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding Ping, Converter={StaticResource TimeSpanToColorConverter}}"/>
+								<TextBlock Text="{Binding Ping, Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Content="Toggle" Command="{Binding TogglePingingCommand}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
