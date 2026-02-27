@@ -3,10 +3,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using Pinger3.Services;
 using Pinger3.Services.DependencyInjection;
 using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Views;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Pinger3
 {
@@ -29,16 +31,24 @@ namespace Pinger3
                 collection.AddCommonServices();
                 var services = collection.BuildServiceProvider();
 
-                var vm = services.GetRequiredService<MainWindowViewModel>();
-                desktop.MainWindow = new MainWindow()
-                {
-                    DataContext = vm,
-                };
+                _ = StartAsync(desktop, services);
             }
 
             base.OnFrameworkInitializationCompleted();
         }
 
+        private async Task StartAsync(IClassicDesktopStyleApplicationLifetime desktop, ServiceProvider services)
+        {
+            var vmBuilder = services.GetRequiredService<ParsedTargetsViewModelsBuilder>();
+            await vmBuilder.ParseConfigAndCreateViewModelsAsync();
+
+            var vm = services.GetRequiredService<MainWindowViewModel>();
+            desktop.MainWindow = new MainWindow()
+            {
+                DataContext = vm,
+            };
+            desktop.MainWindow.Show();
+        }
         private void DisableAvaloniaDataAnnotationValidation()
         {
             // Get an array of plugins to remove

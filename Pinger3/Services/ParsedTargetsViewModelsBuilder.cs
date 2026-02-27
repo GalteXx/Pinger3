@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services
 {
-    public class ParsedTargetsViewModelsService
+    public class ParsedTargetsViewModelsBuilder
     {
         private readonly List<PingingTargetViewModel> _allParsedTargets;
         private readonly IAddressesConfigParser _configParser;
-        private ResponeAwaitingTimeUpdaterService _timeUpdater;
+        private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
 
 
-        public ParsedTargetsViewModelsService(IAddressesConfigParser configParser, ResponeAwaitingTimeUpdaterService timeUpdater)
+        public ParsedTargetsViewModelsBuilder(IAddressesConfigParser configParser, ResponeAwaitingTimeUpdaterService timeUpdater)
         {
             _configParser = configParser;
             _timeUpdater = timeUpdater;

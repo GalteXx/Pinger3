@@ -8,9 +8,10 @@ namespace Pinger3.Services.DependencyInjection
     {
         public static void AddCommonServices(this IServiceCollection collection)
         {
+            collection.AddSingleton<IAddressesConfigParser, AddressesConfigParser>();
+            collection.AddSingleton<ParsedTargetsViewModelsBuilder>();
             collection.AddSingleton<IWindowService, WindowService>();
             collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
-            collection.AddSingleton<IAddressesConfigParser, AddressesConfigParser>();
             collection.AddSingleton<ResponeAwaitingTimeUpdaterService, ResponeAwaitingTimeUpdaterService>();
             collection.AddScoped<MainWindowViewModel, MainWindowViewModel>();
         }

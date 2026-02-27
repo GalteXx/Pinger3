@@ -12,36 +12,22 @@ namespace Pinger3.ViewModels.PageViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
-        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup
-        {
-            get
-            {
-                return SelectedGroupOfTargets switch
-                {
-                    PingingTargetCategory.ValidTargets => [.. ValidPingingTargets],
-                    PingingTargetCategory.InvalidTargets => [.. InvalidPingingTargets],
-                    PingingTargetCategory.Everything => [.. ValidPingingTargets.Concat(InvalidPingingTargets)],
-                    _ => [],
-                };
-            }
-        }
+        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup 
+            => [.. _targetsVMs.PingingTargetsByCategory(SelectedGroupOfTargets)];
+
         [ObservableProperty]
         private PingingTargetCategory _selectedGroupOfTargets = PingingTargetCategory.ValidTargets;
 
         public INavigationViewModel NavigationVM { get; }
 
-        private readonly List<IPingingTargetViewModel> ValidPingingTargets;
-        private readonly List<IPingingTargetViewModel> InvalidPingingTargets;
-        private readonly IAddressesConfigParser _parser;
+        private readonly ParsedTargetsViewModelsBuilder _targetsVMs;
         private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
 
-        public MainWindowViewModel(IAddressesConfigParser parser, 
+        public MainWindowViewModel(ParsedTargetsViewModelsBuilder parser, 
             ResponeAwaitingTimeUpdaterService timeUpdaterService, INavigationViewModel navigationVM)
         {
-            ValidPingingTargets = [];
-            InvalidPingingTargets = [];
             _timeUpdater = timeUpdaterService;
-            _parser = parser;
+            _targetsVMs = parser;
             NavigationVM = navigationVM;
         }
 
@@ -53,34 +39,19 @@ namespace Pinger3.ViewModels.PageViewModels
         public async Task OnMainWindowLoaded()
         {
             _timeUpdater.Start();
-            var addresses = await _parser.ParseConfigAsync();
-            foreach (var address in addresses)
-            {
-                if (address.ValidationErrors == ConfigValidationErrors.None)
-                    ValidPingingTargets.Add(new PingingTargetViewModel(new PingTargetModel(address), _timeUpdater, new ICMPPinger(address)));
-                else
-                    InvalidPingingTargets.Add(new InvalidPingingTargetViewModel(address));
-            }
             OnPropertyChanged(nameof(CurrentPingingTargetsGroup));
         }
 
         [RelayCommand]
         public void StartPinging()
         {
-            foreach (var target in ValidPingingTargets)
-            {
-                (target as PingingTargetViewModel)!.StartPingingCommand.Execute(null);
-            }
+            //do nothing for now
         }
 
         [RelayCommand]
         public void StopPinging()
         {
-            foreach (var target in ValidPingingTargets)
-            {
-                (target as PingingTargetViewModel)!.StopPingingCommand.Execute(null);
-            }
-
+            //do nothing for now
         }
     }
 }
