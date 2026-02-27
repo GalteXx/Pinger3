@@ -4,11 +4,9 @@ using System;
 
 namespace Pinger3.Services
 {
-    public class WindowService : IWindowService
+    public class WindowService(IServiceProvider serviceProvider) : IWindowService
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public WindowService(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
 
         public void ShowWindow<T>() where T : Window
         {

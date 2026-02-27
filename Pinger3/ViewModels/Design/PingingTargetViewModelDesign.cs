@@ -6,9 +6,9 @@ using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Design
 {
-    public class PingViewModelDesign : IPingingTargetViewModel
+    public class PingingTargetViewModelDesign : IPingingTargetViewModel
     {
-        public PingViewModelDesign()
+        public PingingTargetViewModelDesign()
         {
             Ping = TimeSpan.FromMilliseconds(Random.Shared.Next(1, 120));
             TimeSinceLastRequest = TimeSpan.FromMilliseconds(Random.Shared.Next(1, 100));

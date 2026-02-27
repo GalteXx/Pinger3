@@ -31,7 +31,7 @@ namespace Pinger3.ViewModels.Design
             ValidPingingTargets = [];
             for (int i = 0; i < 4; i++)
             {
-                ValidPingingTargets.Add(new PingViewModelDesign());
+                ValidPingingTargets.Add(new PingingTargetViewModelDesign());
             }
             InvalidPingingTargets = [];
         }

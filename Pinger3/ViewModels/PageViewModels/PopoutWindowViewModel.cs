@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace Pinger3.ViewModels.PageViewModels
 {
-    public partial class PopoutWindowViewModel : INotifyPropertyChanged
+    public partial class PopoutWindowViewModel : INotifyPropertyChanged, IPopoutWindowViewModel
     {
         //TODO: BindStyles
         private double _transparency = 0.8;
@@ -40,11 +40,12 @@ namespace Pinger3.ViewModels.PageViewModels
 
         public ObservableCollection<IPingingTargetViewModel> PingViewModels { get; }
 
-        public PopoutWindowViewModel(IEnumerable<IPingingTargetViewModel> pingModels)
+        public PopoutWindowViewModel()
         {
+            PingViewModels = [];
             //PingViewModels = [.. pingModels.Select(vm => vm as PingingTargetViewModel)];
-            PingViewModels = [.. pingModels];
-            OnPropertyChanged(nameof(PingViewModels));
+            //PingViewModels = [.. pingModels];
+            //OnPropertyChanged(nameof(PingViewModels));
         }
 
 

@@ -1,14 +1,27 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
-        x:Class="Pinger3.PopoutSettingsWindow"
-        Title="PopoutSettingsWindow">
-  <Grid RowDefinitions="*, 100" ColumnDefinitions="*, *">
-	  <DataGrid Grid.RowSpan="2">
-		  
-      </DataGrid>
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vmc="using:Pinger3.ViewModels.Controls"
+		xmlns:vmp="using:Pinger3.ViewModels.PageViewModels"
+		xmlns:vmd="using:Pinger3.ViewModels.Design"
+		mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+		x:DataType="vmp:IPopoutWindowViewModel"
+		x:Class="Pinger3.PopoutSettingsWindow"
+		Title="PopoutSettingsWindow">
 
-  </Grid>
+	<Design.DataContext>
+		<vmd:PopoutWindowViewModelDesign/>
+	</Design.DataContext>
+
+	<Grid RowDefinitions="*, *" ColumnDefinitions="*, *">
+		<DataGrid Grid.RowSpan="2">
+
+		</DataGrid>
+		<Slider Grid.Column="1" Minimum="0" Maximum="1"
+				Value="{Binding Transparency, Mode=TwoWay}"/>
+		<TextBlock Text="Transparency" HorizontalAlignment="Center" Grid.Column="1"/>
+		<CheckBox Content="Click Through" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"
+			  IsChecked="{Binding ClickThrough, Mode=TwoWay}"/>
+	</Grid>
 </Window>

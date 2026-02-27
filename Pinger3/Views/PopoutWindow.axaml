@@ -8,7 +8,7 @@
         xmlns:controls="using:Pinger3.TemplateControls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Pinger3.Views.PopoutWindow"
-        x:DataType="vm:PopoutWindowViewModel">
+        x:DataType="vm:IPopoutWindowViewModel">
   <StackPanel IsHitTestVisible="{Binding ClickThrough}">
 	  <ListBox ItemsSource="{Binding PingViewModels}">
 		  <ListBox.ItemTemplate>
