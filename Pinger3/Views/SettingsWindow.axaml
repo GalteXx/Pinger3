@@ -7,8 +7,8 @@
 		xmlns:vmp="using:Pinger3.ViewModels.PageViewModels"
 		xmlns:vmd="using:Pinger3.ViewModels.Design"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
+		x:CompileBindings="True"
 		x:DataType="vmp:ISettingsViewModel"
-		x:Name="SettingsWindow"
 		x:Class="Pinger3.SettingsWindow"
 		Title="Settings">
 
@@ -27,8 +27,8 @@
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="Pop out">
 							<DataTemplate>
-								<!--CheckBox Command="{Binding DataContext.ChangePopoutTargetsCommand, ElementName=SettingsWindow}"
-										  CommandParameter="{Binding .}"/-->
+								<CheckBox Command="{Binding $parent[Window].((vmp:ISettingsViewModel)DataContext).ChangePopoutTargets}"
+            CommandParameter="{Binding .}"/>
 							</DataTemplate>
 						</DataGridTemplateColumn>
 						<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
@@ -38,11 +38,11 @@
 				<Slider Minimum="0" Maximum="1" Grid.Row="2" Grid.ColumnSpan="2"
 						Value="{Binding PopoutVM.Transparency, Mode=TwoWay}"/>
 				<CheckBox Grid.Row="3" Grid.ColumnSpan="2"
-						  Content="Click Through" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"
-						  IsChecked="{Binding PopoutVM.ClickThrough, Mode=TwoWay}"/>
+        Content="Click Through" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"
+        IsChecked="{Binding PopoutVM.ClickThrough, Mode=TwoWay}"/>
 
 				<TextBlock Grid.Column="2" Grid.RowSpan="4" Text="PreviewPage"
-						   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+         HorizontalAlignment="Center" VerticalAlignment="Center"/>
 			</Grid>
 		</Expander>
 	</StackPanel>

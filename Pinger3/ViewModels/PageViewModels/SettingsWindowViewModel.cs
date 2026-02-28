@@ -14,13 +14,14 @@ namespace Pinger3.ViewModels.PageViewModels
         [ObservableProperty]
         private IPopoutWindowViewModel _popoutVM;
 
-        [RelayCommand]
-        private void ChangePopoutTargets(IPingingTargetViewModel changedTarget)
+        public void ChangePopoutTargets(object changedTarget)
         {
-            if(PopoutVM.PingViewModels.Contains(changedTarget)) //lol
-                PopoutVM.PingViewModels.Add(changedTarget);
+            if (changedTarget is not IPingingTargetViewModel targetViewModel)
+                return;
+            if(PopoutVM.PingViewModels.Contains(targetViewModel)) //lol
+                PopoutVM.PingViewModels.Add(targetViewModel);
             else
-                PopoutVM.PingViewModels.Remove(changedTarget);
+                PopoutVM.PingViewModels.Remove(targetViewModel);
         }
 
         public ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs

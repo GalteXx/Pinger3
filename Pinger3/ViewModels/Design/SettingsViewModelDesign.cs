@@ -11,6 +11,9 @@ namespace Pinger3.ViewModels.Design
 
         public ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs => [new PingingTargetViewModelDesign(), new PingingTargetViewModelDesign()];
 
-        public IRelayCommand<IPingingTargetViewModel> ChangePopoutTargetsCommand => new RelayCommand<IPingingTargetViewModel>((IPingingTargetViewModel) => { });
+        public void ChangePopoutTargets(object target)
+        {
+
+        }
     }
 }
