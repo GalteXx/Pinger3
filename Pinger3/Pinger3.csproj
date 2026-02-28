@@ -45,6 +45,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\SettingsWindow.axaml.cs">
+      <DependentUpon>SettingsWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\PopoutWindow.axaml.cs">
       <DependentUpon>PopoutWindow.axaml</DependentUpon>
     </Compile>

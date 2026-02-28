@@ -18,7 +18,7 @@ namespace Pinger3.ViewModels.Controls
         [RelayCommand]
         private void OpenPopoutSettingsWindow()
         {
-            _windowService.ShowWindow<PopoutSettingsWindow>();
+            _windowService.ShowWindow<SettingsWindow>();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

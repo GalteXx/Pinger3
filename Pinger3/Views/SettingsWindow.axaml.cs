@@ -4,14 +4,14 @@ using System;
 
 namespace Pinger3;
 
-public partial class PopoutSettingsWindow : Window
+public partial class SettingsWindow : Window
 {
-    public PopoutSettingsWindow()
+    public SettingsWindow()
     {
         InitializeComponent();
     }
 
-    public PopoutSettingsWindow(IPopoutWindowViewModel vm)
+    public SettingsWindow(IPopoutWindowViewModel vm)
     {
         InitializeComponent();
         DataContext = vm;

@@ -6,12 +6,12 @@
 		xmlns:vmp="using:Pinger3.ViewModels.PageViewModels"
 		xmlns:vmd="using:Pinger3.ViewModels.Design"
 		mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
-		x:DataType="vmp:IPopoutWindowViewModel"
-		x:Class="Pinger3.PopoutSettingsWindow"
-		Title="PopoutSettingsWindow">
+		x:DataType="vmp:ISettingsViewModel"
+		x:Class="Pinger3.SettingsWindow"
+		Title="Settings">
 
 	<Design.DataContext>
-		<vmd:PopoutWindowViewModelDesign/>
+		<vmd:SettingsViewModelDesign/>
 	</Design.DataContext>
 
 	<Grid RowDefinitions="*, *" ColumnDefinitions="*, *">
