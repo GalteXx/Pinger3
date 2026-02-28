@@ -1,4 +1,5 @@
-﻿using Pinger3.ViewModels.Controls;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pinger3.ViewModels.Controls;
 using System.Collections.ObjectModel;
 
 namespace Pinger3.ViewModels.PageViewModels
@@ -7,5 +8,7 @@ namespace Pinger3.ViewModels.PageViewModels
     {
         IPopoutWindowViewModel PopoutVM { get; }
         ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs { get; }
+
+        IRelayCommand<IPingingTargetViewModel> ChangePopoutTargetsCommand { get; }
     }
 }

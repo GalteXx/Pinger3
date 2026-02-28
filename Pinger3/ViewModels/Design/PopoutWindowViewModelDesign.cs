@@ -2,6 +2,7 @@
 using Pinger3.ViewModels.PageViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Design
 {
@@ -22,5 +23,7 @@ namespace Pinger3.ViewModels.Design
         public ObservableCollection<IPingingTargetViewModel> PingViewModels => throw new System.NotImplementedException();
 
         public double Transparency { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

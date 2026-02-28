@@ -2,11 +2,13 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:views="using:Pinger3.Views"
 		xmlns:vmc="using:Pinger3.ViewModels.Controls"
 		xmlns:vmp="using:Pinger3.ViewModels.PageViewModels"
 		xmlns:vmd="using:Pinger3.ViewModels.Design"
-		mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
 		x:DataType="vmp:ISettingsViewModel"
+		x:Name="SettingsWindow"
 		x:Class="Pinger3.SettingsWindow"
 		Title="Settings">
 
@@ -14,14 +16,34 @@
 		<vmd:SettingsViewModelDesign/>
 	</Design.DataContext>
 
-	<Grid RowDefinitions="*, *" ColumnDefinitions="*, *">
-		<DataGrid Grid.RowSpan="2">
+	<StackPanel>
+		<Expander HorizontalAlignment="Stretch" IsExpanded="True">
+			<Expander.Header>
+				<TextBlock Text="Popout Window" FontSize="16" FontWeight="Bold"/>
+			</Expander.Header>
+			<Grid RowDefinitions="Auto, *, *, *" ColumnDefinitions="*, *, 2*">
+				<DataGrid Grid.RowSpan="2" Grid.ColumnSpan="2"
+						  ItemsSource="{Binding SelectableForPopoutTargetVMs}">
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="Pop out">
+							<DataTemplate>
+								<!--CheckBox Command="{Binding DataContext.ChangePopoutTargetsCommand, ElementName=SettingsWindow}"
+										  CommandParameter="{Binding .}"/-->
+							</DataTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+						<DataGridTextColumn Header="IP Or Domain" Binding="{Binding DomainOrAddress}"/>
+					</DataGrid.Columns>
+				</DataGrid>
+				<Slider Minimum="0" Maximum="1" Grid.Row="2" Grid.ColumnSpan="2"
+						Value="{Binding PopoutVM.Transparency, Mode=TwoWay}"/>
+				<CheckBox Grid.Row="3" Grid.ColumnSpan="2"
+						  Content="Click Through" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"
+						  IsChecked="{Binding PopoutVM.ClickThrough, Mode=TwoWay}"/>
 
-		</DataGrid>
-		<Slider Grid.Column="1" Minimum="0" Maximum="1"
-				Value="{Binding Transparency, Mode=TwoWay}"/>
-		<TextBlock Text="Transparency" HorizontalAlignment="Center" Grid.Column="1"/>
-		<CheckBox Content="Click Through" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"
-			  IsChecked="{Binding ClickThrough, Mode=TwoWay}"/>
-	</Grid>
+				<TextBlock Grid.Column="2" Grid.RowSpan="4" Text="PreviewPage"
+						   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</Grid>
+		</Expander>
+	</StackPanel>
 </Window>

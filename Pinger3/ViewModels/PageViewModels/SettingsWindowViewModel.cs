@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
 using System.Collections.ObjectModel;
@@ -13,7 +14,16 @@ namespace Pinger3.ViewModels.PageViewModels
         [ObservableProperty]
         private IPopoutWindowViewModel _popoutVM;
 
-        public ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs 
+        [RelayCommand]
+        private void ChangePopoutTargets(IPingingTargetViewModel changedTarget)
+        {
+            if(PopoutVM.PingViewModels.Contains(changedTarget)) //lol
+                PopoutVM.PingViewModels.Add(changedTarget);
+            else
+                PopoutVM.PingViewModels.Remove(changedTarget);
+        }
+
+        public ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs
             => [.. _targetsVmBuilder.PingingTargetsByCategory(PingingTargetCategory.ValidTargets)];
 
         public SettingsViewModel(IPopoutWindowViewModel popoutVM, ParsedTargetsViewModelsBuilder targetsVMBuilder)
