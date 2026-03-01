@@ -40,6 +40,9 @@ namespace Pinger3
         private async Task StartAsync(IClassicDesktopStyleApplicationLifetime desktop, ServiceProvider services)
         {
             var vmBuilder = services.GetRequiredService<ParsedTargetsViewModelsBuilder>();
+
+            _ = services.GetRequiredService<ISettingsViewModel>(); //To properly subscribe to events, Maybe a little hacky?
+
             await vmBuilder.ParseConfigAndCreateViewModelsAsync();
 
             var vm = services.GetRequiredService<MainWindowViewModel>();

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -31,6 +31,12 @@ namespace Pinger3.ViewModels.PageViewModels
         {
             _popoutVM = popoutVM;
             _targetsVmBuilder = targetsVMBuilder;
+            _targetsVmBuilder.ViewModelsBuilt += OnTargetVMsRebuilt;
+        }
+
+        private void OnTargetVMsRebuilt(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(SelectableForPopoutTargetVMs));
         }
     }
 }

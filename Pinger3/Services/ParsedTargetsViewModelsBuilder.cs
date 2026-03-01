@@ -1,6 +1,7 @@
 ﻿using Pinger3.Models;
 using Pinger3.ViewModels.Controls;
 using Pinger3.ViewModels.PageViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,8 @@ namespace Pinger3.Services
         private readonly List<PingingTargetViewModel> _allParsedTargets;
         private readonly IAddressesConfigParser _configParser;
         private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
-
+        
+        public event EventHandler? ViewModelsBuilt; //i did not do INotifyPropertyChanged as initial design implies VMs to be static
 
         public ParsedTargetsViewModelsBuilder(IAddressesConfigParser configParser, ResponeAwaitingTimeUpdaterService timeUpdater)
         {
@@ -36,6 +38,7 @@ namespace Pinger3.Services
 
             var vms = await Task.WhenAll(creationTasks);
             _allParsedTargets.AddRange(vms);
+            ViewModelsBuilt?.Invoke(this, new EventArgs());
         }
 
         public IEnumerable<IPingingTargetViewModel> PingingTargetsByCategory(PingingTargetCategory category)

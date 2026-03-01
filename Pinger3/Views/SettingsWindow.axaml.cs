@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Pinger3.ViewModels.PageViewModels;
-using System;
 
 namespace Pinger3;
 
@@ -11,7 +10,7 @@ public partial class SettingsWindow : Window
         InitializeComponent();
     }
 
-    public SettingsWindow(IPopoutWindowViewModel vm)
+    public SettingsWindow(ISettingsViewModel vm)
     {
         InitializeComponent();
         DataContext = vm;

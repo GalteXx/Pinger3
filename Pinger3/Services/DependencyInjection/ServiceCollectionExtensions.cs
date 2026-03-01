@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Pinger3.ViewModels.Controls;
 using Pinger3.ViewModels.PageViewModels;
+using Pinger3.Views;
+using System;
 
 namespace Pinger3.Services.DependencyInjection
 {
@@ -13,7 +15,14 @@ namespace Pinger3.Services.DependencyInjection
             collection.AddSingleton<IWindowService, WindowService>();
             collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
             collection.AddSingleton<ResponeAwaitingTimeUpdaterService, ResponeAwaitingTimeUpdaterService>();
-            collection.AddScoped<MainWindowViewModel, MainWindowViewModel>();
+            collection.AddSingleton<IPopoutWindowViewModel, PopoutWindowViewModel>();
+            collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
+
+
+
+            collection.AddTransient<PopoutWindow>();
+            collection.AddTransient( sp => { return new SettingsWindow(sp.GetRequiredService<ISettingsViewModel>()); });
+            collection.AddTransient<MainWindowViewModel>();
         }
     }
 }
