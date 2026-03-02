@@ -12,11 +12,11 @@ namespace Pinger3.Services
     {
         private readonly List<PingingTargetViewModel> _allParsedTargets;
         private readonly IAddressesConfigParser _configParser;
-        private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
+        private readonly ResponseAwaitingTimeUpdaterService _timeUpdater;
         
         public event EventHandler? ViewModelsBuilt; //i did not do INotifyPropertyChanged as initial design implies VMs to be static
 
-        public ParsedTargetsViewModelsBuilder(IAddressesConfigParser configParser, ResponeAwaitingTimeUpdaterService timeUpdater)
+        public ParsedTargetsViewModelsBuilder(IAddressesConfigParser configParser, ResponseAwaitingTimeUpdaterService timeUpdater)
         {
             _configParser = configParser;
             _timeUpdater = timeUpdater;

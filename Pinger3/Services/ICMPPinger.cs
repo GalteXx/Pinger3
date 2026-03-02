@@ -13,7 +13,7 @@ namespace Pinger3.Services
         private DateTime _lastRequest = DateTime.Now;
         private bool _updateSuppressed = true;
 
-        public event EventHandler<TimeSpan> PingReceived;
+        public event EventHandler<TimeSpan>? PingReceived;
 
         public DateTime? LastRequestTime => _updateSuppressed ? null : _lastRequest;
 
@@ -22,7 +22,6 @@ namespace Pinger3.Services
         public ICMPPinger(AddressConfig config)
         {
             _config = config;
-            PingReceived = new EventHandler<TimeSpan>((sender, e) => { });
         }
 
         public void Start()
@@ -70,7 +69,7 @@ namespace Pinger3.Services
 
         private void OnPingReceived(TimeSpan e)
         {
-            PingReceived.Invoke(this, e);
+            PingReceived?.Invoke(this, e);
             _updateSuppressed = true;
         }
 

@@ -21,10 +21,10 @@ namespace Pinger3.ViewModels.PageViewModels
         public INavigationViewModel NavigationVM { get; }
 
         private readonly ParsedTargetsViewModelsBuilder _targetsVMs;
-        private readonly ResponeAwaitingTimeUpdaterService _timeUpdater;
+        private readonly ResponseAwaitingTimeUpdaterService _timeUpdater;
 
         public MainWindowViewModel(ParsedTargetsViewModelsBuilder parser, 
-            ResponeAwaitingTimeUpdaterService timeUpdaterService, INavigationViewModel navigationVM)
+            ResponseAwaitingTimeUpdaterService timeUpdaterService, INavigationViewModel navigationVM)
         {
             _timeUpdater = timeUpdaterService;
             _targetsVMs = parser;

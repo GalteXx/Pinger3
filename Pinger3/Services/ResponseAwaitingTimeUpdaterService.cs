@@ -4,14 +4,14 @@ using System;
 
 namespace Pinger3.Services
 {
-    public sealed class ResponeAwaitingTimeUpdaterService
+    public sealed class ResponseAwaitingTimeUpdaterService
     {
         private readonly TimeSpan TimerInterval = TimeSpan.FromMilliseconds(16);
 
         private readonly DispatcherTimer _timer;
         public event EventHandler? Ticked;
 
-        public ResponeAwaitingTimeUpdaterService()
+        public ResponseAwaitingTimeUpdaterService()
         {
             Ticked = new EventHandler((sender, e) => { });
             _timer = new DispatcherTimer(TimerInterval, DispatcherPriority.Normal, Ticked);
@@ -20,7 +20,7 @@ namespace Pinger3.Services
 
         private void OnTimerTick(object? sender, EventArgs e)
         {
-            Ticked!.Invoke(this, EventArgs.Empty);
+            Ticked?.Invoke(this, EventArgs.Empty);
         }
 
         public void Start() => _timer.Start();

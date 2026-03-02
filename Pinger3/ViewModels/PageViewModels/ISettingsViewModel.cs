@@ -8,8 +8,6 @@ namespace Pinger3.ViewModels.PageViewModels
     {
         IPopoutWindowViewModel PopoutVM { get; }
         ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs { get; }
-
-        //IRelayCommand<object> ChangePopoutTargetsCommand { get; }
         void ChangePopoutTargets(object popoutTargets);
     }
 }

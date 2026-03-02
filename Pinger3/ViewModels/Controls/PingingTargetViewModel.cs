@@ -11,7 +11,7 @@ namespace Pinger3.ViewModels.Controls
         private readonly PingTargetModel _model;
         private readonly IPingService _pingService;
 
-        public PingingTargetViewModel(PingTargetModel model, ResponeAwaitingTimeUpdaterService timeUpdater, IPingService pinger)
+        public PingingTargetViewModel(PingTargetModel model, ResponseAwaitingTimeUpdaterService timeUpdater, IPingService pinger)
         {
             TimeSinceLastRequest = TimeSpan.Zero;
             _model = model;

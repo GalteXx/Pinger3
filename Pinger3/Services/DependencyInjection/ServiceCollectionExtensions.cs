@@ -14,7 +14,7 @@ namespace Pinger3.Services.DependencyInjection
             collection.AddSingleton<ParsedTargetsViewModelsBuilder>();
             collection.AddSingleton<IWindowService, WindowService>();
             collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
-            collection.AddSingleton<ResponeAwaitingTimeUpdaterService, ResponeAwaitingTimeUpdaterService>();
+            collection.AddSingleton<ResponseAwaitingTimeUpdaterService, ResponseAwaitingTimeUpdaterService>();
             collection.AddSingleton<IPopoutWindowViewModel, PopoutWindowViewModel>();
             collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
 
