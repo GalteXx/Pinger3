@@ -18,11 +18,17 @@ namespace Pinger3.ViewModels.Design
             }
         }
 
-        public bool ClickThrough { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool ClickThrough { get => false; set { } }
 
-        public ObservableCollection<IPingingTargetViewModel> PingViewModels => throw new System.NotImplementedException();
+        public ObservableCollection<IPingingTargetViewModel> PingViewModels =>
+        [
+            new PingingTargetViewModelDesign(),
+            new PingingTargetViewModelDesign(),
+            new PingingTargetViewModelDesign(),
+            new PingingTargetViewModelDesign()
+        ];
 
-        public double Transparency { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public double Transparency { get => 0; set { } }
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }

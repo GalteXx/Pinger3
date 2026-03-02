@@ -20,7 +20,7 @@ namespace Pinger3.Services.DependencyInjection
 
 
 
-            collection.AddTransient<PopoutWindow>();
+            collection.AddTransient(sp => { return new PopoutWindow(sp.GetRequiredService<IPopoutWindowViewModel>()); });
             collection.AddTransient( sp => { return new SettingsWindow(sp.GetRequiredService<ISettingsViewModel>()); });
             collection.AddTransient<MainWindowViewModel>();
         }

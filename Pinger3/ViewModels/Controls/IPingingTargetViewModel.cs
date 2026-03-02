@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace Pinger3.ViewModels.Controls
 {
-    public interface IPingingTargetViewModel
+    public interface IPingingTargetViewModel : INotifyPropertyChanged
     {
         string DomainOrAddress { get; }
         string Name { get; }
@@ -21,6 +21,5 @@ namespace Pinger3.ViewModels.Controls
         public IRelayCommand TogglePingingCommand { get; }
         ConfigValidationErrors ValidationErrors { get; }
 
-        event PropertyChangedEventHandler? PropertyChanged;
     }
 }

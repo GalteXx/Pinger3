@@ -1,11 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Pinger3.Models;
 using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Pinger3.ViewModels.PageViewModels
@@ -36,7 +33,7 @@ namespace Pinger3.ViewModels.PageViewModels
             OnPropertyChanged(nameof(CurrentPingingTargetsGroup));
         }
 
-        public async Task OnMainWindowLoaded()
+        public void OnMainWindowLoaded()
         {
             _timeUpdater.Start();
             OnPropertyChanged(nameof(CurrentPingingTargetsGroup));

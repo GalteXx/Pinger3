@@ -16,10 +16,10 @@ namespace Pinger3.Views
             Loaded += MainWindow_Loaded;
         }
 
-        private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel vm)
-                await vm!.OnMainWindowLoaded();
+                 vm!.OnMainWindowLoaded();
         }
 
         private void NativeMenuItem_Click(object? sender, System.EventArgs e)

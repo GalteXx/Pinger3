@@ -11,43 +11,43 @@
 	</Styles.Resources>
 	<Design.PreviewWith>
 		<StackPanel Background="Black">
-			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="Full"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="Full"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>
-					<vm:PingViewModelDesign/>
+					<vm:PingingTargetViewModelDesign/>
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 
-			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="CompactPing"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="CompactPing"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>
-					<vm:PingViewModelDesign/>
+					<vm:PingingTargetViewModelDesign/>
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 
-			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="CompactAwaitngTime"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="CompactAwaitngTime"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>
-					<vm:PingViewModelDesign/>
+					<vm:PingingTargetViewModelDesign/>
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 
-			<controls:PingDisplay x:DataType="vm:PingViewModelDesign" Classes="ResponeTimeOnly"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="ResponeTimeOnly"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>
-					<vm:PingViewModelDesign/>
+					<vm:PingingTargetViewModelDesign/>
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 		</StackPanel>
@@ -58,10 +58,12 @@
 			<ControlTemplate>
 				<Border CornerRadius="5" BorderThickness="1" 
 						BorderBrush="{DynamicResource PrimaryColor}" ClipToBounds="True">
-					<Grid RowDefinitions="*, *, *, *" ColumnDefinitions=" 40, *"
-						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
-						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
-						<TextBlock Grid.Column="1" Grid.Row="1"
+					<Grid RowDefinitions="*, *, *, *" ColumnDefinitions=" 25, *"
+						  Background="{DynamicResource BackgroundColor}">
+						<TextBlock Grid.Column="0" Margin="5, 0, 0, 0" Grid.ColumnSpan="2"
+								   Text="{TemplateBinding AddressName}"/>
+						<TextBlock Grid.Column="0" Margin="5, 0, 0, 0" Grid.ColumnSpan="2"
+								    Grid.Row="1"
 								   Text="{TemplateBinding Address}"/>
 						<TextBlock Grid.Column="1" Grid.Row="2"
 								   Text="{TemplateBinding Ping, Converter={StaticResource TimespanToStringConverter}}"
@@ -82,9 +84,10 @@
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
-					<Grid RowDefinitions="*, *" ColumnDefinitions="40, *"
-						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
-						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
+					<Grid RowDefinitions="*, *" ColumnDefinitions="25, *"
+						  Background="{DynamicResource BackgroundColor}">
+						<TextBlock Grid.Column="0" Margin="5, 0, 0, 0" Grid.ColumnSpan="2"
+								   Text="{TemplateBinding AddressName}"/>
                         <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5"
                                 Grid.Row="1" Margin="5, 2, 5, 2" Background="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConver}}"/>
 						<TextBlock Grid.Column="1" Grid.Row="1"
@@ -98,9 +101,10 @@
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
-					<Grid RowDefinitions="*, *" ColumnDefinitions="40, *"
-						  Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
-						<TextBlock Grid.Column="1" Text="{TemplateBinding AddressName}"/>
+					<Grid RowDefinitions="*, *" ColumnDefinitions="25, *"
+						  Background="{DynamicResource BackgroundColor}">
+						<TextBlock Grid.Column="0" Margin="5, 0, 0, 0" Grid.ColumnSpan="2"
+								   Text="{TemplateBinding AddressName}"/>
 						<TextBlock Grid.Column="1" Grid.Row="1"
 								   Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
@@ -116,8 +120,8 @@
 			<ControlTemplate>
 				<Border CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
 					<StackPanel Orientation="Horizontal"
-								Background="{DynamicResource BackgroundColor}" Margin="0, 10, 0, 0">
-                        <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5" Margin="5, 2, 5, 2" Width="30" Background="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}" />
+								Background="{DynamicResource BackgroundColor}">
+                        <Border BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" CornerRadius="5" Margin="5, 2, 5, 2" Width="15" Background="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConver}}" />
 						<TextBlock Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}"
 								   />
 					</StackPanel>

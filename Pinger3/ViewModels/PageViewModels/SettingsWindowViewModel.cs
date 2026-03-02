@@ -18,10 +18,8 @@ namespace Pinger3.ViewModels.PageViewModels
         {
             if (changedTarget is not IPingingTargetViewModel targetViewModel)
                 return;
-            if(PopoutVM.PingViewModels.Contains(targetViewModel)) //lol
+            if (!PopoutVM.PingViewModels.Remove(targetViewModel)) //lol
                 PopoutVM.PingViewModels.Add(targetViewModel);
-            else
-                PopoutVM.PingViewModels.Remove(targetViewModel);
         }
 
         public ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs

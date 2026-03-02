@@ -1,5 +1,4 @@
 ﻿using Pinger3.ViewModels.Controls;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -43,9 +42,6 @@ namespace Pinger3.ViewModels.PageViewModels
         public PopoutWindowViewModel()
         {
             PingViewModels = [];
-            //PingViewModels = [.. pingModels.Select(vm => vm as PingingTargetViewModel)];
-            //PingViewModels = [.. pingModels];
-            //OnPropertyChanged(nameof(PingViewModels));
         }
 
 
