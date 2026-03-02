@@ -20,7 +20,7 @@ namespace Pinger3.ViewModels.PageViewModels
                 OnPropertyChanged();
             }
         }
-        public double Transparency
+        public double Opacity
         {
             get => _transparency;
             set

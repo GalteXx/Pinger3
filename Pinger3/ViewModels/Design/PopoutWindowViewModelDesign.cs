@@ -28,7 +28,7 @@ namespace Pinger3.ViewModels.Design
             new PingingTargetViewModelDesign()
         ];
 
-        public double Transparency { get => 0; set { } }
+        public double Opacity { get => 0; set { } }
 
         public event PropertyChangedEventHandler? PropertyChanged;
     }
