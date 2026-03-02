@@ -3,5 +3,6 @@
     public interface IPingingTargetWrapperViewModel
     {
         bool IsMarkedForPopout { get; set; }
+        IPingingTargetViewModel TargetViewModel { get; }
     }
 }

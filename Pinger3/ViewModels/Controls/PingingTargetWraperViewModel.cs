@@ -6,17 +6,11 @@ namespace Pinger3.ViewModels.Controls
 {
     public partial class PingingTargetWrapperViewModel : INotifyPropertyChanged, IPingingTargetWrapperViewModel
     {
-        private IPingingTargetViewModel _targetVM;
-        private IPopoutWindowViewModel _popoutVM;
+        private readonly IPingingTargetViewModel _targetVM;
+        private readonly IPopoutWindowViewModel _popoutVM;
 
 
-        public IPingingTargetViewModel TargetViewModel
-        {
-            get
-            {
-                return _targetVM;
-            }
-        }
+        public IPingingTargetViewModel TargetViewModel => _targetVM;
 
         public bool IsMarkedForPopout
         {
