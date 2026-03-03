@@ -1,0 +1,33 @@
+<Styles xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<TextBox Classes="Entry" Text="Obunga"/>
+		</Border>
+	</Design.PreviewWith>
+
+	<!-- Add Styles Here -->
+	<Style Selector="TextBox.Entry">
+		<Setter Property="Template">
+			<ControlTemplate>
+					<Grid RowDefinitions="15*, 2*"
+						  Background="{TemplateBinding Background}">
+						<TextPresenter Grid.RowSpan="3"
+						Name="PART_TextPresenter"
+						Text="{TemplateBinding Text}"
+						CaretIndex="{TemplateBinding CaretIndex}"
+						SelectionStart="{TemplateBinding SelectionStart}"
+						SelectionEnd="{TemplateBinding SelectionEnd}"
+						TextAlignment="{TemplateBinding TextAlignment}"
+						TextWrapping="{TemplateBinding TextWrapping}"
+						PasswordChar="{TemplateBinding PasswordChar}"
+						VerticalAlignment="Center"/>
+						<Rectangle Fill="{TemplateBinding BorderBrush}"
+								   Height="2"
+								  Margin="1, 0, 1, 0"
+						Grid.Row="1"/>
+					</Grid>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

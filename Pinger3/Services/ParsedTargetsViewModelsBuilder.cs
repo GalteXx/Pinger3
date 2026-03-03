@@ -46,6 +46,12 @@ namespace Pinger3.Services
             ViewModelsBuilt?.Invoke(this, new EventArgs());
         }
 
+        public void AddViewModelToParsedList(IPingingTargetViewModel newVm)
+        {
+            _allParsedTargets.Add(newVm);
+            ViewModelsBuilt?.Invoke(this, new EventArgs());
+        }
+
         public IEnumerable<IPingingTargetViewModel> PingingTargetsByCategory(PingingTargetCategory category)
         {
             return category switch

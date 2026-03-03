@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\ControlDictionaries\PingDisplayStyles.axaml" />
+    <AvaloniaXaml Remove="Assets\ControlDictionaries\TextBoxStyles.axaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +41,9 @@
 
   <ItemGroup>
     <AvaloniaResource Update="Assets\ControlDictionaries\PingDisplayStyles.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\ControlDictionaries\TextBoxStyles.axaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
   </ItemGroup>

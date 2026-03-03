@@ -19,6 +19,7 @@
 		<FluentTheme />
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 		<StyleInclude Source="Assets\ControlDictionaries\PingDisplayStyles.axaml"/>
+		<StyleInclude Source="Assets\ControlDictionaries\TextBoxStyles.axaml"/>
 		<Style Selector="TemplatedControl">
 			<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
 			<Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
