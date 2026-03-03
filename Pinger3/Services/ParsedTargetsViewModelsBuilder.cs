@@ -10,10 +10,10 @@ namespace Pinger3.Services
 {
     public class ParsedTargetsViewModelsBuilder
     {
-        private readonly List<PingingTargetViewModel> _allParsedTargets;
+        private readonly List<IPingingTargetViewModel> _allParsedTargets;
         private readonly IAddressesConfigParser _configParser;
         private readonly ResponseAwaitingTimeUpdaterService _timeUpdater;
-        
+
         public event EventHandler? ViewModelsBuilt; //i did not do INotifyPropertyChanged as initial design implies VMs to be static
 
         public ParsedTargetsViewModelsBuilder(IAddressesConfigParser configParser, ResponseAwaitingTimeUpdaterService timeUpdater)
@@ -32,7 +32,12 @@ namespace Pinger3.Services
                 await Task.Yield();
 
                 var pinger = new ICMPPinger(address);
-                var vm = new PingingTargetViewModel(new PingTargetModel(address), _timeUpdater, pinger);
+
+                IPingingTargetViewModel vm;
+                if (address.ValidationErrors == ConfigValidationErrors.None)
+                    vm = new PingingTargetViewModel(new PingTargetModel(address), _timeUpdater, pinger);
+                else
+                    vm = new InvalidPingingTargetViewModel(address);
                 return vm;
             });
 
@@ -45,10 +50,10 @@ namespace Pinger3.Services
         {
             return category switch
             {
-                PingingTargetCategory.Everything => _allParsedTargets.Cast<IPingingTargetViewModel>(),
-                PingingTargetCategory.ValidTargets => _allParsedTargets.Where(t => t.ValidationErrors == ConfigValidationErrors.None).Cast<IPingingTargetViewModel>(),
-                PingingTargetCategory.InvalidTargets => _allParsedTargets.Where(t => t.ValidationErrors != ConfigValidationErrors.None).Cast<IPingingTargetViewModel>(),
-                _ => _allParsedTargets.Cast<IPingingTargetViewModel>(),
+                PingingTargetCategory.Everything => _allParsedTargets,
+                PingingTargetCategory.ValidTargets => _allParsedTargets.Where(t => t.ValidationErrors == ConfigValidationErrors.None),
+                PingingTargetCategory.InvalidTargets => _allParsedTargets.Where(t => t.ValidationErrors != ConfigValidationErrors.None),
+                _ => _allParsedTargets,
             };
         }
 
