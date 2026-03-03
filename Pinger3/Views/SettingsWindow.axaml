@@ -28,13 +28,12 @@
 						<DataGridTemplateColumn Header="Pop out">
 							<DataTemplate>
 								<StackPanel>
-									<CheckBox Command="{Binding $parent[Window].((vmp:ISettingsViewModel)DataContext).ChangePopoutTargets}"
-            CommandParameter="{Binding .}"/>
+									<CheckBox IsChecked="{Binding IsMarkedForPopout}"/>
 								</StackPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-						<DataGridTextColumn Header="IP Or Domain" Binding="{Binding DomainOrAddress}"/>
+						<DataGridTextColumn Header="Name" Binding="{Binding TargetViewModel.Name}"/>
+						<DataGridTextColumn Header="IP Or Domain" Binding="{Binding TargetViewModel.DomainOrAddress}"/>
 					</DataGrid.Columns>
 				</DataGrid>
 				<Slider Minimum="0" Maximum="1" Grid.Row="2" Grid.ColumnSpan="2"

@@ -6,7 +6,6 @@ namespace Pinger3.ViewModels.PageViewModels
     public interface ISettingsViewModel
     {
         IPopoutWindowViewModel PopoutVM { get; }
-        ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs { get; }
-        void ChangePopoutTargets(object popoutTargets);
+        ObservableCollection<IPingingTargetWrapperViewModel> SelectableForPopoutTargetVMs { get; }
     }
 }

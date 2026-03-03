@@ -29,7 +29,7 @@ namespace Pinger3.ViewModels.Controls
         {
             _targetVM = targetVM;
             _popoutVM = popoutVm;
-            _targetVM.PropertyChanged += (object? sender, PropertyChangedEventArgs e) => { PropertyChanged?.Invoke(sender, e); };
+            _targetVM.PropertyChanged += (sender, e) => { PropertyChanged?.Invoke(sender, e); };
         }
 
         

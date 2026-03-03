@@ -9,11 +9,6 @@ namespace Pinger3.ViewModels.Design
     {
         public IPopoutWindowViewModel PopoutVM => new PopoutWindowViewModelDesign();
 
-        public ObservableCollection<IPingingTargetViewModel> SelectableForPopoutTargetVMs => [new PingingTargetViewModelDesign(), new PingingTargetViewModelDesign()];
-
-        public void ChangePopoutTargets(object target)
-        {
-
-        }
+        public ObservableCollection<IPingingTargetWrapperViewModel> SelectableForPopoutTargetVMs => [new PingingTargetWrapperViewModelDesign(), new PingingTargetWrapperViewModelDesign()];
     }
 }
