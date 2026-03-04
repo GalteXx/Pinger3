@@ -2,10 +2,13 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:templatecontrols="using:Pinger3.TemplateControls"
 		xmlns:views="using:Pinger3.Views"
 		xmlns:vmc="using:Pinger3.ViewModels.Controls"
 		xmlns:vmp="using:Pinger3.ViewModels.PageViewModels"
 		xmlns:vmd="using:Pinger3.ViewModels.Design"
+		xmlns:conv="using:Pinger3.Converters"
+		x:Name="settingWindow"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
 		x:CompileBindings="True"
 		x:DataType="vmp:ISettingsViewModel"
@@ -16,13 +19,19 @@
 		<vmd:SettingsViewModelDesign/>
 	</Design.DataContext>
 
+	<Window.Resources>
+		<!-- to be refactored and support color themes-->
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="Teal" />
+		<conv:DisplayClassEnumToClassesKeyConverter x:Key="classConverter"/>
+	</Window.Resources>
+
 	<StackPanel>
-		<Expander HorizontalAlignment="Stretch" IsExpanded="True">
+		<Expander HorizontalAlignment="Stretch" IsExpanded="True"  Background="{DynamicResource BackgroundColor}">
 			<Expander.Header>
 				<TextBlock Text="Popout Window" FontSize="16" FontWeight="Bold"/>
 			</Expander.Header>
-			<Grid RowDefinitions="Auto, *, *, *" ColumnDefinitions="*, *, 2*">
-				<DataGrid Grid.RowSpan="2" Grid.ColumnSpan="2"
+			<Grid RowDefinitions="Auto, *, *" ColumnDefinitions="2*, *">
+				<DataGrid Grid.RowSpan="2" 
 						  ItemsSource="{Binding SelectableForPopoutTargetVMs}">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="Pop out">
@@ -36,14 +45,13 @@
 						<DataGridTextColumn Header="IP Or Domain" Binding="{Binding TargetViewModel.DomainOrAddress}"/>
 					</DataGrid.Columns>
 				</DataGrid>
-				<Slider Minimum="0" Maximum="1" Grid.Row="2" Grid.ColumnSpan="2"
+				<Slider Minimum="0" Maximum="1" Grid.Row="2" 
 						Value="{Binding PopoutVM.Opacity, Mode=TwoWay}"/>
-				<CheckBox Grid.Row="3" Grid.ColumnSpan="2"
-						  Content="Click Through" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"
-						  IsChecked="{Binding PopoutVM.ClickThrough, Mode=TwoWay}"/>
-
-				<TextBlock Grid.Column="2" Grid.RowSpan="4" Text="PreviewPage"
-						   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				<templatecontrols:PingDisplay Grid.Column="2" HorizontalAlignment="Center"
+											  AddressName="Name" Address="example.com"
+											  Classes="{Binding SelectedItem, Converter={StaticResource classConverter}, ElementName=StyleSelector}"/>
+				<ComboBox x:Name="StyleSelector" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center"
+						  ItemsSource="{Binding DisplayableClasses, ElementName=settingWindow}"/>
 			</Grid>
 		</Expander>
 	</StackPanel>

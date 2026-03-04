@@ -8,6 +8,8 @@ namespace Pinger3.ViewModels.Design
 {
     public class PingingTargetViewModelDesign : IPingingTargetViewModel
     {
+
+        public static PingingTargetViewModelDesign Instance { get => new(); }
         public PingingTargetViewModelDesign()
         {
             Ping = TimeSpan.FromMilliseconds(Random.Shared.Next(1, 120));

@@ -31,7 +31,7 @@
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 
-			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="CompactAwaitngTime"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="CompactAwaitingTime"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
@@ -97,7 +97,7 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
-	<Style Selector="controls|PingDisplay.CompactAwaitngTime">
+	<Style Selector="controls|PingDisplay.CompactAwaitingTime">
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
