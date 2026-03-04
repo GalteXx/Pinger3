@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Pinger3.ViewModels.PageViewModels
 {

@@ -48,21 +48,10 @@
 		</StackPanel>
 		<DataGrid Margin="10" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" GridLinesVisibility="Horizontal"
 				  Background="{DynamicResource BackgroundColor}" Grid.Row="2"
-
 				  ItemsSource="{Binding CurrentPingingTargetsGroup}">
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Name">
-					<DataTemplate>
-						<TextBox Text="{Binding Name, Mode=TwoWay}" Classes="Entry" Margin="10, 0, 5, 0"
-								 BorderBrush="{DynamicResource SecondaryColor}" />
-					</DataTemplate>
-				</DataGridTemplateColumn>
-								<DataGridTemplateColumn Header="Address or Domain">
-					<DataTemplate>
-						<TextBox Text="{Binding DomainOrAddress, Mode=TwoWay}" Classes="Entry" Margin="10,0,5,0"
-								 BorderBrush="{DynamicResource SecondaryColor}" />
-					</DataTemplate>
-				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+				<DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}"/>
 				<DataGridTextColumn Header="Delay" Binding="{Binding DelayBetweenRequests, Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}"/>
 				<DataGridCheckBoxColumn Header="Active"
 										Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True"
@@ -71,8 +60,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal">
-								<Border CornerRadius="5" Margin="10" Width="5" Height="5" 
-										Background="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToColorConverter}}"/>
+								<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToColorConverter}}"/>
 								<TextBlock Text="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
 							</StackPanel>
 						</DataTemplate>
@@ -82,8 +70,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal">
-								<Border CornerRadius="5" Margin="10" Width="5" Height="5" 
-										Background="{Binding Ping, Converter={StaticResource TimeSpanToColorConverter}}"/>
+								<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding Ping, Converter={StaticResource TimeSpanToColorConverter}}"/>
 								<TextBlock Text="{Binding Ping, Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
 							</StackPanel>
 						</DataTemplate>
@@ -92,17 +79,14 @@
 				<DataGridTemplateColumn>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Button Foreground="{DynamicResource PrimaryColor}" Background="{DynamicResource BackgroundColor}" 
-									BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" Padding="2"
+							<Button Foreground="{DynamicResource PrimaryColor}" Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" Padding="2"
 									IsEnabled="{Binding ValidationErrors, Converter={StaticResource ValidationErrorsToBoolConverter}}"
-									Content="{Binding IsActive, Converter={StaticResource BoolToToggleStringConverter}, 
-											 ConverterParameter=Stop|Start}" Command="{Binding TogglePingingCommand}" />
+									Content="{Binding IsActive, Converter={StaticResource BoolToToggleStringConverter}, ConverterParameter=Stop|Start}" Command="{Binding TogglePingingCommand}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
 			</DataGrid.Columns>
-			
 		</DataGrid>
 	</Grid>
 

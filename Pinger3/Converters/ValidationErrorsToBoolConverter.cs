@@ -11,7 +11,7 @@ namespace Pinger3.Converters
         {
             if(value is not ConfigValidationErrors errors)
                 return Avalonia.Data.BindingNotification.UnsetValue;
-            return (errors != ConfigValidationErrors.None) != ((parameter is null) || ((string)parameter != "inverted"));
+            return (errors != ConfigValidationErrors.None) != ((parameter is null) || ((string)parameter == "inverted"));
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
