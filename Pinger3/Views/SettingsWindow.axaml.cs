@@ -9,7 +9,7 @@ namespace Pinger3;
 
 public partial class SettingsWindow : Window
 {
-    public static List<PingDisplayClass> DisplayableClasses => [.. Enum.GetValues<PingDisplayClass>()];
+    public static List<string> DisplayableClasses => ["Full", "CompactPing", "CompactResponseTime", "ResponseTimeOnly"];
     public SettingsWindow()
     {
         InitializeComponent();

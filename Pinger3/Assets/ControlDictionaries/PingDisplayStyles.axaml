@@ -21,7 +21,8 @@
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 
-			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="CompactPing"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" 
+								  Classes="CompactPing"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
@@ -31,7 +32,8 @@
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 
-			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="CompactAwaitingTime"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" 
+								  Classes="CompactResponseTime"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
@@ -41,7 +43,8 @@
 				</controls:PingDisplay.DataContext>
 			</controls:PingDisplay>
 
-			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="ResponeTimeOnly"
+			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" 
+								  Classes="ResponseTimeOnly"
 								  AddressName="{Binding Name}"
 								  Address="{Binding DomainOrAddress}"
 								  Ping="{Binding Ping}"
@@ -97,7 +100,7 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
-	<Style Selector="controls|PingDisplay.CompactAwaitingTime">
+	<Style Selector="controls|PingDisplay.CompactResponseTime">
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">
@@ -115,7 +118,7 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
-	<Style Selector="controls|PingDisplay.ResponeTimeOnly">
+	<Style Selector="controls|PingDisplay.ResponseTimeOnly">
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource PrimaryColor}">

@@ -11,8 +11,9 @@
 		mc:Ignorable="d" SizeToContent="WidthAndHeight"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaChromeHints="NoChrome"
-		Topmost="True" IsHitTestVisible="{Binding ClickThrough}"
+		Topmost="True"
 		PointerPressed="OnPointerPressed"
+		x:CompileBindings="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
 		x:Class="Pinger3.Views.PopoutWindow"
 		Opacity="{Binding Opacity}"
@@ -21,20 +22,24 @@
 		<vmd:PopoutWindowViewModelDesign/>
 	</Design.DataContext>
 	<Window.Resources>
-		<converters:TimespanToStringConverter x:Key="TimeToString"/>
+		<converters:StringClassToBooleanConverter x:Key="classNameConverter"/>
 	</Window.Resources>
 
-	<ListBox ItemsSource="{Binding PingViewModels}" IsHitTestVisible="{Binding ClickThrough}" >
+	<ListBox ItemsSource="{Binding PingViewModels}">
 		<ListBox.Styles>
 			<Style Selector="ListBoxItem"> <Setter Property="Padding" Value="1" /> </Style>
 		</ListBox.Styles>
 		<ListBox.ItemTemplate>
 			<DataTemplate>
-				<controls:PingDisplay Classes="CompactAwaitngTime" IsHitTestVisible="{Binding $parent[Window].DataContext.ClickThrough}"
-									  AddressName="{Binding Name}" Address="{Binding DomainOrAddress}"
-									  Ping="{Binding Ping}"
-									  ResponseWaitingTime="{Binding TimeSinceLastRequest}"
-									  />
+				<controls:PingDisplay
+				Classes.Full="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=Full}"
+				Classes.CompactPing="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactPing}"
+				Classes.CompactResponseTime="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactResponseTime}"
+				Classes.ResponseTimeOnly="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=ResponseTimeOnly}"
+				AddressName="{Binding Name}" Address="{Binding DomainOrAddress}"
+				Ping="{Binding Ping}"
+				ResponseWaitingTime="{Binding TimeSinceLastRequest}"
+				/>
 			</DataTemplate>
 		</ListBox.ItemTemplate>
 	</ListBox>

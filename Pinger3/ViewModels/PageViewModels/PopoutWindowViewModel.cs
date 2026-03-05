@@ -10,6 +10,7 @@ namespace Pinger3.ViewModels.PageViewModels
         //TODO: BindStyles
         private double _transparency = 0.8;
         private bool _clickThrough = false;
+        private string _selectedClassName = "Full";
 
         public bool ClickThrough
         {
@@ -38,6 +39,15 @@ namespace Pinger3.ViewModels.PageViewModels
         }
 
         public ObservableCollection<IPingingTargetViewModel> PingViewModels { get; }
+        public string SelectedStyleClassName
+        {
+            get => _selectedClassName;
+            set
+            {
+                _selectedClassName = value;
+                OnPropertyChanged();
+            }
+        }
 
         public PopoutWindowViewModel()
         {

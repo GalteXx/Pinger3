@@ -30,6 +30,8 @@ namespace Pinger3.ViewModels.Design
 
         public double Opacity { get => 0; set { } }
 
+        public string SelectedStyleClassName { get => "Full"; set { } }
+
         public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

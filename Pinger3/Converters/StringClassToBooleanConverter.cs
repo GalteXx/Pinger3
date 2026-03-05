@@ -1,19 +1,17 @@
 ﻿using Avalonia.Data.Converters;
-using Pinger3.ViewModels.Controls;
 using System;
 using System.Globalization;
 
 namespace Pinger3.Converters
 {
-    internal class DisplayClassEnumToClassesKeyConverter : IValueConverter
+    internal class StringClassToBooleanConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is not PingDisplayClass cl)
+            if (value is not string targetClass || parameter is not string compareClassName)
                 return Avalonia.Data.BindingNotification.UnsetValue;
-
-            return Enum.GetName(cl);
-
+            return targetClass == compareClassName;
+            //wow, class binding is the worst thing i've ever coded
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
