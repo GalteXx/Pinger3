@@ -12,6 +12,7 @@
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
 		SizeToContent="Width"
 		x:CompileBindings="True"
+		Icon="/Assets/icon.ico"
 		x:DataType="vmp:ISettingsViewModel"
 		x:Class="Pinger3.SettingsWindow"
 		Title="Settings">

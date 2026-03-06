@@ -20,7 +20,7 @@ namespace Pinger3.Services
             _trayIcon = new TrayIcon
             {
                 ToolTipText = "Pinger",
-                Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://Pinger3/Assets/avalonia-logo.ico")))
+                Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://Pinger3/Assets/icon.ico")))
             };
 
             InitializeMenu();

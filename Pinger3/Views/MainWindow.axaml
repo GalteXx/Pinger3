@@ -10,7 +10,7 @@
 		mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="450"
 		x:Class="Pinger3.Views.MainWindow"
 		x:DataType="vm:IMainWindowViewModel"
-		Icon="/Assets/avalonia-logo.ico"
+		Icon="/Assets/icon.ico"
 		x:Name="mainWindow"
 		Title="Pinger3">
 	<Window.Resources>
