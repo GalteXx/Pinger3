@@ -14,17 +14,16 @@ namespace Pinger3.ViewModels.PageViewModels
         [ObservableProperty]
         private PingingTargetCategory _selectedGroupOfTargets = PingingTargetCategory.ValidTargets;
 
-        public INavigationViewModel NavigationVM { get; }
+
 
         private readonly ParsedTargetsViewModelsBuilder _targetsVMs;
         private readonly ResponseAwaitingTimeUpdaterService _timeUpdater;
 
         public MainWindowViewModel(ParsedTargetsViewModelsBuilder parser, 
-            ResponseAwaitingTimeUpdaterService timeUpdaterService, INavigationViewModel navigationVM)
+            ResponseAwaitingTimeUpdaterService timeUpdaterService)
         {
             _timeUpdater = timeUpdaterService;
             _targetsVMs = parser;
-            NavigationVM = navigationVM;
         }
 
         partial void OnSelectedGroupOfTargetsChanged(PingingTargetCategory value)

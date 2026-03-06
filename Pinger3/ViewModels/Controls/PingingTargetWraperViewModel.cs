@@ -18,7 +18,10 @@ namespace Pinger3.ViewModels.Controls
             set
             {
                 if (value)
+                {
                     _popoutVM.PingViewModels.Add(_targetVM);
+                    _targetVM.StartPingingCommand.Execute(null);
+                }
                 else
                     _popoutVM.PingViewModels.Remove(_targetVM);
             }

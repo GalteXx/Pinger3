@@ -13,5 +13,7 @@ namespace Pinger3.Services
             var window = _serviceProvider.GetRequiredService<T>();
             window.Show();
         }
+
+        public T GetWindowInstance<T>() where T : Window => _serviceProvider.GetRequiredService<T>();
     }
 }

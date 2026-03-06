@@ -25,13 +25,13 @@
 		<converters:StringClassToBooleanConverter x:Key="classNameConverter"/>
 	</Window.Resources>
 
-	<ListBox ItemsSource="{Binding PingViewModels}">
+	<ListBox ItemsSource="{Binding PingViewModels}" IsHitTestVisible="False">
 		<ListBox.Styles>
 			<Style Selector="ListBoxItem"> <Setter Property="Padding" Value="1" /> </Style>
 		</ListBox.Styles>
 		<ListBox.ItemTemplate>
 			<DataTemplate>
-				<controls:PingDisplay
+				<controls:PingDisplay IsHitTestVisible="False"
 				Classes.Full="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=Full}"
 				Classes.CompactPing="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactPing}"
 				Classes.CompactResponseTime="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactResponseTime}"

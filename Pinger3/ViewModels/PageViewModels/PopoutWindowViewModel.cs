@@ -10,7 +10,7 @@ namespace Pinger3.ViewModels.PageViewModels
         //TODO: BindStyles
         private double _transparency = 0.8;
         private bool _clickThrough = false;
-        private string _selectedClassName = "Full";
+        private string _selectedClassName = "CompactResponseTime";
 
         public bool ClickThrough
         {

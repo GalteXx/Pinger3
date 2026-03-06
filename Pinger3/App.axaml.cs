@@ -39,18 +39,17 @@ namespace Pinger3
 
         private async Task StartAsync(IClassicDesktopStyleApplicationLifetime desktop, ServiceProvider services)
         {
+            desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
             var vmBuilder = services.GetRequiredService<ParsedTargetsViewModelsBuilder>();
 
             _ = services.GetRequiredService<ISettingsViewModel>(); //To properly subscribe to events, Maybe a little hacky?
-
             await vmBuilder.ParseConfigAndCreateViewModelsAsync();
 
-            var vm = services.GetRequiredService<MainWindowViewModel>();
-            desktop.MainWindow = new MainWindow()
-            {
-                DataContext = vm,
-            };
-            desktop.MainWindow.Show();
+            var trayIconService = services.GetRequiredService<TrayIconService>();
+            trayIconService.Show();
+            services.GetRequiredService<SettingsWindow>().Show();
+            services.GetRequiredService<PopoutWindow>().Show();
+
         }
         private void DisableAvaloniaDataAnnotationValidation()
         {

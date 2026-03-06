@@ -16,6 +16,15 @@ namespace Pinger3.Views
             Loaded += MainWindow_Loaded;
         }
 
+        public MainWindow(IMainWindowViewModel viewModel)
+        {
+            AddressCategories = [.. Enum.GetValues<PingingTargetCategory>()];
+            DataContext = viewModel;
+            InitializeComponent();
+            Loaded += MainWindow_Loaded;
+        }
+
+
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel vm)

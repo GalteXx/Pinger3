@@ -28,20 +28,6 @@
 	
 
 	<Grid RowDefinitions="25, 50 *">
-		<DockPanel>
-			<Menu>
-			<MenuItem Header="Settings" IsVisible="True">
-				<Menu>
-					<MenuItem Header="PopoutMenuSettings" Command="{Binding NavigationVM.OpenPopoutSettingsWindowCommand}"/>
-				</Menu>
-			</MenuItem>
-			<MenuItem Header="Windows" IsVisible="True">
-				<Menu>
-					<MenuItem Header="PopoutWidget" Command="{Binding NavigationVM.OpenPopoutWindowCommand}"/>
-				</Menu>
-			</MenuItem>
-		</Menu>
-		</DockPanel>
 		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15" Grid.Row="1">
 			<ComboBox SelectedItem="{Binding SelectedGroupOfTargets, Mode=TwoWay}" x:Name="AddressCategorySelectorBox"
 					  ItemsSource="{Binding AddressCategories, ElementName=mainWindow}"/>

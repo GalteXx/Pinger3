@@ -4,6 +4,7 @@ namespace Pinger3.Services
 {
     public interface IWindowService
     {
-        public void ShowWindow<T>() where T : Window;
+        T GetWindowInstance<T>() where T : Window;
+        void ShowWindow<T>() where T : Window;
     }
 }
