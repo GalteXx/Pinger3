@@ -7,6 +7,8 @@ using Pinger3.Services;
 using Pinger3.Services.DependencyInjection;
 using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Views;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +33,18 @@ namespace Pinger3
                 collection.AddCommonServices();
                 var services = collection.BuildServiceProvider();
 
-                _ = StartAsync(desktop, services);
+                var startTask = StartAsync(desktop, services);
+                startTask.ContinueWith(t =>
+                {
+                    if (t.IsCanceled)
+                    {
+                        desktop.Shutdown();
+                    }
+                    else if (t.IsFaulted)
+                    {
+                        throw new Exception($"Unhandled exception in StartAsync: {t.Exception?.Flatten().ToString()}");
+                    }
+                }, TaskScheduler.Default);
             }
 
             base.OnFrameworkInitializationCompleted();

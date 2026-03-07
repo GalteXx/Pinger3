@@ -31,7 +31,7 @@ namespace Pinger3.Services
         {
             var assembly = typeof(AddressesConfigParser).Assembly;
             await using var stream =
-                assembly.GetManifestResourceStream("Pinger_2.Assets.config.default.xml")
+                assembly.GetManifestResourceStream("Pinger3.Assets.config.default.xml")
                 ?? throw new InvalidOperationException("Default config not found.");
 
             return await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
