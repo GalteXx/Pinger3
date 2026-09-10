@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace Pinger3.Services;
 
-internal class XmlAddressesStorageLoader : IAddressesStorageLoader<XDocument>
+internal class XmlAddressesStorageLoader
 {
     private const string ConfigName = "config.xml";
 

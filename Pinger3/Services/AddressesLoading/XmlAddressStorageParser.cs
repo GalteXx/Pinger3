@@ -1,34 +1,17 @@
 ﻿using Pinger3.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Pinger3.Services
 {
     internal class AddressStorageReader(XmlAddressesStorageLoader loader, XmlAddressValidator validator)
-        : IAddressesConfigParser
+        : IAddressesStorageParser
     {
-        private readonly XmlAddressesStorageLoader _loader = loader;
-        private readonly XmlAddressValidator _validator = validator;
         private readonly object _docLock = new();
-
-        private static async Task<bool> TryResolveDomain(string domainAttr)
-        {
-            try
-            {
-                await Dns.GetHostAddressesAsync(domainAttr);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
 
         private static async Task<AddressConfig> ParseValidatedConfigElement(XElement element,
             ConfigValidationErrors errors)
@@ -65,7 +48,14 @@ namespace Pinger3.Services
 
         public async IAsyncEnumerable<AddressConfig> ParseAddressesAsync()
         {
-            var storage = await _loader.LoadStorageAsync();
+            var storage = await loader.LoadStorageAsync();
+            // TODO: revisit this when internet access
+            var i = -1;
+
+            await foreach (var errors in validator.ValidateAddressEntriesAsync(storage))
+            {
+                yield return await ParseValidatedConfigElement(storage.Elements().ElementAt(++i), errors);
+            }
             
         }
     }

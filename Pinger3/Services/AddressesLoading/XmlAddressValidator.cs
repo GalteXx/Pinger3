@@ -9,33 +9,44 @@ namespace Pinger3.Services;
 
 public class XmlAddressValidator
 {
-    public async IAsyncEnumerable<AddressConfig>? ValidateAddressEntriesAsync(XDocument doc)
+    public async IAsyncEnumerable<ConfigValidationErrors> ValidateAddressEntriesAsync(XDocument doc)
     {
         var targets = doc.Root!.Element("TargetIPs");
-        if (targets == null) return null;
+        if (targets == null) yield break;
 
         var elements = targets.Elements("TargetIP").ToList();
 
-        await foreach (var entry in elements)
+        foreach (var element in elements)
         {
-            var errors = await ValidateConfigElement(el);
-            var config = await ParseValidatedConfigElement(el, errors);
-            yield return config;
+            var errors = await ValidateConfigElement(element);
+            yield return errors;
+        }
+    }
+    
+    private static async Task<bool> TryResolveDomain(string domainAttr)
+    {
+        try
+        {
+            await Dns.GetHostAddressesAsync(domainAttr);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 
+    // At this point I want to make a metadata based validator, and use Attributes.
+    // This looks horrible and I hate it
     private async Task<ConfigValidationErrors> ValidateConfigElement(XElement el)
     {
-        ConfigValidationErrors errors = ConfigValidationErrors.None;
+        var errors = ConfigValidationErrors.None;
         if (el.Attribute("Name") == null)
         {
-            lock (_docLock)
+            if (el.Attribute("Name") == null) // got rid of lock here. Might need to look up if I shouldn't have
             {
-                if (el.Attribute("Name") == null)
-                {
-                    el.Add(new XAttribute("Name", "AddressName"));
-                    errors |= ConfigValidationErrors.MissingName;
-                }
+                el.Add(new XAttribute("Name", "AddressName"));
+                errors |= ConfigValidationErrors.MissingName;
             }
         }
 
@@ -57,8 +68,8 @@ public class XmlAddressValidator
 
         if (!string.IsNullOrWhiteSpace(domainAttr))
         {
-            if (!await TryResolveDomain(domainAttr))
-                errors |= ConfigValidationErrors.DomainUnresolvable;
+            if (!await TryResolveDomain(domainAttr)) //really not sure about this one
+                errors |= ConfigValidationErrors.DomainUnresolvable; 
         }
 
         return errors;
