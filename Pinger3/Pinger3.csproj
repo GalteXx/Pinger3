@@ -52,4 +52,8 @@
       <DependentUpon>PopoutWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\DependencyInjection\" />
+  </ItemGroup>
 </Project>
