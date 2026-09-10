@@ -25,13 +25,13 @@ namespace Pinger3.Services
 
         public async Task ParseConfigAndCreateViewModelsAsync()
         {
-            var addresses = await _configParser.ParseConfigAsync();
+            var addresses = await _configParser.ParseAddressesAsync();
 
             var creationTasks = addresses.Select(async address =>
             {
                 await Task.Yield();
 
-                var pinger = new ICMPPinger(address);
+                var pinger = new IcmpPingService(address);
 
                 IPingingTargetViewModel vm;
                 if (address.ValidationErrors == ConfigValidationErrors.None)

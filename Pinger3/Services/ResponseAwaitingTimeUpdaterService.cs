@@ -13,7 +13,7 @@ namespace Pinger3.Services
 
         public ResponseAwaitingTimeUpdaterService()
         {
-            Ticked = new EventHandler((sender, e) => { });
+            Ticked = (_, _) => { };
             _timer = new DispatcherTimer(TimerInterval, DispatcherPriority.Normal, Ticked);
             _timer.Tick += OnTimerTick;
         }

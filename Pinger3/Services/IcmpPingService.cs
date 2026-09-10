@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services
 {
-    public sealed class ICMPPinger : IPingService, IDisposable
+    public sealed class IcmpPingService(AddressConfig config) : IPingService, IDisposable
     {
-        private readonly AddressConfig _config;
         private CancellationTokenSource? _cts;
         private DateTime _lastRequest = DateTime.Now;
         private bool _updateSuppressed = true;
@@ -17,12 +16,6 @@ namespace Pinger3.Services
 
         public DateTime? LastRequestTime => _updateSuppressed ? null : _lastRequest;
 
-
-
-        public ICMPPinger(AddressConfig config)
-        {
-            _config = config;
-        }
 
         public void Start()
         {
@@ -45,19 +38,18 @@ namespace Pinger3.Services
             {
                 try
                 {
-                    var rep = ping.SendPingAsync(_config.ResolvedIpAddress, 2000);
+                    var rep = ping.SendPingAsync(config.ResolvedIpAddress, 2000);
                     OnPingSent();
                     var reply = await rep;
-                    if (reply.Status == IPStatus.Success)
-                        OnPingReceived(TimeSpan.FromMilliseconds(reply.RoundtripTime));
-                    else
-                        OnPingReceived(TimeSpan.FromMilliseconds(-1d)); //why is there no NaN for TimeSpan
+                    OnPingReceived(reply.Status == IPStatus.Success
+                        ? TimeSpan.FromMilliseconds(reply.RoundtripTime)
+                        : TimeSpan.FromMilliseconds(-1d)); //why is there no NaN for TimeSpan
                 }
                 catch
                 {
                     OnPingReceived(TimeSpan.FromMilliseconds(-1d));
                 }
-                await Task.Delay(_config.RequestDelay, ct);
+                await Task.Delay(config.RequestDelay, ct);
             }
         }
 

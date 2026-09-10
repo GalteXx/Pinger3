@@ -31,15 +31,15 @@ namespace Pinger3.ViewModels.Controls
         }
 
         [ObservableProperty]
-        private string name = string.Empty;
+        private string _name = string.Empty;
         [ObservableProperty]
-        private string domainOrAddress = string.Empty;
+        private string _domainOrAddress = string.Empty;
         [ObservableProperty]
-        private TimeSpan ping;
+        private TimeSpan _ping;
         [ObservableProperty]
-        private bool isActive;
+        private bool _isActive;
         [ObservableProperty]
-        private TimeSpan timeSinceLastRequest;
+        private TimeSpan _timeSinceLastRequest;
 
         public TimeSpan DelayBetweenRequests => _model.DelayBetweenRequests;
 
