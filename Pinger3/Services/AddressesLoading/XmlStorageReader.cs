@@ -8,7 +8,7 @@ public class XmlStorageReader : IStorageReader
 {
     private readonly XmlAddressesStorageLoader _loader = new();
 
-    public async IAsyncEnumerable<AddressDTO> ReadAddressAsync()
+    public async IAsyncEnumerable<EndpointDTO> ReadAddressAsync()
     {
         var storage = await _loader.LoadStorageAsync();
         foreach (var el in storage.Elements())
@@ -21,13 +21,13 @@ public class XmlStorageReader : IStorageReader
     }
 
     // I will deal with updating outdated configs later
-    private static AddressDTO? CreateAddressDto(XElement el)
+    private static EndpointDTO? CreateAddressDto(XElement el)
     {
         var id = el.Attribute("id")?.Value;
         var name = el.Attribute("Name")?.Value;
         var address = el.Attribute("Address")?.Value;
         var delay = el.Attribute("")?.Value;
         
-        return new AddressDTO(id, name, address, delay);
+        return new EndpointDTO(id, name, address, delay);
     }
 }

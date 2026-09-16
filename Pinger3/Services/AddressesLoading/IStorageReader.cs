@@ -5,5 +5,5 @@ namespace Pinger3.Services;
 
 public interface IStorageReader
 {
-    IAsyncEnumerable<AddressDTO> ReadAddressAsync();
+    IAsyncEnumerable<EndpointDTO> ReadAddressAsync();
 }

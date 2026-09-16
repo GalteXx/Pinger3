@@ -9,12 +9,12 @@ namespace Pinger3.ViewModels.Controls
     {
         private ConfigValidationErrors validationErrors;
 
-        public InvalidPingingTargetViewModel(AddressConfig address)
+        public InvalidPingingTargetViewModel(EndpointConfig endpoint)
         {
-            Name = address.Name;
-            DomainOrAddress = address.AddressOrDomain;
-            ValidationErrors = address.ValidationErrors;
-            DelayBetweenRequests = address.RequestDelay;
+            Name = endpoint.Name;
+            DomainOrAddress = endpoint.Address;
+            ValidationErrors = endpoint.ValidationErrors;
+            DelayBetweenRequests = endpoint.RequestDelay;
         }
 
 

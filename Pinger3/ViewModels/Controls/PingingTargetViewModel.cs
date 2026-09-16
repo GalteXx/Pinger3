@@ -27,7 +27,7 @@ namespace Pinger3.ViewModels.Controls
                     TimeSinceLastRequest : DateTime.Now - (DateTime)_pingService.LastRequestTime;
             };
             Name = _model.Name;
-            DomainOrAddress = _model.AddressOrDomain;
+            DomainOrAddress = _model.Address;
         }
 
         [ObservableProperty]

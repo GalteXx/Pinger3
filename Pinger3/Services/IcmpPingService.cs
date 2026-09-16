@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services
 {
-    public sealed class IcmpPingService(AddressConfig config) : IPingService, IDisposable
+    public sealed class IcmpPingService(EndpointConfig config) : IPingService, IDisposable
     {
         private CancellationTokenSource? _cts;
         private DateTime _lastRequest = DateTime.Now;

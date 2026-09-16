@@ -13,7 +13,7 @@ namespace Pinger3.Services
     {
         private readonly object _docLock = new();
 
-        private static async Task<AddressConfig> ParseValidatedConfigElement(AddressDTO element,
+        private static async Task<EndpointConfig> ParseValidatedConfigElement(EndpointDTO element,
             ConfigValidationErrors errors)
         {
             IPAddress resolvedIP;
@@ -40,10 +40,10 @@ namespace Pinger3.Services
                 ? TimeSpan.FromSeconds(1)
                 : TimeSpan.FromMilliseconds(Convert.ToDouble(element.Attribute("Delay")!.Value));
 
-            return new AddressConfig(name, addressOrDomain, delay, errors);
+            return new EndpointConfig(name, addressOrDomain, delay, errors);
         }
 
-        public async IAsyncEnumerable<AddressConfig> ParseAddressesAsync()
+        public async IAsyncEnumerable<EndpointConfig> ParseAddressesAsync()
         {
             var dtoStream = reader.ReadAddressAsync();
 
