@@ -13,7 +13,7 @@ namespace Pinger3.Services
     {
         private readonly object _docLock = new();
 
-        private static async Task<EndpointConfig> ParseValidatedConfigElement(EndpointDTO element,
+        private static async Task<EndpointConfig> ParseValidatedConfigElement(EndpointDto element,
             ConfigValidationErrors errors)
         {
             IPAddress resolvedIP;
