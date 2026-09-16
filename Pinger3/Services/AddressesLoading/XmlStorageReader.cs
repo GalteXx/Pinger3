@@ -14,9 +14,9 @@ public class XmlStorageReader : IStorageReader
         foreach (var el in storage.Elements())
         {
             var dto = CreateAddressDto(el);
-            if (dto == null) // there is literally no case when this could fire 
+            if (dto == null) // there is literally not a single case when this could fire 
                 continue;
-            yield return dto.Value;
+            yield return dto;
         }
     }
 
