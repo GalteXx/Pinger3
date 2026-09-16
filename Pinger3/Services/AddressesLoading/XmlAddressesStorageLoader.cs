@@ -16,7 +16,7 @@ internal class XmlAddressesStorageLoader
 
     private static async Task<XDocument> LoadDefaultConfigAsync()
     {
-        var assembly = typeof(AddressStorageReader).Assembly;
+        var assembly = typeof(XmlAddressesStorageLoader).Assembly;
         await using var stream =
             assembly.GetManifestResourceStream("Pinger3.Assets.config.default.xml")
             ?? throw new InvalidOperationException("Default config not found.");

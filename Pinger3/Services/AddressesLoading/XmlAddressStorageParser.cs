@@ -8,19 +8,16 @@ using System.Xml.Linq;
 
 namespace Pinger3.Services
 {
-    internal class AddressStorageReader(XmlAddressesStorageLoader loader, XmlAddressValidator validator)
+    internal class XmlAddressStorageParser(IStorageReader reader, XmlAddressValidator validator)
         : IAddressesStorageParser
     {
         private readonly object _docLock = new();
 
-        private static async Task<AddressConfig> ParseValidatedConfigElement(XElement element,
+        private static async Task<AddressConfig> ParseValidatedConfigElement(AddressDTO element,
             ConfigValidationErrors errors)
         {
             IPAddress resolvedIP;
             string addressOrDomain;
-            string name = !errors.HasFlag(ConfigValidationErrors.MissingName)
-                ? element.Attribute("Name")!.Value
-                : "AddressName";
 
             if (errors.HasFlag(ConfigValidationErrors.MissingAddress) ||
                 errors.HasFlag(ConfigValidationErrors.InvalidIpFormat) ||
@@ -43,14 +40,12 @@ namespace Pinger3.Services
                 ? TimeSpan.FromSeconds(1)
                 : TimeSpan.FromMilliseconds(Convert.ToDouble(element.Attribute("Delay")!.Value));
 
-            return new AddressConfig(name, addressOrDomain, resolvedIP, delay, errors);
+            return new AddressConfig(name, addressOrDomain, delay, errors);
         }
 
         public async IAsyncEnumerable<AddressConfig> ParseAddressesAsync()
         {
-            var storage = await loader.LoadStorageAsync();
-            // TODO: revisit this when internet access
-            var i = -1;
+            var dtoStream = reader.ReadAddressAsync();
 
             await foreach (var errors in validator.ValidateAddressEntriesAsync(storage))
             {
