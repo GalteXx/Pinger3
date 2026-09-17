@@ -20,7 +20,6 @@ public class XmlStorageReader : IStorageReader
         }
     }
 
-    // I will deal with updating outdated configs later
     private static EndpointDto? CreateAddressDto(XElement el)
     {
         var id = el.Attribute("id")?.Value;

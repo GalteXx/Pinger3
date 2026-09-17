@@ -9,7 +9,7 @@ namespace Pinger3.ViewModels.Controls
     {
         private ConfigValidationErrors validationErrors;
 
-        public InvalidPingingTargetViewModel(EndpointConfig endpoint)
+        public InvalidPingingTargetViewModel(EndpointEntry endpoint)
         {
             Name = endpoint.Name;
             DomainOrAddress = endpoint.Address;

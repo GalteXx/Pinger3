@@ -17,8 +17,16 @@ namespace Pinger3
 
             collection.AddSingleton<TrayIconService>();
             
+            AddStorageParsingServices(collection);
             AddViewModels(collection);
             AddWindows(collection);
+        }
+
+        private static void AddStorageParsingServices(IServiceCollection collection)
+        {
+            collection.AddTransient<IAddressesStorageParser, XmlAddressStorageParser>();
+            collection.AddTransient<IStorageReader, XmlStorageReader>();
+            collection.AddTransient<EndpointModelFactory>();
         }
 
         private static void AddViewModels(IServiceCollection collection)

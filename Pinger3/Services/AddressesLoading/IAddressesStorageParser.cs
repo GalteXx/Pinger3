@@ -6,6 +6,6 @@ namespace Pinger3.Services
 {
     internal interface IAddressesStorageParser
     {
-        public IAsyncEnumerable<EndpointConfig> ParseAddressesAsync();
+        public IAsyncEnumerable<EndpointModel> ParseAddressesAsync();
     }
 }

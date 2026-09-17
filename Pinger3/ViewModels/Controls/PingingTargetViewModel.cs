@@ -8,10 +8,10 @@ namespace Pinger3.ViewModels.Controls
 {
     public partial class PingingTargetViewModel : ObservableObject, IPingingTargetViewModel
     {
-        private readonly PingTargetModel _model;
+        private readonly EndpointModel _model;
         private readonly IPingService _pingService;
 
-        public PingingTargetViewModel(PingTargetModel model, ResponseAwaitingTimeUpdaterService timeUpdater, IPingService pinger)
+        public PingingTargetViewModel(EndpointModel model, ResponseAwaitingTimeUpdaterService timeUpdater, IPingService pinger)
         {
             TimeSinceLastRequest = TimeSpan.Zero;
             _model = model;

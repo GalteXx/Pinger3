@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services
 {
-    public sealed class IcmpPingService(EndpointConfig config) : IPingService, IDisposable
+    public sealed class IcmpPingService(EndpointEntry entry) : IPingService, IDisposable
     {
         private CancellationTokenSource? _cts;
         private DateTime _lastRequest = DateTime.Now;
@@ -38,7 +38,7 @@ namespace Pinger3.Services
             {
                 try
                 {
-                    var rep = ping.SendPingAsync(config.ResolvedIpAddress, 2000);
+                    var rep = ping.SendPingAsync(entry, 2000);
                     OnPingSent();
                     var reply = await rep;
                     OnPingReceived(reply.Status == IPStatus.Success
@@ -49,7 +49,7 @@ namespace Pinger3.Services
                 {
                     OnPingReceived(TimeSpan.FromMilliseconds(-1d));
                 }
-                await Task.Delay(config.RequestDelay, ct);
+                await Task.Delay(entry.RequestDelay, ct);
             }
         }
 

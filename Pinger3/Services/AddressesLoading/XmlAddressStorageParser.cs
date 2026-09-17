@@ -8,48 +8,17 @@ using System.Xml.Linq;
 
 namespace Pinger3.Services
 {
-    internal class XmlAddressStorageParser(IStorageReader reader, XmlAddressValidator validator)
+    internal class XmlAddressStorageParser(IStorageReader reader, EndpointModelFactory factory)
         : IAddressesStorageParser
     {
-        private readonly object _docLock = new();
 
-        private static async Task<EndpointConfig> ParseValidatedConfigElement(EndpointDto element,
-            ConfigValidationErrors errors)
-        {
-            IPAddress resolvedIP;
-            string addressOrDomain;
-
-            if (errors.HasFlag(ConfigValidationErrors.MissingAddress) ||
-                errors.HasFlag(ConfigValidationErrors.InvalidIpFormat) ||
-                errors.HasFlag(ConfigValidationErrors.DomainUnresolvable))
-            {
-                addressOrDomain = "InvalidAddress";
-                resolvedIP = IPAddress.None;
-            }
-            else
-            {
-                addressOrDomain = element.Attribute("IP") is null
-                    ? element.Attribute("Domain")!.Value
-                    : element.Attribute("IP")!.Value;
-                resolvedIP = element.Attribute("IP") is null
-                    ? (await Dns.GetHostAddressesAsync(element.Attribute("Domain")!.Value))[0]
-                    : IPAddress.Parse(element.Attribute("IP")!.Value);
-            }
-
-            var delay = element.Attribute("Delay") is null
-                ? TimeSpan.FromSeconds(1)
-                : TimeSpan.FromMilliseconds(Convert.ToDouble(element.Attribute("Delay")!.Value));
-
-            return new EndpointConfig(name, addressOrDomain, delay, errors);
-        }
-
-        public async IAsyncEnumerable<EndpointConfig> ParseAddressesAsync()
+        public async IAsyncEnumerable<EndpointModel> ParseAddressesAsync()
         {
             var dtoStream = reader.ReadAddressAsync();
 
-            await foreach (var errors in validator.ValidateAddressEntriesAsync(storage))
+            await foreach (var endpointDto in dtoStream)
             {
-                yield return await ParseValidatedConfigElement(storage.Elements().ElementAt(++i), errors);
+                yield return factory.CreateValidEndpointConfig(endpointDto);
             }
             
         }

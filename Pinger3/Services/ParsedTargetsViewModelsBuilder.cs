@@ -35,7 +35,7 @@ namespace Pinger3.Services
 
                 IPingingTargetViewModel vm;
                 if (address.ValidationErrors == ConfigValidationErrors.None)
-                    vm = new PingingTargetViewModel(new PingTargetModel(address), _timeUpdater, pinger);
+                    vm = new PingingTargetViewModel(new EndpointModel(address), _timeUpdater, pinger);
                 else
                     vm = new InvalidPingingTargetViewModel(address);
                 return vm;
