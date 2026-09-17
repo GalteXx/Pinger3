@@ -1,12 +1,14 @@
 ﻿using Pinger3.Models;
+using System.Linq;
 using System;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pinger3.Services
 {
-    public sealed class IcmpPingService(EndpointEntry entry) : IPingService, IDisposable
+    public sealed class IcmpPingService(EndpointModel entry) : IPingService, IDisposable
     {
         private CancellationTokenSource? _cts;
         private DateTime _lastRequest = DateTime.Now;
@@ -19,11 +21,12 @@ namespace Pinger3.Services
 
         public void Start()
         {
-            if (_cts != null) 
+            if (_cts != null)
                 return;
             _cts = new CancellationTokenSource();
             _ = RunPingLoopAsync(_cts.Token);
         }
+
         public void Stop()
         {
             _cts?.Cancel();
@@ -38,7 +41,11 @@ namespace Pinger3.Services
             {
                 try
                 {
-                    var rep = ping.SendPingAsync(entry, 2000);
+                    var address = (await entry.ResolveAddressesAsync()).FirstOrDefault();
+                    if (address == null)
+                        OnPingReceived(TimeSpan.FromMilliseconds(-1d));
+
+                    var rep = ping.SendPingAsync(address!, 2000);
                     OnPingSent();
                     var reply = await rep;
                     OnPingReceived(reply.Status == IPStatus.Success
@@ -49,7 +56,8 @@ namespace Pinger3.Services
                 {
                     OnPingReceived(TimeSpan.FromMilliseconds(-1d));
                 }
-                await Task.Delay(entry.RequestDelay, ct);
+
+                await Task.Delay(entry.DelayBetweenRequests, ct);
             }
         }
 

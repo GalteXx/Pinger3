@@ -4,7 +4,6 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Pinger3.Services;
-using Pinger3.Services.DependencyInjection;
 using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Views;
 using System;
