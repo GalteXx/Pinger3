@@ -1,4 +1,5 @@
 using System;
+using Pinger3.DataTypes;
 using Pinger3.Models;
 
 namespace Pinger3.Services;
@@ -14,6 +15,6 @@ public class EndpointModelFactory
         if (!TimeSpan.TryParse(endpoint.RequestDelay, out var delay))
             delay = TimeSpan.FromSeconds(1);
 
-        return new EndpointModel(endpoint.Name ?? "", endpoint.Address ?? "", delay);
+        return new EndpointModel(endpoint.Id ?? ShortGuid.NewShortGuid(),endpoint.Name ?? "", endpoint.Address ?? "", delay);
     }
 }
