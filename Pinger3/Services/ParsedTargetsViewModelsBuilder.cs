@@ -14,9 +14,11 @@ namespace Pinger3.Services
         private readonly IAddressesStorageParser _storageParser;
         private readonly ResponseAwaitingTimeUpdaterService _timeUpdater;
 
-        public event EventHandler? ViewModelsBuilt; //i did not do INotifyPropertyChanged as initial design implies VMs to be static
+        public event EventHandler?
+            ViewModelsBuilt; // I did not do INotifyPropertyChanged as initial design implies VMs to be static
 
-        public ParsedTargetsViewModelsBuilder(IAddressesStorageParser storageParser, ResponseAwaitingTimeUpdaterService timeUpdater)
+        public ParsedTargetsViewModelsBuilder(IAddressesStorageParser storageParser,
+            ResponseAwaitingTimeUpdaterService timeUpdater)
         {
             _storageParser = storageParser;
             _timeUpdater = timeUpdater;
@@ -51,11 +53,12 @@ namespace Pinger3.Services
             return category switch
             {
                 PingingTargetCategory.Everything => _allParsedTargets,
-                PingingTargetCategory.ValidTargets => _allParsedTargets.Where(t => t.ValidationErrors == ConfigValidationErrors.None),
-                PingingTargetCategory.InvalidTargets => _allParsedTargets.Where(t => t.ValidationErrors != ConfigValidationErrors.None),
+                PingingTargetCategory.ValidTargets => _allParsedTargets.Where(t =>
+                    t.ValidationErrors == ConfigValidationErrors.None),
+                PingingTargetCategory.InvalidTargets => _allParsedTargets.Where(t =>
+                    t.ValidationErrors != ConfigValidationErrors.None),
                 _ => _allParsedTargets,
             };
         }
-
     }
 }
