@@ -1,24 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
-public sealed class PingScheduler : IAsyncDisposable
+internal sealed class PingScheduler(IPingTransport transport, EndpointRuntimeFactory factory)
 {
-    private readonly List<EndpointRuntime> _endpoints;
-    private readonly IPingTransport _transport;
+    private readonly List<EndpointRuntime> _endpoints = [];
     private readonly TimeSpan _tick = TimeSpan.FromMilliseconds(100);
-    private readonly int _maxConcurrency;
-
-    public PingScheduler()
-    {
-        _endpoints = [];
-    }
+    private const int MaxConcurrency = 10;
 
     public event EventHandler<EndpointUpdated>? PingCompleted;
 
@@ -31,37 +24,33 @@ public sealed class PingScheduler : IAsyncDisposable
                 .Where(e => e.LastPinged + e.Model.DelayBetweenRequests <= now);
 
             await Parallel.ForEachAsync(due,
-                new ParallelOptions { MaxDegreeOfParallelism = _maxConcurrency, CancellationToken = ct },
+                new ParallelOptions { MaxDegreeOfParallelism = MaxConcurrency, CancellationToken = ct },
                 async (runtime, token) =>
                 {
                     runtime.LastPinged = DateTime.Now;
 
                     TimeSpan? rtt = null;
-                    try
-                    {
-                        var result = await _transport.PingAsync(runtime.Model, token);
-                        
-                    }
-                    catch (OperationCanceledException) { throw; }
-                    catch { /* rtt stays null */ }
 
-                    var finished = _clock.GetUtcNow().UtcDateTime;
-                    runtime.MarkReply(finished, rtt);
+                    var result = await transport.PingAsync(runtime.Model, token);
 
-                    // Schedule next due with optional backoff on failure
-                    var delay = runtime.Model.DelayBetweenRequests;
-                    if (!runtime.LastSucceeded)
-                        delay = TimeSpan.FromTicks(Math.Min(
-                            delay.Ticks * (1L << Math.Min(runtime.ConsecutiveFailures, 5)),
-                            TimeSpan.FromMinutes(5).Ticks));
-
-                    runtime.NextDueUtc = finished + delay;
+                    runtime.Ping = result;
 
                     PingCompleted?.Invoke(this,
-                        new PingCompletedEventArgs(runtime.Model, rtt));
+                        new EndpointUpdated(runtime.Model.Id, runtime.Ping, runtime.LastPinged));
                 });
 
-            await Task.Delay(_tick, _clock, ct);
+            await Task.Delay(_tick, ct);
         }
+    }
+
+    public void AddModel(EndpointModel model)
+    {
+        var runtime = factory.Create(model);
+        _endpoints.Add(runtime);
+    }
+
+    public void RemoveModel(EndpointModel model)
+    {
+        _endpoints.RemoveAll(e => e.Model.Id == model.Id);
     }
 }
