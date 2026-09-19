@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services
 {
-    internal interface IAddressesStorageParser
+    public interface IAddressesStorageParser
     {
         public IAsyncEnumerable<EndpointModel> ParseAddressesAsync();
     }

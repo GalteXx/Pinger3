@@ -20,7 +20,6 @@ namespace Pinger3.Services
             {
                 yield return factory.CreateValidEndpointConfig(endpointDto);
             }
-            
         }
     }
 }

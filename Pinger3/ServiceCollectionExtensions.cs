@@ -10,7 +10,6 @@ namespace Pinger3
     {
         public static void AddCommonServices(this IServiceCollection collection)
         {
-            collection.AddSingleton<IAddressesStorageParser, XmlAddressStorageParser>();
             collection.AddSingleton<ParsedTargetsViewModelsBuilder>();
             collection.AddSingleton<IWindowService, WindowService>();
             collection.AddSingleton<ResponseAwaitingTimeUpdaterService, ResponseAwaitingTimeUpdaterService>();
