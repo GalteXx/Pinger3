@@ -29,8 +29,6 @@ internal sealed class PingScheduler(IPingTransport transport, EndpointRuntimeFac
                 {
                     runtime.LastPinged = DateTime.Now;
 
-                    TimeSpan? rtt = null;
-
                     var result = await transport.PingAsync(runtime.Model, token);
 
                     runtime.Ping = result;
