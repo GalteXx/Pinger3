@@ -6,10 +6,10 @@ using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public class EndpointStore(IAddressesStorageParser parser)
+public class EndpointRepository(IAddressesStorageParser parser)
 {
     private readonly Dictionary<string, EndpointModel> _endpoints = [];
-    
+
     public ReadOnlyDictionary<string, EndpointModel> Endpoints => _endpoints.AsReadOnly();
 
     public event EventHandler<string>? EndpointUpdated;
@@ -20,11 +20,16 @@ public class EndpointStore(IAddressesStorageParser parser)
         await foreach (var endpoint in stream)
         {
             _endpoints.Add(endpoint.Id, endpoint);
+            endpoint.Updated += (sender, _) =>
+            {
+                if (sender is EndpointModel e)
+                    OnEndpointUpdated(e.Id);
+            };
         }
     }
 
-    protected virtual void OnEndpointUpdated(string e)
+    protected virtual void OnEndpointUpdated(string id)
     {
-        EndpointUpdated?.Invoke(this, e);
+        EndpointUpdated?.Invoke(this, id);
     }
 }
