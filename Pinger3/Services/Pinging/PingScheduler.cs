@@ -40,7 +40,7 @@ public sealed class PingScheduler : IAsyncDisposable
                     try
                     {
                         var result = await _transport.PingAsync(runtime.Model, token);
-                        if (result.Success) rtt = result.Rtt;
+                        
                     }
                     catch (OperationCanceledException) { throw; }
                     catch { /* rtt stays null */ }
