@@ -57,6 +57,9 @@ internal class XmlAddressesStorageLoader
 
     public async Task SaveAsync(XDocument storage)
     {
-        throw new NotImplementedException();
+        Directory.CreateDirectory(DirectoryPath);
+        var fullPath = Path.Combine(DirectoryPath, ConfigName);
+        await using var createStream = File.Create(fullPath);
+        await storage.SaveAsync(createStream, SaveOptions.None, CancellationToken.None);
     }
 }
