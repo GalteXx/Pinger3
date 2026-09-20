@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Pinger3.Models;
@@ -44,16 +45,14 @@ public class XmlStorageGateway : IStorageGateway
     public async Task WriteAddressAsync(EndpointDto dto)
     {
         var storage = await _loader.LoadStorageAsync();
-        foreach (var el in storage.Elements())
-        {
-            if (el.Attribute("id")?.Value != dto.Id)
-                continue;
 
-            CreateXElement(dto);
-            el.ReplaceWith(dto);
-            break;
-        }
-
+        var endpointElement = CreateXElement(dto);
+        var replacedElement = storage.Elements().FirstOrDefault(el => el.Attribute("id")?.Value == dto.Id);
+        if (replacedElement != null)
+            replacedElement.ReplaceWith(endpointElement);
+        else
+            storage.Add(endpointElement);
+        
         await _loader.SaveAsync(storage);
     }
 }
