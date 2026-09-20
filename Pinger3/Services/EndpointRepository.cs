@@ -6,7 +6,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public class EndpointRepository(IAddressesStorageParser parser)
+public class EndpointRepository(IAddressesStorage parser)
 {
     private readonly Dictionary<string, EndpointModel> _endpoints = [];
 

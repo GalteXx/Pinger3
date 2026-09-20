@@ -54,4 +54,9 @@ internal class XmlAddressesStorageLoader
             return defaultConfig;
         }
     }
+
+    public async Task SaveAsync(XDocument storage)
+    {
+        throw new NotImplementedException();
+    }
 }

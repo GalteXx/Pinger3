@@ -8,18 +8,23 @@ using System.Xml.Linq;
 
 namespace Pinger3.Services
 {
-    internal class XmlAddressStorageParser(IStorageReader reader, EndpointModelFactory factory)
-        : IAddressesStorageParser
+    internal class XmlAddressStorage(IStorageGateway gateway, EndpointModelFactory factory)
+        : IAddressesStorage
     {
 
         public async IAsyncEnumerable<EndpointModel> ParseAddressesAsync()
         {
-            var dtoStream = reader.ReadAddressAsync();
+            var dtoStream = gateway.ReadAddressAsync();
 
             await foreach (var endpointDto in dtoStream)
             {
                 yield return factory.CreateValidEndpointConfig(endpointDto);
             }
+        }
+
+        public Task WriteAddressAsync(EndpointModel address)
+        {
+            
         }
     }
 }

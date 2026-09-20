@@ -23,8 +23,8 @@ namespace Pinger3
 
         private static void AddStorageParsingServices(IServiceCollection collection)
         {
-            collection.AddTransient<IAddressesStorageParser, XmlAddressStorageParser>();
-            collection.AddTransient<IStorageReader, XmlStorageReader>();
+            collection.AddTransient<IAddressesStorage, XmlAddressStorage>();
+            collection.AddTransient<IStorageGateway, XmlStorageGateway>();
             collection.AddTransient<EndpointModelFactory>();
         }
 

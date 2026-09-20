@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services
 {
-    public interface IAddressesStorageParser
+    public interface IAddressesStorage
     {
         public IAsyncEnumerable<EndpointModel> ParseAddressesAsync();
+        
+        public Task WriteAddressAsync(EndpointModel address);
     }
 }

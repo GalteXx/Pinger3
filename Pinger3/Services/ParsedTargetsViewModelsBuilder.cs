@@ -11,23 +11,23 @@ namespace Pinger3.Services
     public class ParsedTargetsViewModelsBuilder
     {
         private readonly List<IPingingTargetViewModel> _allParsedTargets;
-        private readonly IAddressesStorageParser _storageParser;
+        private readonly IAddressesStorage _storage;
         private readonly ResponseAwaitingTimeUpdaterService _timeUpdater;
 
         public event EventHandler?
             ViewModelsBuilt; // I did not do INotifyPropertyChanged as initial design implies VMs to be static
 
-        public ParsedTargetsViewModelsBuilder(IAddressesStorageParser storageParser,
+        public ParsedTargetsViewModelsBuilder(IAddressesStorage storage,
             ResponseAwaitingTimeUpdaterService timeUpdater)
         {
-            _storageParser = storageParser;
+            _storage = storage;
             _timeUpdater = timeUpdater;
             _allParsedTargets = [];
         }
 
         public async Task ParseConfigAndCreateViewModelsAsync()
         {
-            var addresses = await _storageParser.ParseAddressesAsync();
+            var addresses = await _storage.ParseAddressesAsync();
 
             var creationTasks = addresses.Select(async address =>
             {
