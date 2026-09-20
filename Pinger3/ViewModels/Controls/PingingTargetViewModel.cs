@@ -9,77 +9,21 @@ namespace Pinger3.ViewModels.Controls
     public partial class PingingTargetViewModel : ObservableObject, IPingingTargetViewModel
     {
         private readonly EndpointModel _model;
-        private readonly IPingService _pingService;
 
-        public PingingTargetViewModel(EndpointModel model, ResponseAwaitingTimeUpdaterService timeUpdater, IPingService pinger)
+        public PingingTargetViewModel(EndpointModel model, ResponseAwaitingTimeUpdaterService timeUpdater)
         {
             TimeSinceLastRequest = TimeSpan.Zero;
             _model = model;
-            _pingService = pinger;
-            _pingService.PingReceived += (sender, e) =>
-            {
-                Ping = e;
-            };
-
-            timeUpdater.Ticked += (sender, e) =>
-            {
-                TimeSinceLastRequest = _pingService.LastRequestTime is null ?
-                    TimeSinceLastRequest : DateTime.Now - (DateTime)_pingService.LastRequestTime;
-            };
             Name = _model.Name;
             DomainOrAddress = _model.Address;
         }
 
-        [ObservableProperty]
-        private string _name = string.Empty;
-        [ObservableProperty]
-        private string _domainOrAddress = string.Empty;
-        [ObservableProperty]
-        private TimeSpan _ping;
-        [ObservableProperty]
-        private bool _isActive;
-        [ObservableProperty]
-        private TimeSpan _timeSinceLastRequest;
+        [ObservableProperty] private string _name = string.Empty;
+        [ObservableProperty] private string _domainOrAddress = string.Empty;
+        [ObservableProperty] private TimeSpan _ping;
+        [ObservableProperty] private bool _isActive;
+        [ObservableProperty] private TimeSpan _timeSinceLastRequest;
 
         public TimeSpan DelayBetweenRequests => _model.DelayBetweenRequests;
-
-        public ConfigValidationErrors ValidationErrors => ConfigValidationErrors.None;
-
-        partial void OnIsActiveChanged(bool value)
-        {
-            if(value)
-                _pingService.Start();
-            else
-                _pingService.Stop();
-        }
-
-
-        [RelayCommand]
-        private void StartPinging()
-        {
-            _pingService.Start();
-            IsActive = true;
-        }
-        [RelayCommand]
-        private void StopPinging()
-        {
-            _pingService.Stop();
-            IsActive = false;
-        }
-
-        [RelayCommand]
-        private void TogglePinging()
-        {
-            if (IsActive)
-            {
-                _pingService.Stop();
-                IsActive = false;
-            }
-            else
-            {
-                _pingService.Start();
-                IsActive = true;
-            }
-        }
     }
 }
