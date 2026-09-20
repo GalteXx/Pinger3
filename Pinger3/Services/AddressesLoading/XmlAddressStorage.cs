@@ -1,17 +1,12 @@
 ﻿using Pinger3.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Pinger3.Services
 {
     internal class XmlAddressStorage(IStorageGateway gateway, EndpointModelFactory factory)
         : IAddressesStorage
     {
-
         public async IAsyncEnumerable<EndpointModel> ParseAddressesAsync()
         {
             var dtoStream = gateway.ReadAddressAsync();
@@ -22,9 +17,11 @@ namespace Pinger3.Services
             }
         }
 
-        public Task WriteAddressAsync(EndpointModel address)
+        public async Task WriteAddressAsync(EndpointModel address)
         {
-            
+            //this calls for extra factory
+            await gateway.WriteAddressAsync(new EndpointDto(address.Id, address.Name, address.Address,
+                address.DelayBetweenRequests.Milliseconds.ToString()));
         }
     }
 }
