@@ -7,9 +7,10 @@ namespace Pinger3.Services.Pinging;
 
 public interface IPingCatalog
 {
-    Task AddModelAsync(string id, CancellationToken ct);
-    void RemoveModel(string id);
+    Task AddEndpointAsync(string id, CancellationToken ct);
+    void RemoveEndpoint(string id);
     bool IsRunning(string id);
     event EventHandler<string>? PingSent;
     event EventHandler<PingUpdated>? PingReceived;
+    Task ToggleEndpointPingingAsync(string id, CancellationToken ct);
 }

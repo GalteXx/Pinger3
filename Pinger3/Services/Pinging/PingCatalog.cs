@@ -22,7 +22,15 @@ public class PingCatalog // TODO: rename catalog to something sane
         scheduler.PingReceived += PingReceived;
     }
 
-    public async Task AddModelAsync(string id, CancellationToken ct)
+    public async Task ToggleEndpointPingingAsync(string id, CancellationToken ct)
+    {
+        if(IsRunning(id))
+            await AddEndpointAsync(id, ct);
+        else
+            RemoveEndpoint(id);
+    }
+
+    public async Task AddEndpointAsync(string id, CancellationToken ct)
     {
         var model = _repository.GetEndpoint(id);
         if (model == null)
@@ -31,7 +39,7 @@ public class PingCatalog // TODO: rename catalog to something sane
         _scheduler.Endpoints.Add(runtime.Id, runtime);
     }
 
-    public void RemoveModel(string id)
+    public void RemoveEndpoint(string id)
     {
         _scheduler.Endpoints.Remove(id);
     }
