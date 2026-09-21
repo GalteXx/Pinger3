@@ -7,48 +7,44 @@ using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
-internal sealed class PingScheduler(IPingTransport transport, EndpointRuntimeFactory factory)
+public sealed class PingScheduler : IPingScheduler
 {
-    private readonly List<EndpointRuntime> _endpoints = [];
     private readonly TimeSpan _tick = TimeSpan.FromMilliseconds(100);
+    private readonly IPingTransport _transport;
     private const int MaxConcurrency = 10;
 
-    public event EventHandler<EndpointUpdated>? PingCompleted;
+    public PingScheduler(IPingTransport transport, EndpointRuntimeFactory factory)
+    {
+        _transport = transport;
+        RunAsync(CancellationToken.None).Start();
+    }
+
+    public Dictionary<string, EndpointRuntime> Endpoints { get; } = [];
+    public event EventHandler<string>? PingSent;
+    public event EventHandler<PingUpdated>? PingReceived;
 
     private async Task RunAsync(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested)
         {
             var now = DateTime.UtcNow;
-            var due = _endpoints
-                .Where(e => e.LastPinged + e.Model.DelayBetweenRequests <= now);
+            var due = Endpoints.Values
+                .Where(e => e.LastPinged + e.DelayBetweenRequests <= now);
 
             await Parallel.ForEachAsync(due,
                 new ParallelOptions { MaxDegreeOfParallelism = MaxConcurrency, CancellationToken = ct },
                 async (runtime, token) =>
                 {
                     runtime.LastPinged = DateTime.Now;
+                    PingSent?.Invoke(this, runtime.Id);
 
-                    var result = await transport.PingAsync(runtime.Model, token);
-
+                    var result = await _transport.PingAsync(runtime, token);
                     runtime.Ping = result;
 
-                    PingCompleted?.Invoke(this,
-                        new EndpointUpdated(runtime.Model.Id, runtime.Ping, runtime.LastPinged));
+                    PingReceived?.Invoke(this, new PingUpdated("Id", runtime.Ping));
                 });
 
             await Task.Delay(_tick, ct);
         }
-    }
-
-    public void AddModel(EndpointModel model)
-    {
-        var runtime = factory.Create(model);
-        _endpoints.Add(runtime);
-    }
-
-    public void RemoveModel(EndpointModel model)
-    {
-        _endpoints.RemoveAll(e => e.Model.Id == model.Id);
     }
 }

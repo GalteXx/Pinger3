@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
 public interface IPingScheduler
 {
-    event EventHandler<EndpointUpdated>? PingCompleted;
-    void AddModel(EndpointModel model);
-    void RemoveModel(EndpointModel model);
+    Dictionary<string, EndpointRuntime> Endpoints { get; }
+    event EventHandler<string>? PingSent;
+    event EventHandler<PingUpdated>? PingReceived;
 }
