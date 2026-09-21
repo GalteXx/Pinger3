@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
@@ -8,22 +9,16 @@ namespace Pinger3.ViewModels.PageViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
-        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup 
-            => [.. _targetsVMs.PingingTargetsByCategory(SelectedGroupOfTargets)];
+        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup { get; } = [];
 
-        [ObservableProperty]
-        private PingingTargetCategory _selectedGroupOfTargets = PingingTargetCategory.ValidTargets;
+        [ObservableProperty] private PingingTargetCategory _selectedGroupOfTargets = PingingTargetCategory.ValidTargets;
 
-
-
-        private readonly ParsedTargetsViewModelsBuilder _targetsVMs;
-        private readonly ResponseAwaitingTimeUpdaterService _timeUpdater;
-
-        public MainWindowViewModel(ParsedTargetsViewModelsBuilder parser, 
-            ResponseAwaitingTimeUpdaterService timeUpdaterService)
+        private readonly IEndpointRepository _repository;
+        
+        public MainWindowViewModel(IEndpointRepository endpointRepository)
         {
-            _timeUpdater = timeUpdaterService;
-            _targetsVMs = parser;
+            _repository = endpointRepository;
+            
         }
 
         partial void OnSelectedGroupOfTargetsChanged(PingingTargetCategory value)
@@ -33,20 +28,19 @@ namespace Pinger3.ViewModels.PageViewModels
 
         public void OnMainWindowLoaded()
         {
-            _timeUpdater.Start();
             OnPropertyChanged(nameof(CurrentPingingTargetsGroup));
         }
 
         [RelayCommand]
-        public void StartPinging()
+        public void StartPinging(string Id)
         {
-            //do nothing for now
+            throw new NotImplementedException();
         }
 
         [RelayCommand]
         public void StopPinging()
         {
-            //do nothing for now
+            throw new NotImplementedException();
         }
     }
 }
