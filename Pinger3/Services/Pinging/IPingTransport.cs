@@ -5,7 +5,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
-internal interface IPingTransport
+public interface IPingTransport
 {
     Task<TimeSpan> PingAsync(EndpointModel endpoint, CancellationToken ct);
 }

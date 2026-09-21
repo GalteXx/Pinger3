@@ -11,4 +11,5 @@ public interface IEndpointRepository
     event EventHandler<string>? EndpointUpdated;
     Task Load();
     Task Add(EndpointModel endpoint);
+    EndpointModel? GetEndpoint(string id);
 }

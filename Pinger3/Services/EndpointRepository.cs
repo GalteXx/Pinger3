@@ -35,6 +35,11 @@ public sealed class EndpointRepository(IAddressesStorage storage) : IEndpointRep
         OnEndpointUpdated(endpoint.Id);
     }
 
+    public EndpointModel? GetEndpoint(string id)
+    {
+        return _endpoints.GetValueOrDefault(id);
+    }
+
     private void OnEndpointUpdated(string id)
     {
         EndpointUpdated?.Invoke(this, id);
