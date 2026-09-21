@@ -24,7 +24,24 @@ public class PingingTargetViewModelDesign : IPingingTargetViewModel
     }
 
     public void UpdateModel(EndpointModel endpointModel)
-    { }
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateTimeSinceLastRequest(TimeSpan updateTime)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnPingReceived(PingUpdated update)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnPingSent()
+    {
+        throw new NotImplementedException();
+    }
 
     public TimeSpan DelayBetweenRequests =>
         TimeSpan.FromMilliseconds(Random.Shared.Next(30, (int)TimeSpan.FromHours(2).TotalMilliseconds));

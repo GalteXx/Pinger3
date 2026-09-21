@@ -6,7 +6,7 @@ namespace Pinger3.ViewModels.PageViewModels
 {
     public interface IMainWindowViewModel
     {
-        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup { get; }
+        public ObservableCollection<IPingingTargetViewModel> Endpoints { get; }
 
         public IRelayCommand<string> TogglePingingCommand { get; }
     }

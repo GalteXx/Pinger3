@@ -12,7 +12,8 @@ namespace Pinger3.ViewModels.PageViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
-        public ObservableCollection<IPingingTargetViewModel> CurrentPingingTargetsGroup { get; } = [];
+        // TODO: get an observable Dictionary
+        public ObservableCollection<IPingingTargetViewModel> Endpoints { get; } = [];
 
         private readonly IEndpointRepository _repository;
         private readonly IPingTargetViewModelFactory _factory;
@@ -28,16 +29,16 @@ namespace Pinger3.ViewModels.PageViewModels
 
             foreach (var endpoint in _repository.CachedEndpoints.Values)
             {
-                CurrentPingingTargetsGroup.Add(factory.Create(endpoint));
+                Endpoints.Add(factory.Create(endpoint));
             }
 
             _catalog.PingSent += (_, id) =>
             {
-                CurrentPingingTargetsGroup.FirstOrDefault(vm => vm.Id == id)?.OnPingSent();
+                Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent();
             };
             _catalog.PingReceived += (_, update) =>
             {
-                CurrentPingingTargetsGroup.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
+                Endpoints.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
             };
         }
 
@@ -46,10 +47,10 @@ namespace Pinger3.ViewModels.PageViewModels
             if (_repository.GetEndpoint(e) is not { } value)
                 return;
 
-            var vm = CurrentPingingTargetsGroup.FirstOrDefault(vm => vm.Id == e);
+            var vm = Endpoints.FirstOrDefault(vm => vm.Id == e);
             if (vm == null)
             {
-                CurrentPingingTargetsGroup.Add(_factory.Create(value));
+                Endpoints.Add(_factory.Create(value));
                 return;
             }
 
@@ -58,13 +59,17 @@ namespace Pinger3.ViewModels.PageViewModels
 
         public void OnMainWindowLoaded()
         {
-            OnPropertyChanged(nameof(CurrentPingingTargetsGroup));
+            OnPropertyChanged(nameof(Endpoints));
         }
 
         [RelayCommand]
         private async Task TogglePinging(string id, CancellationToken token)
         {
             await _catalog.ToggleEndpointPingingAsync(id, token);
+            var vm = Endpoints.FirstOrDefault(vm => vm.Id == id);
+            if (vm == null)
+                return;
+            vm.IsActive = _catalog.IsRunning(id);
         }
     }
 }
