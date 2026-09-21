@@ -6,11 +6,11 @@ using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public class EndpointRepository(IAddressesStorage storage)
+public sealed class EndpointRepository(IAddressesStorage storage) : IEndpointRepository
 {
     private readonly Dictionary<string, EndpointModel> _endpoints = [];
 
-    public ReadOnlyDictionary<string, EndpointModel> Endpoints => _endpoints.AsReadOnly();
+    public ReadOnlyDictionary<string, EndpointModel> CachedEndpoints => _endpoints.AsReadOnly();
 
     public event EventHandler<string>? EndpointUpdated;
 
@@ -28,14 +28,14 @@ public class EndpointRepository(IAddressesStorage storage)
         }
     }
 
-    public async Task Save(EndpointModel endpoint)
+    public async Task Add(EndpointModel endpoint)
     {
         _endpoints.Add(endpoint.Id, endpoint);
         await storage.WriteAddressAsync(endpoint);
         OnEndpointUpdated(endpoint.Id);
     }
 
-    protected virtual void OnEndpointUpdated(string id)
+    private void OnEndpointUpdated(string id)
     {
         EndpointUpdated?.Invoke(this, id);
     }
