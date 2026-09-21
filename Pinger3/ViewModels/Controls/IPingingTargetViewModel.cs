@@ -16,5 +16,8 @@ namespace Pinger3.ViewModels.Controls
         bool IsActive { get; set; }
 
         public void UpdateModel(EndpointModel endpointModel);
+        void UpdateTimeSinceLastRequest(TimeSpan updateTime);
+        void OnPingReceived(PingUpdated update);
+        void OnPingSent();
     }
 }

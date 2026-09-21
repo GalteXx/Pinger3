@@ -23,6 +23,9 @@ public partial class PingingTargetViewModel : ObservableObject, IPingingTargetVi
     [ObservableProperty] private TimeSpan _timeSinceLastRequest;
     [ObservableProperty] private string _id;
     [ObservableProperty] private TimeSpan _delayBetweenRequests;
+
+    // It's C++ style cheese, but strategy would be an overkill here
+    private int _stepCoefficient = 0;
     
     public void UpdateModel(EndpointModel endpointModel)
     {
@@ -31,5 +34,22 @@ public partial class PingingTargetViewModel : ObservableObject, IPingingTargetVi
         Name =  endpointModel.Name;
         DomainOrAddress = endpointModel.Address;
         DelayBetweenRequests = endpointModel.DelayBetweenRequests;
+    }
+
+    public void UpdateTimeSinceLastRequest(TimeSpan updateTime)
+    {
+        TimeSinceLastRequest += updateTime * _stepCoefficient; 
+    }
+
+    public void OnPingReceived(PingUpdated update)
+    {
+        Ping = update.Ping;
+        _stepCoefficient = 0;
+    }
+
+    public void OnPingSent()
+    {
+        TimeSinceLastRequest = TimeSpan.Zero;
+        _stepCoefficient = 1;
     }
 }
