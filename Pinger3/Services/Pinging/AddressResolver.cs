@@ -7,7 +7,7 @@ namespace Pinger3.Services.Pinging;
 
 public class AddressResolver
 {
-    public Task<IPAddress[]> ResolveAddresses(EndpointModel model, CancellationToken ct)
+    public Task<IPAddress[]> ResolveAddressesAsync(EndpointModel model, CancellationToken ct)
     {
         return Dns.GetHostAddressesAsync(model.Address, ct);
     }
