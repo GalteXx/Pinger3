@@ -17,14 +17,14 @@ namespace Pinger3.ViewModels.PageViewModels
 
         private readonly IEndpointRepository _repository;
         private readonly IPingTargetViewModelFactory _factory;
-        private readonly IPingCatalog _catalog;
+        private readonly IPingManager _pingManager;
 
         public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
-            IPingCatalog catalog)
+            IPingManager pingManager)
         {
             _repository = endpointRepository;
             _factory = factory;
-            _catalog = catalog;
+            _pingManager = pingManager;
             _repository.EndpointUpdated += UpdateViewModel;
 
             foreach (var endpoint in _repository.CachedEndpoints.Values)
@@ -32,11 +32,11 @@ namespace Pinger3.ViewModels.PageViewModels
                 Endpoints.Add(factory.Create(endpoint));
             }
 
-            _catalog.PingSent += (_, id) =>
+            _pingManager.PingSent += (_, id) =>
             {
                 Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent();
             };
-            _catalog.PingReceived += (_, update) =>
+            _pingManager.PingReceived += (_, update) =>
             {
                 Endpoints.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
             };
@@ -65,11 +65,11 @@ namespace Pinger3.ViewModels.PageViewModels
         [RelayCommand]
         private async Task TogglePinging(string id, CancellationToken token)
         {
-            await _catalog.ToggleEndpointPingingAsync(id, token);
+            await _pingManager.ToggleEndpointPingingAsync(id, token);
             var vm = Endpoints.FirstOrDefault(vm => vm.Id == id);
             if (vm == null)
                 return;
-            vm.IsActive = _catalog.IsRunning(id);
+            vm.IsActive = _pingManager.IsRunning(id);
         }
     }
 }

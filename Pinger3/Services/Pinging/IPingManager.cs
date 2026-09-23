@@ -5,7 +5,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
-public interface IPingCatalog
+public interface IPingManager
 {
     Task AddEndpointAsync(string id, CancellationToken ct);
     void RemoveEndpoint(string id);
