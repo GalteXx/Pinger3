@@ -11,7 +11,6 @@ public class EndpointRuntimeFactory(AddressResolver resolver)
     public async Task<EndpointRuntime> CreateRuntimeAsync(EndpointModel model, CancellationToken ct)
     {
         var address = (await resolver.ResolveAddressesAsync(model, ct)).FirstOrDefault() ?? IPAddress.None;
-        return new EndpointRuntime
-            { Id = model.Id, DelayBetweenRequests = model.DelayBetweenRequests, Address = address };
+        return new EndpointRuntime(model.Id, address, model.DelayBetweenRequests);
     }
 }
