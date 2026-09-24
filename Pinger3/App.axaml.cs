@@ -4,10 +4,8 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Pinger3.Services;
-using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Views;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,7 +39,7 @@ namespace Pinger3
                     }
                     else if (t.IsFaulted)
                     {
-                        throw new Exception($"Unhandled exception in StartAsync: {t.Exception?.Flatten().ToString()}");
+                        throw new Exception($"Unhandled exception in StartAsync: {t.Exception?.Flatten()}");
                     }
                 }, TaskScheduler.Default);
             }
@@ -49,20 +47,19 @@ namespace Pinger3
             base.OnFrameworkInitializationCompleted();
         }
 
-        private async Task StartAsync(IClassicDesktopStyleApplicationLifetime desktop, ServiceProvider services)
+        private static async Task StartAsync(IClassicDesktopStyleApplicationLifetime desktop, ServiceProvider services)
         {
             desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
-            var vmBuilder = services.GetRequiredService<ParsedTargetsViewModelsBuilder>();
+            var endpointRepository = services.GetRequiredService<IEndpointRepository>();
 
-            _ = services.GetRequiredService<ISettingsViewModel>(); //To properly subscribe to events, Maybe a little hacky?
-            await vmBuilder.ParseConfigAndCreateViewModelsAsync();
+            await endpointRepository.LoadFromSource();
 
             var trayIconService = services.GetRequiredService<TrayIconService>();
             trayIconService.Show();
-            services.GetRequiredService<SettingsWindow>().Show();
+            services.GetRequiredService<MainWindow>().Show();
             services.GetRequiredService<PopoutWindow>().Show();
-
         }
+
         private void DisableAvaloniaDataAnnotationValidation()
         {
             // Get an array of plugins to remove

@@ -9,7 +9,7 @@ public interface IEndpointRepository
 {
     ReadOnlyDictionary<string, EndpointModel> CachedEndpoints { get; }
     event EventHandler<string>? EndpointUpdated;
-    Task Load();
+    Task LoadFromSource();
     Task Add(EndpointModel endpoint);
     EndpointModel? GetEndpoint(string id);
 }

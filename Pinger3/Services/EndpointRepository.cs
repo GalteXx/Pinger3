@@ -14,7 +14,7 @@ public sealed class EndpointRepository(IAddressesStorage storage) : IEndpointRep
 
     public event EventHandler<string>? EndpointUpdated;
 
-    public async Task Load()
+    public async Task LoadFromSource()
     {
         var stream = storage.ParseAddressesAsync();
         await foreach (var endpoint in stream)
