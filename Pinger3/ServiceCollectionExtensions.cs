@@ -2,6 +2,7 @@
 using Pinger3.ViewModels.Controls;
 using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Services;
+using Pinger3.Services.Pinging;
 using Pinger3.Views;
 
 namespace Pinger3
@@ -10,22 +11,31 @@ namespace Pinger3
     {
         public static void AddCommonServices(this IServiceCollection collection)
         {
-            collection.AddSingleton<ParsedTargetsViewModelsBuilder>();
             collection.AddSingleton<IWindowService, WindowService>();
-            collection.AddSingleton<ResponseAwaitingTimeUpdaterService, ResponseAwaitingTimeUpdaterService>();
 
             collection.AddSingleton<TrayIconService>();
             
-            AddStorageParsingServices(collection);
+            AddStorageServices(collection);
             AddViewModels(collection);
             AddWindows(collection);
         }
 
-        private static void AddStorageParsingServices(IServiceCollection collection)
+        private static void AddStorageServices(IServiceCollection collection)
         {
             collection.AddTransient<IAddressesStorage, XmlAddressStorage>();
             collection.AddTransient<IStorageGateway, XmlStorageGateway>();
+            collection.AddSingleton<IEndpointRepository, EndpointRepository>();
             collection.AddTransient<EndpointModelFactory>();
+        }
+
+        private static void AddPingServices(IServiceCollection collection)
+        {
+            collection.AddTransient<IPingTransport, PingTransport>();
+            collection.AddTransient<IPingManager, PingManager>();
+            collection.AddTransient<IPingScheduler, PingScheduler>();
+            collection.AddTransient<AddressResolver>();
+            collection.AddTransient<EndpointRuntimeFactory>();
+            collection.AddTransient<EndpointUpdateResolver>();
         }
 
         private static void AddViewModels(IServiceCollection collection)
