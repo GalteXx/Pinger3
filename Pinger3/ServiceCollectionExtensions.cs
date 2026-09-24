@@ -12,10 +12,11 @@ namespace Pinger3
         public static void AddCommonServices(this IServiceCollection collection)
         {
             collection.AddSingleton<IWindowService, WindowService>();
-
             collection.AddSingleton<TrayIconService>();
             
             AddStorageServices(collection);
+            AddPingServices(collection);
+            
             AddViewModels(collection);
             AddWindows(collection);
         }

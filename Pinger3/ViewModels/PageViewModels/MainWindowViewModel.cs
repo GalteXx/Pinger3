@@ -35,7 +35,7 @@ namespace Pinger3.ViewModels.PageViewModels
                 Interval = _timerIntervalMs,
                 IsEnabled = true
             };
-            _timespanUpdateTimer.Tick += UpdateEnpointViewModels;
+            _timespanUpdateTimer.Tick += UpdateEndpointViewModels;
             _timespanUpdateTimer.Start();
 
             foreach (var endpoint in _repository.CachedEndpoints.Values)
@@ -53,7 +53,7 @@ namespace Pinger3.ViewModels.PageViewModels
             };
         }
 
-        private void UpdateEnpointViewModels(object? sender, EventArgs e)
+        private void UpdateEndpointViewModels(object? sender, EventArgs e)
         {
             foreach (var endpoint in Endpoints)
             {

@@ -1,64 +1,25 @@
-﻿using Pinger3.ViewModels.Controls;
+﻿using System;
+using Pinger3.ViewModels.Controls;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Pinger3.ViewModels.PageViewModels
+namespace Pinger3.ViewModels.PageViewModels;
+
+public partial class PopoutWindowViewModel : ObservableObject, IPopoutWindowViewModel
 {
-    public partial class PopoutWindowViewModel : INotifyPropertyChanged, IPopoutWindowViewModel
+    //TODO: BindStyles
+    [ObservableProperty] private bool _clickThrough;
+    [ObservableProperty] private string _selectedStyleClassName = "CompactResponseTime";
+    [ObservableProperty] private double _opacity = 1;
+
+    public ObservableCollection<IPingingTargetViewModel> PingViewModels { get; } = [];
+
+    partial void OnOpacityChanging(double value)
     {
-        //TODO: BindStyles
-        private double _transparency = 0.8;
-        private bool _clickThrough = false;
-        private string _selectedClassName = "CompactResponseTime";
-
-        public bool ClickThrough
-        {
-            get => _clickThrough;
-            set
-            {
-                _clickThrough = value;
-                OnPropertyChanged();
-            }
-        }
-        public double Opacity
-        {
-            get => _transparency;
-            set
-            {
-                if (value >= 0 && value <= 1)
-                {
-                    _transparency = value;
-                    OnPropertyChanged();
-                }
-                else
-                {
-                    throw new System.ArgumentOutOfRangeException($"{value} is not in [0;1] range");
-                }
-            }
-        }
-
-        public ObservableCollection<IPingingTargetViewModel> PingViewModels { get; }
-        public string SelectedStyleClassName
-        {
-            get => _selectedClassName;
-            set
-            {
-                _selectedClassName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public PopoutWindowViewModel()
-        {
-            PingViewModels = [];
-        }
-
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler? PropertyChanged;
+        if (value is < 0 or > 1)
+            throw new ArgumentOutOfRangeException(nameof(value), $"{value} is not in [0;1] range");
     }
+
+
+
 }

@@ -1,63 +1,67 @@
 <Window xmlns="https://github.com/avaloniaui"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:templatecontrols="using:Pinger3.TemplateControls"
-		xmlns:views="using:Pinger3.Views"
-		xmlns:vmc="using:Pinger3.ViewModels.Controls"
-		xmlns:vmp="using:Pinger3.ViewModels.PageViewModels"
-		xmlns:vmd="using:Pinger3.ViewModels.Design"
-		xmlns:conv="using:Pinger3.Converters"
-		x:Name="settingWindow"
-		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
-		SizeToContent="Width"
-		x:CompileBindings="True"
-		Icon="/Assets/icon.ico"
-		x:DataType="vmp:ISettingsViewModel"
-		x:Class="Pinger3.SettingsWindow"
-		Title="Settings">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:templatecontrols="using:Pinger3.TemplateControls"
+        xmlns:views="using:Pinger3.Views"
+        xmlns:vmc="using:Pinger3.ViewModels.Controls"
+        xmlns:vmp="using:Pinger3.ViewModels.PageViewModels"
+        xmlns:vmd="using:Pinger3.ViewModels.Design"
+        xmlns:conv="using:Pinger3.Converters"
+        x:Name="settingWindow"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
+        SizeToContent="Width"
+        x:CompileBindings="True"
+        Icon="/Assets/icon.ico"
+        x:DataType="vmp:ISettingsViewModel"
+        x:Class="Pinger3.SettingsWindow"
+        Title="Settings">
 
-	<Design.DataContext>
-		<vmd:SettingsViewModelDesign/>
-	</Design.DataContext>
+    <Design.DataContext>
+        <vmd:SettingsViewModelDesign />
+    </Design.DataContext>
 
-	<Window.Resources>
-		<!-- to be refactored and support color themes-->
-		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="Teal" />
-		<conv:StringClassToBooleanConverter x:Key="classNameConverter"/>
-	</Window.Resources>
+    <Window.Resources>
+        <!-- to be refactored and support color themes-->
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="Teal" />
+        <conv:StringClassToBooleanConverter x:Key="classNameConverter" />
+    </Window.Resources>
 
-	<StackPanel>
-		<Expander HorizontalAlignment="Stretch" IsExpanded="True"  Background="{DynamicResource BackgroundColor}">
-			<Expander.Header>
-				<TextBlock Text="Popout Window" FontSize="16" FontWeight="Bold"/>
-			</Expander.Header>
-			<StackPanel Orientation="Horizontal">
-				<StackPanel>
-					<Slider Minimum="0" Maximum="1"
-						Value="{Binding PopoutVM.Opacity, Mode=TwoWay}"/>
+    <StackPanel>
+        <Expander HorizontalAlignment="Stretch" IsExpanded="True" Background="{DynamicResource BackgroundColor}">
+            <Expander.Header>
+                <TextBlock Text="Popout Window" FontSize="16" FontWeight="Bold" />
+            </Expander.Header>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <Slider Minimum="0" Maximum="1"
+                            Value="{Binding PopoutVM.Opacity, Mode=TwoWay}" />
 
-				</StackPanel>
-				<StackPanel Grid.Column="1">
-					<ComboBox HorizontalAlignment="Center" SelectedItem="{Binding PopoutVM.SelectedStyleClassName, Mode=TwoWay}"
-							  ItemsSource="{Binding DisplayableClasses, ElementName=settingWindow}"/>
-					<ListBox ItemsSource="{Binding PopoutVM.PingViewModels}" Background="{DynamicResource BackgroundColor}">
-						<ListBox.Styles>
-							<Style Selector="ListBoxItem"> <Setter Property="Padding" Value="1" /> </Style>
-						</ListBox.Styles>
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<templatecontrols:PingDisplay
-								HorizontalAlignment="Center" AddressName="Name" Address="example.com"
-								Classes.Full="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=Full}"
-								Classes.CompactPing="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactPing}"
-								Classes.CompactResponseTime="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactResponseTime}"
-								Classes.ResponseTimeOnly="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=ResponseTimeOnly}"/>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
-				</StackPanel>
-			</StackPanel>
-		</Expander>
-	</StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <ComboBox HorizontalAlignment="Center"
+                              SelectedItem="{Binding PopoutVM.SelectedStyleClassName, Mode=TwoWay}"
+                              ItemsSource="{Binding DisplayableClasses, ElementName=settingWindow}" />
+                    <ListBox ItemsSource="{Binding PopoutVM.PingViewModels}"
+                             Background="{DynamicResource BackgroundColor}">
+                        <ListBox.Styles>
+                            <Style Selector="ListBoxItem">
+                                <Setter Property="Padding" Value="1" />
+                            </Style>
+                        </ListBox.Styles>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <templatecontrols:PingDisplay
+                                    HorizontalAlignment="Center" AddressName="Name" Address="example.com"
+                                    Classes.Full="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=Full}"
+                                    Classes.CompactPing="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactPing}"
+                                    Classes.CompactResponseTime="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactResponseTime}"
+                                    Classes.ResponseTimeOnly="{Binding $parent[Window].DataContext.PopoutVM.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=ResponseTimeOnly}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+    </StackPanel>
 </Window>
