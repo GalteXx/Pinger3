@@ -25,7 +25,7 @@
 		<vmd:PopoutWindowViewModelDesign/>
 	</Design.DataContext>
 	<Window.Resources>
-		<converters:StringClassToBooleanConverter x:Key="classNameConverter"/>
+		<converters:StringClassToBooleanConverter x:Key="ClassNameConverter"/>
 	</Window.Resources>
 
 	<ListBox ItemsSource="{Binding PingViewModels}" IsHitTestVisible="False">
@@ -35,10 +35,10 @@
 		<ListBox.ItemTemplate>
 			<DataTemplate>
 				<controls:PingDisplay IsHitTestVisible="False"
-				Classes.Full="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=Full}"
-				Classes.CompactPing="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactPing}"
-				Classes.CompactResponseTime="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=CompactResponseTime}"
-				Classes.ResponseTimeOnly="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource classNameConverter}, ConverterParameter=ResponseTimeOnly}"
+				Classes.Full="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource ClassNameConverter}, ConverterParameter=Full}"
+				Classes.CompactPing="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource ClassNameConverter}, ConverterParameter=CompactPing}"
+				Classes.CompactResponseTime="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource ClassNameConverter}, ConverterParameter=CompactResponseTime}"
+				Classes.ResponseTimeOnly="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource ClassNameConverter}, ConverterParameter=ResponseTimeOnly}"
 				AddressName="{Binding Name}" Address="{Binding DomainOrAddress}"
 				Ping="{Binding Ping}"
 				ResponseWaitingTime="{Binding TimeSinceLastRequest}"

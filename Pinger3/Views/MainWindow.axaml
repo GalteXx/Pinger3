@@ -1,79 +1,83 @@
 <Window xmlns="https://github.com/avaloniaui"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:vm="using:Pinger3.ViewModels.PageViewModels"
-		xmlns:vmc="using:Pinger3.ViewModels.Controls"
-		xmlns:vmd="using:Pinger3.ViewModels.Design"
-		xmlns:converters="using:Pinger3.Converters"
-		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:templatecontrols="using:Pinger3.TemplateControls"
-		mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="450"
-		x:Class="Pinger3.Views.MainWindow"
-		x:DataType="vm:IMainWindowViewModel"
-		Icon="/Assets/icon.ico"
-		x:Name="mainWindow"
-		Title="Pinger3">
-	<Window.Resources>
-		<converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter"/>
-		<converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter"/>
-		<converters:BoolToToggleStringConverter x:Key="BoolToToggleStringConverter"/>
-		<converters:TimeSpanToLargestUnitConverter x:Key="TimeSpanToLargestUnitConverter"/>
-		<converters:AddressCategoryToBoolConverter x:Key="AddressCategoryToBoolConverter"/>
-		<converters:ValidationErrorsToBoolConverter x:Key="ValidationErrorsToBoolConverter"/>
-	</Window.Resources>
-	<Design.DataContext>
-		<vmd:MainWindowViewModelDesign/>
-	</Design.DataContext>
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Pinger3.ViewModels.PageViewModels"
+        xmlns:vmc="using:Pinger3.ViewModels.Controls"
+        xmlns:vmd="using:Pinger3.ViewModels.Design"
+        xmlns:converters="using:Pinger3.Converters"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:templatecontrols="using:Pinger3.TemplateControls"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="450"
+        x:Class="Pinger3.Views.MainWindow"
+        x:DataType="vm:IMainWindowViewModel"
+        Icon="/Assets/icon.ico"
+        x:Name="MainWindowInstance"
+        Title="Pinger3">
+    <Window.Resources>
+        <converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter" />
+        <converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter" />
+        <converters:BoolToToggleStringConverter x:Key="BoolToToggleStringConverter" />
+        <converters:TimeSpanToLargestUnitConverter x:Key="TimeSpanToLargestUnitConverter" />
+    </Window.Resources>
+    <Design.DataContext>
+        <vmd:MainWindowViewModelDesign />
+    </Design.DataContext>
 
-	
 
-	<Grid RowDefinitions="25, 50 *">
-		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15" Grid.Row="1">
-			<ComboBox SelectedItem="{Binding SelectedGroupOfTargets, Mode=TwoWay}" x:Name="AddressCategorySelectorBox"
-					  ItemsSource="{Binding AddressCategories, ElementName=mainWindow}"/>
-		</StackPanel>
-		<DataGrid Margin="10" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" GridLinesVisibility="Horizontal"
-				  Background="{DynamicResource BackgroundColor}" Grid.Row="2"
-				  ItemsSource="{Binding CurrentPingingTargetsGroup}">
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-				<DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}"/>
-				<DataGridTextColumn Header="Delay" Binding="{Binding DelayBetweenRequests, Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}"/>
-				<DataGridCheckBoxColumn Header="Active"
-										Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True"
-										IsVisible="{Binding $parent.DataContext.SelectedGroupOfTargets, Converter={StaticResource AddressCategoryToBoolConverter}}"/>
-				<DataGridTemplateColumn Header="Awaiting Response Time">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToColorConverter}}"/>
-								<TextBlock Text="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
-							</StackPanel>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="Ping">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<Border CornerRadius="5" Margin="10" Width="5" Height="5" Background="{Binding Ping, Converter={StaticResource TimeSpanToColorConverter}}"/>
-								<TextBlock Text="{Binding Ping, Converter={StaticResource TimeSpanToStringConverter}}" VerticalAlignment="Center"/>
-							</StackPanel>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn>
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<Button Foreground="{DynamicResource PrimaryColor}" Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" Padding="2"
-									IsEnabled="{Binding ValidationErrors, Converter={StaticResource ValidationErrorsToBoolConverter}}"
-									Content="{Binding IsActive, Converter={StaticResource BoolToToggleStringConverter}, ConverterParameter=Stop|Start}" Command="{Binding TogglePingingCommand}" />
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
+    <Grid RowDefinitions="25, 50 *">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15" Grid.Row="1">
+        </StackPanel>
+        <DataGrid Margin="10" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1"
+                  GridLinesVisibility="Horizontal"
+                  Background="{DynamicResource BackgroundColor}" Grid.Row="2"
+                  ItemsSource="{Binding Endpoints}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}" />
+                <DataGridTextColumn Header="Delay"
+                                    Binding="{Binding DelayBetweenRequests, Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}" />
+                <DataGridCheckBoxColumn Header="Active"
+                                        Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True" />
+                <DataGridTemplateColumn Header="Awaiting Response Time">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Border CornerRadius="5" Margin="10" Width="5" Height="5"
+                                        Background="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToColorConverter}}" />
+                                <TextBlock
+                                    Text="{Binding TimeSinceLastRequest, Converter={StaticResource TimeSpanToStringConverter}}"
+                                    VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Ping">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Border CornerRadius="5" Margin="10" Width="5" Height="5"
+                                        Background="{Binding Ping, Converter={StaticResource TimeSpanToColorConverter}}" />
+                                <TextBlock Text="{Binding Ping, Converter={StaticResource TimeSpanToStringConverter}}"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Foreground="{DynamicResource PrimaryColor}"
+                                    Background="{DynamicResource BackgroundColor}"
+                                    BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" Padding="2"
+                                    Content="{Binding IsActive, Converter={StaticResource BoolToToggleStringConverter}, ConverterParameter=Stop|Start}"
+                                    Command="{Binding #MainWindowInstance.DataContext.TogglePingingCommand}"
+                                    CommandParameter="{Binding Id}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-			</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 
 </Window>
