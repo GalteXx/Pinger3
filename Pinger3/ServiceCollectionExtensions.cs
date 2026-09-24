@@ -32,7 +32,7 @@ namespace Pinger3
         private static void AddPingServices(IServiceCollection collection)
         {
             collection.AddTransient<IPingTransport, PingTransport>();
-            collection.AddTransient<IPingManager, PingManager>();
+            collection.AddSingleton<IPingManager, PingManager>();
             collection.AddTransient<IPingScheduler, PingScheduler>();
             collection.AddTransient<AddressResolver>();
             collection.AddTransient<EndpointRuntimeFactory>();
