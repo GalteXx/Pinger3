@@ -20,7 +20,7 @@ namespace Pinger3.ViewModels.Design
 
         public bool ClickThrough { get => false; set { } }
 
-        public ObservableCollection<IPingingTargetViewModel> PingViewModels =>
+        public ObservableCollection<IPopOutEndpointViewModel> PingViewModels =>
         [
             new PingingTargetViewModelDesign(),
             new PingingTargetViewModelDesign(),

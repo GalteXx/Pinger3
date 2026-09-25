@@ -5,7 +5,7 @@ using Pinger3.Models;
 
 namespace Pinger3.ViewModels.Design;
 
-public class PingingTargetViewModelDesign : IPingingTargetViewModel
+public class PingingTargetViewModelDesign : IPingingTargetViewModel, IPopOutEndpointViewModel
 {
     public static PingingTargetViewModelDesign Instance => new();
 
@@ -23,7 +23,7 @@ public class PingingTargetViewModelDesign : IPingingTargetViewModel
         set { }
     }
 
-    public void UpdateModel(EndpointModel endpointModel)
+    public void UpdateFromModel(EndpointModel endpointModel)
     {
         throw new NotImplementedException();
     }

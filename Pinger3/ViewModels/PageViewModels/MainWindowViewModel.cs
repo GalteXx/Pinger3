@@ -73,7 +73,7 @@ namespace Pinger3.ViewModels.PageViewModels
                 return;
             }
 
-            vm.UpdateModel(value);
+            vm.UpdateFromModel(value);
         }
 
         public void OnMainWindowLoaded()

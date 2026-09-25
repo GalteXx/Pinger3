@@ -27,7 +27,7 @@ public partial class PingingTargetViewModel : ObservableObject, IPingingTargetVi
     // It's C++ style cheese, but strategy would be an overkill here
     private int _stepCoefficient = 0;
     
-    public void UpdateModel(EndpointModel endpointModel)
+    public void UpdateFromModel(EndpointModel endpointModel)
     {
         if (Id != endpointModel.Id)
             return;

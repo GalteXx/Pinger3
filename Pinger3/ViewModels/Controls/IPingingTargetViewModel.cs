@@ -15,7 +15,7 @@ namespace Pinger3.ViewModels.Controls
         TimeSpan DelayBetweenRequests { get; }
         bool IsActive { get; set; }
 
-        public void UpdateModel(EndpointModel endpointModel);
+        public void UpdateFromModel(EndpointModel endpointModel);
         void UpdateTimeSinceLastRequest(TimeSpan updateTime);
         void OnPingReceived(PingUpdated update);
         void OnPingSent();

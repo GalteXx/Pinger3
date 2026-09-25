@@ -8,15 +8,11 @@ public interface IPopOutEndpointViewModel : INotifyPropertyChanged
 {
     string Id { get; }
 
-    string Name
-    {
-        get;
-        set;
-    }
+    string Name { get; }
 
-    TimeSpan Ping { get; set; }
+    TimeSpan Ping { get; }
 
-    TimeSpan TimeSinceLastRequest { get; set; }
+    TimeSpan TimeSinceLastRequest { get; }
 
     void UpdateFromModel(EndpointModel model);
     void UpdateTimeSinceLastRequest(TimeSpan tick);
