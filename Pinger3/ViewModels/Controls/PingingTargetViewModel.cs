@@ -6,39 +6,41 @@ namespace Pinger3.ViewModels.Controls;
 
 public partial class PingingTargetViewModel : ObservableObject, IPingingTargetViewModel
 {
-
-    public PingingTargetViewModel(EndpointModel model)
+    public PingingTargetViewModel(EndpointModel model, bool isActive, bool isPopOut)
     {
         _id = model.Id;
         TimeSinceLastRequest = TimeSpan.Zero;
         Name = model.Name;
         DomainOrAddress = model.Address;
         DelayBetweenRequests = model.DelayBetweenRequests;
+        IsActive = isActive;
+        IsPopOut = isPopOut;
     }
 
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _domainOrAddress = string.Empty;
     [ObservableProperty] private TimeSpan _ping;
     [ObservableProperty] private bool _isActive;
+    [ObservableProperty] private bool _isPopOut;
     [ObservableProperty] private TimeSpan _timeSinceLastRequest;
     [ObservableProperty] private string _id;
     [ObservableProperty] private TimeSpan _delayBetweenRequests;
 
     // It's C++ style cheese, but strategy would be an overkill here
-    private int _stepCoefficient = 0;
-    
+    private int _stepCoefficient;
+
     public void UpdateFromModel(EndpointModel endpointModel)
     {
         if (Id != endpointModel.Id)
             return;
-        Name =  endpointModel.Name;
+        Name = endpointModel.Name;
         DomainOrAddress = endpointModel.Address;
         DelayBetweenRequests = endpointModel.DelayBetweenRequests;
     }
 
     public void UpdateTimeSinceLastRequest(TimeSpan updateTime)
     {
-        TimeSinceLastRequest += updateTime * _stepCoefficient; 
+        TimeSinceLastRequest += updateTime * _stepCoefficient;
     }
 
     public void OnPingReceived(PingUpdated update)

@@ -13,7 +13,7 @@ public partial class PopOutEndpointViewModel(string id, string name)
     [ObservableProperty] private TimeSpan _timeSinceLastRequest = TimeSpan.FromMilliseconds(-1);
 
     //the step shenanigans deserve their own service atp 
-    private int _step = 0;
+    private int _step;
 
     public void UpdateFromModel(EndpointModel model)
     {

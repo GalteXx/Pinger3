@@ -23,6 +23,12 @@ public class PingingTargetViewModelDesign : IPingingTargetViewModel, IPopOutEndp
         set { }
     }
 
+    public bool IsPopOut
+    {
+        get => Random.Shared.Next() % 2 == 0;
+        set { }
+    }
+
     public void UpdateFromModel(EndpointModel endpointModel)
     {
         throw new NotImplementedException();
@@ -45,7 +51,6 @@ public class PingingTargetViewModelDesign : IPingingTargetViewModel, IPopOutEndp
 
     public TimeSpan DelayBetweenRequests =>
         TimeSpan.FromMilliseconds(Random.Shared.Next(30, (int)TimeSpan.FromHours(2).TotalMilliseconds));
-
 #pragma warning disable CS0067 // The event is never used
     public event PropertyChangedEventHandler? PropertyChanged;
 }

@@ -14,6 +14,7 @@ namespace Pinger3.ViewModels.Controls
         TimeSpan TimeSinceLastRequest { get; }
         TimeSpan DelayBetweenRequests { get; }
         bool IsActive { get; set; }
+        bool IsPopOut {get; set;}
 
         public void UpdateFromModel(EndpointModel endpointModel);
         void UpdateTimeSinceLastRequest(TimeSpan updateTime);
