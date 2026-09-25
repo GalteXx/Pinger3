@@ -12,4 +12,5 @@ public interface IPopOutCatalog
     event EventHandler<string>? PingSent;
     void Add(string id);
     void Remove(string id);
+    bool IsPopOut(string id);
 }
