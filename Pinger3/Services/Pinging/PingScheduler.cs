@@ -13,7 +13,7 @@ public sealed class PingScheduler : IPingScheduler
     private readonly IPingTransport _transport;
     private const int MaxConcurrency = 10;
 
-    public PingScheduler(IPingTransport transport, EndpointRuntimeFactory factory)
+    public PingScheduler(IPingTransport transport)
     {
         _transport = transport;
         RunAsync(CancellationToken.None).Start();
