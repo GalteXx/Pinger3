@@ -15,6 +15,13 @@ public partial class PopOutEndpointViewModel(string id, string name)
     //the step shenanigans deserve their own service atp 
     private int _step = 0;
 
+    public void UpdateFromModel(EndpointModel model)
+    {
+        if (model.Id != Id)
+            return;
+        Name = model.Name;
+    }
+
     public void UpdateTimeSinceLastRequest(TimeSpan tick)
     {
         TimeSinceLastRequest += tick * _step;

@@ -4,7 +4,7 @@ using Pinger3.Services.Pinging;
 
 namespace Pinger3.Services.PopOut;
 
-public sealed class PopOutCatalog
+public sealed class PopOutCatalog : IPopOutCatalog
 {
     private readonly EndpointRepository _repository;
 
@@ -12,15 +12,22 @@ public sealed class PopOutCatalog
     {
         _repository = repository;
         
-        repository.EndpointUpdated += EndpointUpdated;
+        repository.EndpointUpdated += OnEndpointUpdated;
         manager.PingReceived += PingReceived;
         manager.PingSent += PingSent;
+    }
+
+    private void OnEndpointUpdated(object? sender, string id)
+    {
+        var model = _repository.GetEndpoint(id);
+        if(model != null)
+            EndpointUpdated?.Invoke(this, model);
     }
 
     public event EventHandler<EndpointModel>? EndpointAdded;
     public event EventHandler<string>? EndpointRemoved;
     
-    public event EventHandler<string>? EndpointUpdated;
+    public event EventHandler<EndpointModel>? EndpointUpdated;
     public event EventHandler<PingUpdated>? PingReceived;
     public event EventHandler<string>? PingSent;
 
