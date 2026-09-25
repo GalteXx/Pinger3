@@ -8,7 +8,7 @@ namespace Pinger3.ViewModels.PageViewModels
     {
         string SelectedStyleClassName { get; set; }
         bool ClickThrough { get; set; }
-        ObservableCollection<IPingingTargetViewModel> PingViewModels { get; }
+        ObservableCollection<IPopOutEndpointViewModel> PingViewModels { get; }
         double Opacity { get; set; }
     }
 }

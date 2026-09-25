@@ -5,9 +5,9 @@ using Pinger3.Models;
 namespace Pinger3.ViewModels.Controls;
 
 public partial class PopOutEndpointViewModel(string id, string name)
-    : ObservableObject
+    : ObservableObject, IPopOutEndpointViewModel
 {
-    public string Id { get; set; } = id;
+    public string Id { get; } = id;
     [ObservableProperty] private string _name = name;
     [ObservableProperty] private TimeSpan _ping = TimeSpan.FromMilliseconds(-1);
     [ObservableProperty] private TimeSpan _timeSinceLastRequest = TimeSpan.FromMilliseconds(-1);

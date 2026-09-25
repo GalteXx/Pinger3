@@ -5,7 +5,7 @@ namespace Pinger3.Services.PopOut.Factories;
 
 public class PopOutEndpointViewModelFactory
 {
-    public PopOutEndpointViewModel Create(EndpointModel model)
+    public IPopOutEndpointViewModel Create(EndpointModel model)
     {
         return new PopOutEndpointViewModel(model.Id, model.Name);
     }
