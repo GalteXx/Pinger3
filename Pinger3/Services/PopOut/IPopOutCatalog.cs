@@ -13,4 +13,5 @@ public interface IPopOutCatalog
     void Add(string id);
     void Remove(string id);
     bool IsPopOut(string id);
+    void Toggle(string id);
 }

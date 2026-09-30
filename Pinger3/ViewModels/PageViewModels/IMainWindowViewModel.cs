@@ -9,5 +9,7 @@ namespace Pinger3.ViewModels.PageViewModels
         public ObservableCollection<IPingingTargetViewModel> Endpoints { get; }
 
         public IAsyncRelayCommand<string> TogglePingingCommand { get; }
+        
+        public IRelayCommand<string> TogglePopOutCommand { get; }
     }
 }

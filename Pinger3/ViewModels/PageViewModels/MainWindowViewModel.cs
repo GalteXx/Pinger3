@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Pinger3.Services.Pinging;
+using Pinger3.Services.PopOut;
 using Pinger3.ViewModels.Controls.Factories;
 
 namespace Pinger3.ViewModels.PageViewModels
@@ -22,13 +23,15 @@ namespace Pinger3.ViewModels.PageViewModels
         private readonly IPingTargetViewModelFactory _factory;
         private readonly DispatcherTimer _timespanUpdateTimer;
         private readonly IPingManager _pingManager;
+        private readonly IPopOutCatalog _popOutCatalog;
 
         public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
-            IPingManager pingManager)
+            IPingManager pingManager, IPopOutCatalog popOutCatalog)
         {
             _repository = endpointRepository;
             _factory = factory;
             _pingManager = pingManager;
+            _popOutCatalog = popOutCatalog;
             _repository.EndpointUpdated += UpdateViewModel;
             _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Default)
             {
@@ -79,6 +82,12 @@ namespace Pinger3.ViewModels.PageViewModels
         public void OnMainWindowLoaded()
         {
             OnPropertyChanged(nameof(Endpoints));
+        }
+
+        [RelayCommand]
+        private void TogglePopOut(string id)
+        {
+            _popOutCatalog.Toggle(id);
         }
 
         [RelayCommand]

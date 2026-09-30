@@ -53,6 +53,14 @@ public sealed class PopOutCatalog : IPopOutCatalog
         _ids.Add(id);
     }
 
+    public void Toggle(string id)
+    {
+        if (_ids.Contains(id))
+            Remove(id);
+        else
+            Add(id);
+    }
+
     public void Remove(string id)
     {
         OnEndpointRemoved(id);
