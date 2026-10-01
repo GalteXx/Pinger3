@@ -41,7 +41,9 @@ public class MigrationFromV0 : IConfigMigration
                             new XAttribute("Delay", e.RequestDelay ?? "5000")
                         )
                     )
-                )
+                ),
+                new XElement("Active"),
+                new XElement("PopOut")
             )
         );
     }
