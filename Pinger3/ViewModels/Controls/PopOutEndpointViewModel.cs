@@ -11,6 +11,7 @@ public partial class PopOutEndpointViewModel(string id, string name)
     [ObservableProperty] private string _name = name;
     [ObservableProperty] private TimeSpan _ping = TimeSpan.FromMilliseconds(-1);
     [ObservableProperty] private TimeSpan _timeSinceLastRequest = TimeSpan.FromMilliseconds(-1);
+    [ObservableProperty] private string  _address = "0.0.0.0";
 
     //the step shenanigans deserve their own service atp 
     private int _step;

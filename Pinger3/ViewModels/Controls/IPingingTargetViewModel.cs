@@ -8,7 +8,7 @@ namespace Pinger3.ViewModels.Controls
     public interface IPingingTargetViewModel : INotifyPropertyChanged
     {
         string Id { get; }
-        string DomainOrAddress { get; }
+        string Address { get; }
         string Name { get; }
         TimeSpan Ping { get; }
         TimeSpan TimeSinceLastRequest { get; }

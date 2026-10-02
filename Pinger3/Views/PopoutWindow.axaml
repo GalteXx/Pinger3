@@ -39,7 +39,7 @@
 				Classes.CompactPing="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource ClassNameConverter}, ConverterParameter=CompactPing}"
 				Classes.CompactResponseTime="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource ClassNameConverter}, ConverterParameter=CompactResponseTime}"
 				Classes.ResponseTimeOnly="{Binding $parent[Window].DataContext.SelectedStyleClassName, Converter={StaticResource ClassNameConverter}, ConverterParameter=ResponseTimeOnly}"
-				AddressName="{Binding Name}" Address="{Binding DomainOrAddress}"
+				AddressName="{Binding Name}" Address="{Binding Address}"
 				Ping="{Binding Ping}"
 				ResponseWaitingTime="{Binding TimeSinceLastRequest}"
 				/>

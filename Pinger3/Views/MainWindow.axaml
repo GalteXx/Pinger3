@@ -33,7 +33,7 @@
                   ItemsSource="{Binding Endpoints}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Address Or Domain" Binding="{Binding DomainOrAddress}" />
+                <DataGridTextColumn Header="Address Or Domain" Binding="{Binding Address}" />
                 <DataGridTextColumn Header="Delay"
                                     Binding="{Binding DelayBetweenRequests, Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}" />
                 <DataGridCheckBoxColumn Header="Active"

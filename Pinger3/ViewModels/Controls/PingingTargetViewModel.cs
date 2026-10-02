@@ -11,14 +11,14 @@ public partial class PingingTargetViewModel : ObservableObject, IPingingTargetVi
         _id = model.Id;
         TimeSinceLastRequest = TimeSpan.Zero;
         Name = model.Name;
-        DomainOrAddress = model.Address;
+        Address = model.Address;
         DelayBetweenRequests = model.DelayBetweenRequests;
         IsActive = isActive;
         IsPopOut = isPopOut;
     }
 
     [ObservableProperty] private string _name = string.Empty;
-    [ObservableProperty] private string _domainOrAddress = string.Empty;
+    [ObservableProperty] private string _address = string.Empty;
     [ObservableProperty] private TimeSpan _ping;
     [ObservableProperty] private bool _isActive;
     [ObservableProperty] private bool _isPopOut;
@@ -34,7 +34,7 @@ public partial class PingingTargetViewModel : ObservableObject, IPingingTargetVi
         if (Id != endpointModel.Id)
             return;
         Name = endpointModel.Name;
-        DomainOrAddress = endpointModel.Address;
+        Address = endpointModel.Address;
         DelayBetweenRequests = endpointModel.DelayBetweenRequests;
     }
 

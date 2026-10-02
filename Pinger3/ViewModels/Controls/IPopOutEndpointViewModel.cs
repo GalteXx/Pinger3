@@ -11,6 +11,8 @@ public interface IPopOutEndpointViewModel : INotifyPropertyChanged
     string Name { get; }
 
     TimeSpan Ping { get; }
+    
+    string Address { get; }
 
     TimeSpan TimeSinceLastRequest { get; }
 

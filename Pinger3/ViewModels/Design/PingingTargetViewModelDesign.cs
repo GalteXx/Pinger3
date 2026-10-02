@@ -10,7 +10,7 @@ public class PingingTargetViewModelDesign : IPingingTargetViewModel, IPopOutEndp
     public static PingingTargetViewModelDesign Instance => new();
 
     public string Id => "-1";
-    public string DomainOrAddress => "192.168.2.1";
+    public string Address => "192.168.2.1";
 
     public string Name => "Mockup Server";
 
