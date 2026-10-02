@@ -2,6 +2,7 @@
 using Pinger3.ViewModels.Controls;
 using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Services;
+using Pinger3.Services.Migration;
 using Pinger3.Services.Pinging;
 using Pinger3.Views;
 
@@ -23,6 +24,7 @@ namespace Pinger3
 
         private static void AddStorageServices(IServiceCollection collection)
         {
+            collection.AddTransient<PersistentDataMigrator>();
             collection.AddTransient<IAddressesStorage, XmlAddressStorage>();
             collection.AddTransient<IStorageGateway, XmlStorageGateway>();
             collection.AddSingleton<IEndpointRepository, EndpointRepository>();

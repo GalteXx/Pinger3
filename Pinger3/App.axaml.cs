@@ -8,6 +8,7 @@ using Pinger3.Views;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Pinger3.Services.Migration;
 
 namespace Pinger3
 {
@@ -22,15 +23,14 @@ namespace Pinger3
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-                // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
+                desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
 
                 var collection = new ServiceCollection();
                 collection.AddCommonServices();
                 var services = collection.BuildServiceProvider();
 
-                var startTask = StartAsync(desktop, services);
+                var startTask = StartAsync(services);
                 startTask.ContinueWith(t =>
                 {
                     if (t.IsCanceled)
@@ -47,11 +47,12 @@ namespace Pinger3
             base.OnFrameworkInitializationCompleted();
         }
 
-        private static async Task StartAsync(IClassicDesktopStyleApplicationLifetime desktop, ServiceProvider services)
+        private static async Task StartAsync(ServiceProvider services)
         {
-            desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
+            var migrator = services.GetRequiredService<PersistentDataMigrator>();
+            await migrator.MigrateAsync();
+            
             var endpointRepository = services.GetRequiredService<IEndpointRepository>();
-
             await endpointRepository.LoadFromSource();
 
             var trayIconService = services.GetRequiredService<TrayIconService>();
