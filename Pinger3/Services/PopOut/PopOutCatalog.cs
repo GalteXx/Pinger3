@@ -7,10 +7,10 @@ namespace Pinger3.Services.PopOut;
 
 public sealed class PopOutCatalog : IPopOutCatalog
 {
-    private readonly EndpointRepository _repository;
+    private readonly IEndpointRepository _repository;
     private readonly HashSet<string> _ids;
 
-    public PopOutCatalog(PingManager manager, EndpointRepository repository)
+    public PopOutCatalog(IPingManager manager, IEndpointRepository repository)
     {
         _repository = repository;
         _ids = [];

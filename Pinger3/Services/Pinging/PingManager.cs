@@ -9,10 +9,10 @@ public class PingManager : IPingManager
 {
     private readonly IPingScheduler _scheduler;
     private readonly EndpointRuntimeFactory _factory;
-    private readonly EndpointRepository _repository;
+    private readonly IEndpointRepository _repository;
     private readonly EndpointUpdateResolver _updateResolver;
 
-    public PingManager(IPingScheduler scheduler, EndpointRuntimeFactory factory, EndpointRepository repository,
+    public PingManager(IPingScheduler scheduler, EndpointRuntimeFactory factory, IEndpointRepository repository,
         EndpointUpdateResolver updateResolver)
     {
         _scheduler = scheduler;

@@ -4,6 +4,8 @@ using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Services;
 using Pinger3.Services.Migration;
 using Pinger3.Services.Pinging;
+using Pinger3.Services.PopOut;
+using Pinger3.ViewModels.Controls.Factories;
 using Pinger3.Views;
 
 namespace Pinger3
@@ -17,9 +19,15 @@ namespace Pinger3
             
             AddStorageServices(collection);
             AddPingServices(collection);
+            AddPopOutServices(collection);
             
             AddViewModels(collection);
             AddWindows(collection);
+        }
+
+        private static void AddPopOutServices(IServiceCollection collection)
+        {
+            collection.AddSingleton<IPopOutCatalog, PopOutCatalog>();
         }
 
         private static void AddStorageServices(IServiceCollection collection)
@@ -43,9 +51,11 @@ namespace Pinger3
 
         private static void AddViewModels(IServiceCollection collection)
         {
+            collection.AddTransient<IPingTargetViewModelFactory, PingTargetViewModelFactory>();
+            
             collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
             collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
-            collection.AddSingleton<IPopoutWindowViewModel, PopoutWindowViewModel>();
+            collection.AddTransient<IPopoutWindowViewModel, PopoutWindowViewModel>();
             collection.AddTransient<IMainWindowViewModel, MainWindowViewModel>();
         }
 
