@@ -13,7 +13,7 @@ public class XmlStorageGateway : IStorageGateway
     public async IAsyncEnumerable<EndpointDto> ReadAddressAsync()
     {
         var storage = await _loader.LoadStorageAsync();
-        foreach (var el in storage.Elements())
+        foreach (var el in storage.Root?.Element("Endpoints")?.Elements() ?? [])
         {
             var dto = CreateAddressDto(el);
             if (dto == null) // there is literally not a single case when this could fire 
@@ -24,7 +24,7 @@ public class XmlStorageGateway : IStorageGateway
 
     private static EndpointDto? CreateAddressDto(XElement el)
     {
-        var id = el.Attribute("id")?.Value;
+        var id = el.Attribute("Id")?.Value;
         var name = el.Attribute("Name")?.Value;
         var address = el.Attribute("Address")?.Value;
         var delay = el.Attribute("Delay")?.Value;

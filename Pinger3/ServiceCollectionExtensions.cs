@@ -5,6 +5,7 @@ using Pinger3.Services;
 using Pinger3.Services.Migration;
 using Pinger3.Services.Pinging;
 using Pinger3.Services.PopOut;
+using Pinger3.Services.PopOut.Factories;
 using Pinger3.ViewModels.Controls.Factories;
 using Pinger3.Views;
 
@@ -52,6 +53,7 @@ namespace Pinger3
         private static void AddViewModels(IServiceCollection collection)
         {
             collection.AddTransient<IPingTargetViewModelFactory, PingTargetViewModelFactory>();
+            collection.AddTransient<PopOutEndpointViewModelFactory>();
             
             collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
             collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
