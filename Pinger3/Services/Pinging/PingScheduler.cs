@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
@@ -16,7 +17,12 @@ public sealed class PingScheduler : IPingScheduler
     public PingScheduler(IPingTransport transport)
     {
         _transport = transport;
-        RunAsync(CancellationToken.None).Start();
+        var pingingCycleTask = RunAsync(CancellationToken.None);
+        pingingCycleTask.ContinueWith(t =>
+        {
+            if (t.IsFaulted)
+                throw new Exception($"Unhandled exception in PingScheduler: {t.Exception?.Flatten()}");
+        }, TaskScheduler.Default);
     }
 
     public Dictionary<string, EndpointRuntime> Endpoints { get; } = [];
