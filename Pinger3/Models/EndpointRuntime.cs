@@ -15,5 +15,6 @@ public class EndpointRuntime(string id, IPAddress address, TimeSpan delay)
     {
         Address = endpoint.Address;
         DelayBetweenRequests = endpoint.DelayBetweenRequests;
+        LastPinged = DateTime.MaxValue;
     }
 }

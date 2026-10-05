@@ -34,8 +34,9 @@ public sealed class PingScheduler : IPingScheduler
         while (!ct.IsCancellationRequested)
         {
             var now = DateTime.UtcNow;
+            
             var due = Endpoints.Values
-                .Where(e => e.LastPinged + e.DelayBetweenRequests <= now);
+                .Where(e => e.LastPinged + e.DelayBetweenRequests >= now);
 
             await Parallel.ForEachAsync(due,
                 new ParallelOptions { MaxDegreeOfParallelism = MaxConcurrency, CancellationToken = ct },
@@ -47,7 +48,7 @@ public sealed class PingScheduler : IPingScheduler
                     var result = await _transport.PingAsync(runtime, token);
                     runtime.Ping = result;
 
-                    PingReceived?.Invoke(this, new PingUpdated("Id", runtime.Ping));
+                    PingReceived?.Invoke(this, new PingUpdated(runtime.Id, runtime.Ping));
                 });
 
             await Task.Delay(_tick, ct);

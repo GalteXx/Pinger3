@@ -13,7 +13,7 @@
 		<StackPanel Background="Black">
 			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" Classes="Full"
 								  AddressName="{Binding Name}"
-								  Address="{Binding DomainOrAddress}"
+								  Address="{Binding Address}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>
@@ -24,7 +24,7 @@
 			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" 
 								  Classes="CompactPing"
 								  AddressName="{Binding Name}"
-								  Address="{Binding DomainOrAddress}"
+								  Address="{Binding Address}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>
@@ -35,7 +35,7 @@
 			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" 
 								  Classes="CompactResponseTime"
 								  AddressName="{Binding Name}"
-								  Address="{Binding DomainOrAddress}"
+								  Address="{Binding Address}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>
@@ -46,7 +46,7 @@
 			<controls:PingDisplay x:DataType="vm:PingingTargetViewModelDesign" 
 								  Classes="ResponseTimeOnly"
 								  AddressName="{Binding Name}"
-								  Address="{Binding DomainOrAddress}"
+								  Address="{Binding Address}"
 								  Ping="{Binding Ping}"
 								  ResponseWaitingTime="{Binding TimeSinceLastRequest}">
 				<controls:PingDisplay.DataContext>

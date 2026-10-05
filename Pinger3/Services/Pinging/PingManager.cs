@@ -42,7 +42,7 @@ public class PingManager : IPingManager
 
     public async Task ToggleEndpointPingingAsync(string id, CancellationToken ct)
     {
-        if (IsRunning(id))
+        if (!IsRunning(id))
             await AddEndpointAsync(id, ct);
         else
             RemoveEndpoint(id);

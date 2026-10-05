@@ -16,7 +16,6 @@
     <Window.Resources>
         <converters:TimespanToStringConverter x:Key="TimeSpanToStringConverter" />
         <converters:TimespanToColorConverter x:Key="TimeSpanToColorConverter" />
-        <converters:BoolToToggleStringConverter x:Key="BoolToToggleStringConverter" />
         <converters:TimeSpanToLargestUnitConverter x:Key="TimeSpanToLargestUnitConverter" />
     </Window.Resources>
     <Design.DataContext>
@@ -33,12 +32,11 @@
                   ItemsSource="{Binding Endpoints}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Address Or Domain" Binding="{Binding Address}" />
+                <DataGridTextColumn Header="Address" Binding="{Binding Address}" />
                 <DataGridTextColumn Header="Delay"
-                                    Binding="{Binding DelayBetweenRequests, Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}" />
-                <DataGridCheckBoxColumn Header="Active"
-                                        Binding="{Binding IsActive, Mode= OneWay}" IsReadOnly="True" />
-                <DataGridTemplateColumn Header="Awaiting Response Time">
+                                    Binding="{Binding DelayBetweenRequests,
+                                    Converter={StaticResource TimeSpanToLargestUnitConverter}, Mode=OneWay}" />
+                <DataGridTemplateColumn Header="Awaiting Response">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -66,12 +64,12 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Foreground="{DynamicResource PrimaryColor}"
+                            <CheckBox Foreground="{DynamicResource PrimaryColor}"
                                     Background="{DynamicResource BackgroundColor}"
                                     BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" Padding="2"
-                                    Content="{Binding IsActive, Converter={StaticResource BoolToToggleStringConverter}, ConverterParameter=Stop|Start}"
+                                    IsChecked="{Binding IsActive, Mode=TwoWay}"
                                     Command="{Binding #MainWindowInstance.DataContext.TogglePingingCommand}"
-                                    CommandParameter="{Binding Id}"/>
+                                    CommandParameter="{Binding Id}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
