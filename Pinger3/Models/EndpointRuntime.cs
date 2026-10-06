@@ -8,13 +8,12 @@ public class EndpointRuntime(string id, IPAddress address, TimeSpan delay)
     public string Id { get; private set; } = id;
     public IPAddress Address { get; private set; } = address;
     public TimeSpan DelayBetweenRequests { get; private set; } = delay;
-    public DateTime LastPinged { get; set; }
+    public DateTime LastPinged { get; set; } =  DateTime.Now - delay;
     public TimeSpan Ping { get; set; }
 
     public void UpdateAddress(ResolvedEndpointUpdate endpoint)
     {
         Address = endpoint.Address;
         DelayBetweenRequests = endpoint.DelayBetweenRequests;
-        LastPinged = DateTime.MaxValue;
     }
 }
