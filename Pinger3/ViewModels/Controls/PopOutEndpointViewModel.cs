@@ -8,13 +8,15 @@ public partial class PopOutEndpointViewModel(string id, string name)
     : ObservableObject, IPopOutEndpointViewModel
 {
     public string Id { get; } = id;
+    
     [ObservableProperty] private string _name = name;
     [ObservableProperty] private TimeSpan _ping = TimeSpan.FromMilliseconds(-1);
     [ObservableProperty] private TimeSpan _timeSinceLastRequest = TimeSpan.FromMilliseconds(-1);
     [ObservableProperty] private string  _address = "0.0.0.0`";
-
-    // The step shenanigans deserve their own service atp
-    private int _step;
+    
+    private bool _pingInProgress;
+    private DateTime _lastPingTime;
+    
 
     public void UpdateFromModel(EndpointModel model)
     {
@@ -23,20 +25,23 @@ public partial class PopOutEndpointViewModel(string id, string name)
         Name = model.Name;
     }
 
-    public void UpdateTimeSinceLastRequest(TimeSpan tick)
+    public void UpdateTimeSinceLastRequest()
     {
-        TimeSinceLastRequest += tick * _step;
+        if(_pingInProgress)
+            TimeSinceLastRequest = DateTime.Now - _lastPingTime;
     }
 
     public void OnPingReceived(PingUpdated update)
     {
         Ping = update.Ping;
-        _step = 0;
+        _pingInProgress = false;
+        TimeSinceLastRequest = TimeSpan.Zero;
     }
 
     public void OnPingSent()
     {
         TimeSinceLastRequest = TimeSpan.Zero;
-        _step = 1;
+        _pingInProgress = true;
+        _lastPingTime = DateTime.Now;
     }
 }

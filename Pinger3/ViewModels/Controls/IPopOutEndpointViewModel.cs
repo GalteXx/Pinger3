@@ -17,7 +17,7 @@ public interface IPopOutEndpointViewModel : INotifyPropertyChanged
     TimeSpan TimeSinceLastRequest { get; }
 
     void UpdateFromModel(EndpointModel model);
-    void UpdateTimeSinceLastRequest(TimeSpan tick);
+    void UpdateTimeSinceLastRequest();
     void OnPingReceived(PingUpdated update);
     void OnPingSent();
 }

@@ -17,7 +17,7 @@ namespace Pinger3.ViewModels.Controls
         bool IsPopOut {get; set;}
 
         public void UpdateFromModel(EndpointModel endpointModel);
-        void UpdateTimeSinceLastRequest(TimeSpan updateTime);
+        void UpdateTimeSinceLastRequest();
         void OnPingReceived(PingUpdated update);
         void OnPingSent();
     }

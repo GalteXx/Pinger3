@@ -22,12 +22,13 @@ public partial class PingingTargetViewModel : ObservableObject, IPingingTargetVi
     [ObservableProperty] private TimeSpan _ping;
     [ObservableProperty] private bool _isActive;
     [ObservableProperty] private bool _isPopOut;
-    [ObservableProperty] private TimeSpan _timeSinceLastRequest;
+    [ObservableProperty] private TimeSpan _timeSinceLastRequest = TimeSpan.FromSeconds(-1);
     [ObservableProperty] private string _id;
     [ObservableProperty] private TimeSpan _delayBetweenRequests;
 
-    // It's C++ style cheese, but strategy would be an overkill here
-    private int _stepCoefficient;
+    private DateTime _lastPingTime = DateTime.Now;
+    
+    private bool _pingInProgress;
 
     public void UpdateFromModel(EndpointModel endpointModel)
     {
@@ -38,20 +39,22 @@ public partial class PingingTargetViewModel : ObservableObject, IPingingTargetVi
         DelayBetweenRequests = endpointModel.DelayBetweenRequests;
     }
 
-    public void UpdateTimeSinceLastRequest(TimeSpan updateTime)
+    public void UpdateTimeSinceLastRequest()
     {
-        TimeSinceLastRequest += updateTime * _stepCoefficient;
+        if (_pingInProgress)
+            TimeSinceLastRequest += DateTime.Now - _lastPingTime;
     }
 
     public void OnPingReceived(PingUpdated update)
     {
         Ping = update.Ping;
-        _stepCoefficient = 0;
+        _pingInProgress = false;
     }
 
     public void OnPingSent()
     {
         TimeSinceLastRequest = TimeSpan.Zero;
-        _stepCoefficient = 1;
+        _lastPingTime = DateTime.Now;
+        _pingInProgress = true;
     }
 }

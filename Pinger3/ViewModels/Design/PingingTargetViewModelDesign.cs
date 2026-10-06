@@ -34,7 +34,7 @@ public class PingingTargetViewModelDesign : IPingingTargetViewModel, IPopOutEndp
         throw new NotImplementedException();
     }
 
-    public void UpdateTimeSinceLastRequest(TimeSpan updateTime)
+    public void UpdateTimeSinceLastRequest()
     {
         throw new NotImplementedException();
     }
