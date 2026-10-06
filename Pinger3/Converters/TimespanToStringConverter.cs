@@ -10,7 +10,7 @@ namespace Pinger3.Converters
         {
             if (value is not TimeSpan timeSpan)
                 throw new ArgumentException("Invalid value type");
-            if (timeSpan == TimeSpan.MinValue || timeSpan == TimeSpan.FromMilliseconds(-1d))
+            if (timeSpan < TimeSpan.Zero)
                 return "N/A";
             if (timeSpan == TimeSpan.MaxValue)
                 return "Timeout";
