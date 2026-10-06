@@ -8,13 +8,13 @@ namespace Pinger3.Converters
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is not TimeSpan Value)
+            if (value is not TimeSpan timeSpan)
                 throw new ArgumentException("Invalid value type");
-            if (Value == TimeSpan.MinValue || Value == TimeSpan.FromMilliseconds(-1d))
+            if (timeSpan == TimeSpan.MinValue || timeSpan == TimeSpan.FromMilliseconds(-1d))
                 return "N/A";
-            if (Value == TimeSpan.MaxValue)
+            if (timeSpan == TimeSpan.MaxValue)
                 return "Timeout";
-            return $"{double.Round(Value.TotalMilliseconds, 1)} ms";
+            return $"{double.Round(timeSpan.TotalMilliseconds, 1)} ms";
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
