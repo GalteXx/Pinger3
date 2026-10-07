@@ -21,13 +21,13 @@ public class PingManager : IPingManager
         _updateResolver = updateResolver;
 
         // It won't throw anything. Trust me bro
-        _repository.EndpointUpdated += (sender, id) => OnPingModelUpdated(sender, id).Start();
+        _repository.EndpointUpdated += (_, id) => OnPingModelUpdated(id).Start();
 
-        scheduler.PingSent += PingSent;
-        scheduler.PingReceived += PingReceived;
+        scheduler.PingSent += (sender, e) => PingSent?.Invoke(sender, e);
+        scheduler.PingReceived += (sender, e) => PingReceived?.Invoke(sender, e);
     }
 
-    private async Task OnPingModelUpdated(object? sender, string id)
+    private async Task OnPingModelUpdated(string id)
     {
         if (!_scheduler.Endpoints.TryGetValue(id, out var runtime))
             return;
@@ -63,8 +63,4 @@ public class PingManager : IPingManager
     }
 
     public bool IsRunning(string id) => _scheduler.Endpoints.ContainsKey(id);
-
-    public event EventHandler<string>? PingSent;
-
-    public event EventHandler<PingUpdated>? PingReceived;
 }

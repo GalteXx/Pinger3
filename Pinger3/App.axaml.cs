@@ -58,7 +58,6 @@ namespace Pinger3
             var trayIconService = services.GetRequiredService<TrayIconService>();
             trayIconService.Show();
             services.GetRequiredService<MainWindow>().Show();
-            services.GetRequiredService<PopoutWindow>().Show();
         }
 
         private void DisableAvaloniaDataAnnotationValidation()

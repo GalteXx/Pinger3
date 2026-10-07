@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
@@ -33,25 +32,27 @@ public sealed class PingScheduler : IPingScheduler
     {
         while (!ct.IsCancellationRequested)
         {
-            var now = DateTime.UtcNow;
-            
+            var now = DateTime.Now;
             var due = Endpoints.Values
-                .Where(e => e.LastPinged + e.DelayBetweenRequests >= now);
+                .Where(e => e.LastPinged + e.DelayBetweenRequests <= now && !e.IsPinged);
 
-            await Parallel.ForEachAsync(due,
-                new ParallelOptions { MaxDegreeOfParallelism = MaxConcurrency, CancellationToken = ct },
-                async (runtime, token) =>
-                {
-                    runtime.LastPinged = DateTime.Now;
-                    PingSent?.Invoke(this, runtime.Id);
-
-                    var result = await _transport.PingAsync(runtime, token);
-                    runtime.Ping = result;
-
-                    PingReceived?.Invoke(this, new PingUpdated(runtime.Id, runtime.Ping));
-                });
+            foreach (var runtime in due)
+            {
+                _ = SendPingAsync(runtime, ct);
+            }
 
             await Task.Delay(_tick, ct);
         }
+    }
+
+    private async Task SendPingAsync(EndpointRuntime runtime, CancellationToken token)
+    {
+        PingSent?.Invoke(this, runtime.Id);
+
+        var result = await _transport.PingAsync(runtime, token);
+        runtime.Ping = result;
+
+        runtime.LastPinged = DateTime.Now;
+        PingReceived?.Invoke(this, new PingUpdated(runtime.Id, runtime.Ping));
     }
 }
