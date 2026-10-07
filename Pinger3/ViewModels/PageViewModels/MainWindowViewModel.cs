@@ -18,7 +18,7 @@ namespace Pinger3.ViewModels.PageViewModels
         // TODO: get an observable Dictionary
         public ObservableCollection<IPingingTargetViewModel> Endpoints { get; } = [];
 
-        private readonly TimeSpan _timerIntervalMs = TimeSpan.FromMilliseconds(200);
+        private readonly TimeSpan _timerIntervalMs = TimeSpan.FromMilliseconds(10);
         private readonly IEndpointRepository _repository;
         private readonly IPingTargetViewModelFactory _factory;
         private readonly DispatcherTimer _timespanUpdateTimer;
@@ -33,12 +33,12 @@ namespace Pinger3.ViewModels.PageViewModels
             _pingManager = pingManager;
             _popOutCatalog = popOutCatalog;
             _repository.EndpointUpdated += UpdateViewModel;
-            _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Default)
+            _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
                 Interval = _timerIntervalMs,
                 IsEnabled = true
             };
-            _timespanUpdateTimer.Tick += UpdateEndpointViewModels;
+            _timespanUpdateTimer.Tick += UpdateEndpointViewModelTimeSpans;
             _timespanUpdateTimer.Start();
 
             foreach (var endpoint in _repository.CachedEndpoints.Values)
@@ -56,11 +56,11 @@ namespace Pinger3.ViewModels.PageViewModels
             };
         }
 
-        private void UpdateEndpointViewModels(object? sender, EventArgs e)
+        private void UpdateEndpointViewModelTimeSpans(object? sender, EventArgs e)
         {
             foreach (var endpoint in Endpoints)
             {
-                endpoint.UpdateTimeSinceLastRequest(_timerIntervalMs);
+                endpoint.UpdateTimeSinceLastRequest();
             }
         }
 
