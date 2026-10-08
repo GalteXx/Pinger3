@@ -9,11 +9,13 @@ namespace Pinger3.Services.PopOut;
 public sealed class PopOutCatalog : IPopOutCatalog
 {
     private readonly IEndpointRepository _repository;
+    private readonly IPopOutEndpointsStorage _storage;
     private readonly HashSet<string> _ids;
 
-    public PopOutCatalog(IPingManager manager, IEndpointRepository repository)
+    public PopOutCatalog(IPingManager manager, IEndpointRepository repository, IPopOutEndpointsStorage storage)
     {
         _repository = repository;
+        _storage = storage;
         _ids = [];
 
         repository.EndpointUpdated += OnEndpointUpdated;
@@ -84,11 +86,13 @@ public sealed class PopOutCatalog : IPopOutCatalog
 
     private void OnEndpointAdded(EndpointModel model)
     {
+        _ = _storage.AddPopOutEndpointAsync(model.Id);
         EndpointAdded?.Invoke(this, model);
     }
 
     private void OnEndpointRemoved(string id)
     {
+        _ = _storage.RemovePopOutEndpointAsync(id);
         EndpointRemoved?.Invoke(this, id);
     }
 }

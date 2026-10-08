@@ -11,14 +11,16 @@ public class PingManager : IPingManager
     private readonly EndpointRuntimeFactory _factory;
     private readonly IEndpointRepository _repository;
     private readonly EndpointUpdateResolver _updateResolver;
+    private readonly IActiveEndpointsStorage _storage;
 
     public PingManager(IPingScheduler scheduler, EndpointRuntimeFactory factory, IEndpointRepository repository,
-        EndpointUpdateResolver updateResolver)
+        EndpointUpdateResolver updateResolver, IActiveEndpointsStorage storage)
     {
         _scheduler = scheduler;
         _factory = factory;
         _repository = repository;
         _updateResolver = updateResolver;
+        _storage = storage;
 
         // It won't throw anything. Trust me bro
         _repository.EndpointUpdated += (_, id) => OnPingModelUpdated(id).Start();
@@ -55,11 +57,13 @@ public class PingManager : IPingManager
             return;
         var runtime = await _factory.CreateRuntimeAsync(model, ct);
         _scheduler.Endpoints.Add(runtime.Id, runtime);
+        await _storage.AddActiveEndpointAsync(runtime.Id);
     }
 
     public void RemoveEndpoint(string id)
     {
         _scheduler.Endpoints.Remove(id);
+        _storage.RemoveActiveEndpointAsync(id);
     }
 
     public bool IsRunning(string id) => _scheduler.Endpoints.ContainsKey(id);

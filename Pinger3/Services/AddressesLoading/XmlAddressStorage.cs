@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Pinger3.Services
 {
     internal class XmlAddressStorage(IStorageGateway gateway, EndpointModelFactory factory)
-        : IAddressesStorage
+        : IAddressesStorage, IActiveEndpointsStorage, IPopOutEndpointsStorage
     {
         public async IAsyncEnumerable<EndpointModel> ParseAddressesAsync()
         {
@@ -23,5 +23,13 @@ namespace Pinger3.Services
             await gateway.WriteAddressAsync(new EndpointDto(address.Id, address.Name, address.Address,
                 address.DelayBetweenRequests.Milliseconds.ToString()));
         }
+
+        public async Task AddActiveEndpointAsync(string id) => await gateway.WriteActiveEndpointAsync(id);
+
+        public async Task RemoveActiveEndpointAsync(string id) => await gateway.EraseActiveEndpointAsync(id);
+
+        public async Task AddPopOutEndpointAsync(string id) => await gateway.WritePopOutEndpointAsync(id);
+
+        public async Task RemovePopOutEndpointAsync(string id) => await gateway.ErasePopOutEndpointAsync(id);
     }
 }
