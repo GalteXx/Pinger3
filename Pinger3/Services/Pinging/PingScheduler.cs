@@ -11,7 +11,6 @@ public sealed class PingScheduler : IPingScheduler
 {
     private readonly TimeSpan _tick = TimeSpan.FromMilliseconds(100);
     private readonly IPingTransport _transport;
-    private const int MaxConcurrency = 10;
 
     public PingScheduler(IPingTransport transport)
     {
@@ -47,12 +46,15 @@ public sealed class PingScheduler : IPingScheduler
 
     private async Task SendPingAsync(EndpointRuntime runtime, CancellationToken token)
     {
+        runtime.IsPinged = true;
+        
         PingSent?.Invoke(this, runtime.Id);
-
+        
         var result = await _transport.PingAsync(runtime, token);
         runtime.Ping = result;
 
         runtime.LastPinged = DateTime.Now;
+        runtime.IsPinged = false;
         PingReceived?.Invoke(this, new PingUpdated(runtime.Id, runtime.Ping));
     }
 }

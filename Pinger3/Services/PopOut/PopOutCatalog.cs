@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Pinger3.Models;
 using Pinger3.Services.Pinging;
 
@@ -21,7 +22,11 @@ public sealed class PopOutCatalog : IPopOutCatalog
             if (IsPopOut(updated.Id))
                 PingReceived?.Invoke(sender, updated);
         };
-        manager.PingSent += PingSent;
+        manager.PingSent += (sender, e) =>
+        {
+            if (IsPopOut(e))
+                PingSent?.Invoke(sender, e);
+        };
     }
 
     private void OnEndpointUpdated(object? sender, string id)
@@ -37,6 +42,11 @@ public sealed class PopOutCatalog : IPopOutCatalog
     public event EventHandler<EndpointModel>? EndpointUpdated;
     public event EventHandler<PingUpdated>? PingReceived;
     public event EventHandler<string>? PingSent;
+
+    public IEnumerable<EndpointModel> GetEndpoints()
+    {
+        return _ids.Select(endpoint => _repository.GetEndpoint(endpoint)).OfType<EndpointModel>();
+    }
 
 
     public void Add(string id)
@@ -63,6 +73,7 @@ public sealed class PopOutCatalog : IPopOutCatalog
 
     public void Remove(string id)
     {
+        _ids.Remove(id);
         OnEndpointRemoved(id);
     }
 

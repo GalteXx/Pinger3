@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Pinger3.Models;
 
 namespace Pinger3.Services.PopOut;
@@ -14,4 +15,5 @@ public interface IPopOutCatalog
     void Remove(string id);
     bool IsPopOut(string id);
     void Toggle(string id);
+    IEnumerable<EndpointModel> GetEndpoints();
 }

@@ -61,19 +61,28 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Active">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox Foreground="{DynamicResource PrimaryColor}"
-                                    Background="{DynamicResource BackgroundColor}"
-                                    BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1" Padding="2"
-                                    IsChecked="{Binding IsActive, Mode=TwoWay}"
-                                    Command="{Binding #MainWindowInstance.DataContext.TogglePingingCommand}"
-                                    CommandParameter="{Binding Id}" />
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      IsChecked="{Binding IsActive, Mode=TwoWay}"
+                                      Command="{Binding #MainWindowInstance.DataContext.TogglePingingCommand}"
+                                      CommandParameter="{Binding Id}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                <DataGridTemplateColumn Header="PopOut">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox Foreground="{DynamicResource PrimaryColor}"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      IsChecked="{Binding IsPopOut, Mode=TwoWay}"
+                                      Command="{Binding #MainWindowInstance.DataContext.TogglePopOutCommand}"
+                                      CommandParameter="{Binding Id}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

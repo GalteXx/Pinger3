@@ -23,6 +23,11 @@ public partial class PopoutWindowViewModel : ObservableObject, IPopoutWindowView
     {
         _factory = factory;
 
+        foreach (var model in popOutCatalog.GetEndpoints())
+        {
+            PingViewModels.Add(_factory.Create(model));
+        }
+
         popOutCatalog.EndpointAdded += OnEndpointAdded;
         popOutCatalog.EndpointRemoved +=
             (_, id) => PingViewModels.Remove(PingViewModels.FirstOrDefault(p => p.Id == id)!);
