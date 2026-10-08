@@ -63,4 +63,8 @@ public class PingManager : IPingManager
     }
 
     public bool IsRunning(string id) => _scheduler.Endpoints.ContainsKey(id);
+    
+    public event EventHandler<string>? PingSent;
+
+    public event EventHandler<PingUpdated>? PingReceived;
 }
