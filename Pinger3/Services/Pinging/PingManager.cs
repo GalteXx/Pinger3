@@ -47,7 +47,7 @@ public class PingManager : IPingManager
         if (!IsRunning(id))
             await AddEndpointAsync(id, ct);
         else
-            RemoveEndpoint(id);
+            await RemoveEndpoint(id);
     }
 
     public async Task AddEndpointAsync(string id, CancellationToken ct)
@@ -60,10 +60,10 @@ public class PingManager : IPingManager
         await _storage.AddActiveEndpointAsync(runtime.Id);
     }
 
-    public void RemoveEndpoint(string id)
+    public async Task RemoveEndpoint(string id)
     {
         _scheduler.Endpoints.Remove(id);
-        _storage.RemoveActiveEndpointAsync(id);
+        await _storage.RemoveActiveEndpointAsync(id);
     }
 
     public bool IsRunning(string id) => _scheduler.Endpoints.ContainsKey(id);

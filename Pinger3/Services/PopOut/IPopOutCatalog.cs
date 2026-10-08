@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Pinger3.Models;
 
 namespace Pinger3.Services.PopOut;
@@ -11,9 +12,9 @@ public interface IPopOutCatalog
     event EventHandler<EndpointModel>? EndpointUpdated;
     event EventHandler<PingUpdated>? PingReceived;
     event EventHandler<string>? PingSent;
-    void Add(string id);
-    void Remove(string id);
+    Task Add(string id);
+    Task Remove(string id);
     bool IsPopOut(string id);
-    void Toggle(string id);
+    Task Toggle(string id);
     IEnumerable<EndpointModel> GetEndpoints();
 }
