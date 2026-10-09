@@ -49,6 +49,9 @@ namespace Pinger3
 
         private static async Task StartAsync(ServiceProvider services)
         {
+            var storageInitializer = services.GetRequiredService<IStorageInitializer>();
+            await storageInitializer.Initialize();
+            
             var migrator = services.GetRequiredService<PersistentDataMigrator>();
             await migrator.MigrateAsync();
             
