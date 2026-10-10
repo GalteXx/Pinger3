@@ -5,8 +5,8 @@ namespace Pinger3.Services.Migration;
 
 public interface IStorageMigration
 {
-    string? FromVersion { get; }
-    string ToVersion { get; }
+    int FromVersion { get; }
+    int ToVersion { get; }
 
     Task Migrate(SqliteConnection connection);
 }
