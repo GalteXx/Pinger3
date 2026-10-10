@@ -1,24 +1,13 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 
 namespace Pinger3.Services;
 
-public class SqliteDatabaseInitializer : IStorageInitializer
+public class SqliteDatabaseInitializer(SqliteConnectionFactory connectionFactory) : IStorageInitializer
 {
-    private readonly string _directoryPath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "Geckosystem", "Pinger");
-
     public async Task Initialize()
     {
-        Directory.CreateDirectory(_directoryPath);
-        var connectionString = new SqliteConnectionStringBuilder()
-        {
-            DataSource = Path.Combine(_directoryPath, "Pinger3.sqlite"),
-        }.ToString();
-        await using var connection = new SqliteConnection(connectionString);
+        await using var connection = connectionFactory.Create();
         await connection.OpenAsync();
 
         await CreateEndpointsTable(connection);
