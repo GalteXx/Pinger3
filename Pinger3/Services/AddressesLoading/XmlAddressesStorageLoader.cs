@@ -47,12 +47,4 @@ internal class XmlAddressesStorageLoader
 
         return Task.CompletedTask;
     }
-
-    public async Task SaveAsync(XDocument storage)
-    {
-        Directory.CreateDirectory(DirectoryPath);
-        var fullPath = Path.Combine(DirectoryPath, ConfigName);
-            await using var stream = File.Create(fullPath);
-            await storage.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
-    }
 }

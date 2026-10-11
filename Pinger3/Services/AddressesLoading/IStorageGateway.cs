@@ -6,7 +6,7 @@ namespace Pinger3.Services;
 
 public interface IStorageGateway
 {
-    IAsyncEnumerable<EndpointDto> ReadAddressAsync();
+    IAsyncEnumerable<EndpointDto> ReadAddressesAsync();
     Task WriteAddressAsync(EndpointDto dto);
     Task WriteActiveEndpointAsync(string id);
     Task EraseActiveEndpointAsync(string id);
