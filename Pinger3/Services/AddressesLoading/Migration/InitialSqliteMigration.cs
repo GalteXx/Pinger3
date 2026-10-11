@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Data.Sqlite;
 
@@ -15,37 +18,42 @@ public class InitialSqliteMigration : IStorageMigration
 
     public async Task Migrate(SqliteConnection connection)
     {
-        await CreateEndpointsTable(connection);
-        await CreateEndpointRolesTable(connection);
-
-        await MigrateXmlAsync(connection);
-    }
-
-    private async Task MigrateXmlAsync(SqliteConnection connection)
-    {
         var storage = await _loader.LoadStorageAsync();
-        if (storage == null)
-            return;
-        var transaction = await connection.BeginTransactionAsync();
-        try
-        {
-            foreach (var endpoint in GetEndpoints(storage))
-            {
-                var command = connection.CreateCommand();
-                command.CommandText =
-                    $"INSERT INTO endpoint(name, address, delay) VALUES ('{endpoint.Name}', '{endpoint.Address}', '{endpoint.Delay.ToString()}'));";
-                await command.ExecuteReaderAsync();
-            }
 
-            await transaction.CommitAsync();
-        }
-        catch
+        await using (var transaction = (SqliteTransaction)await connection.BeginTransactionAsync())
         {
-            await transaction.RollbackAsync();
-            throw;
+            await CreateEndpointsTable(connection, transaction);
+            await CreateEndpointRolesTable(connection, transaction);
+
+            if (storage != null)
+                await InsertEndpoints(connection, transaction, GetEndpoints(storage));
+
+            await UpdateSqliteVersion(connection, transaction);
+            await transaction.CommitAsync();
         }
 
         await _loader.DisableXmlStorage();
+    }
+
+    private static async Task InsertEndpoints(
+        SqliteConnection connection, SqliteTransaction transaction, IEnumerable<XmlEndpoint> endpoints)
+    {
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText =
+            "INSERT INTO endpoint(name, address, delay) VALUES ($name, $address, $delay)";
+
+        var name = command.Parameters.Add("$name", SqliteType.Text);
+        var address = command.Parameters.Add("$address", SqliteType.Text);
+        var delay = command.Parameters.Add("$delay", SqliteType.Text);
+
+        foreach (var e in endpoints)
+        {
+            name.Value = e.Name;
+            address.Value = e.Address;
+            delay.Value = e.Delay.ToString();
+            await command.ExecuteNonQueryAsync();
+        }
     }
 
     private IEnumerable<XmlEndpoint> GetEndpoints(XDocument xDocument)
@@ -57,48 +65,62 @@ public class InitialSqliteMigration : IStorageMigration
         {
             var name = endpointElement.Attribute("Name")?.Value ?? "Missing Name";
             // I give priority to explicit Ip for no particular reason
-            var address = endpointElement.Attribute("IP")?.Value ??
-                          endpointElement.Attribute("Domain")?.Value ?? "127.0.0.1";
+            var address = endpointElement.Attribute("IP")?.Value;
+            if (string.IsNullOrWhiteSpace(address))
+            {
+                address = endpointElement.Attribute("Domain")?.Value;
+                if (string.IsNullOrWhiteSpace(address))
+                    address = "127.0.0.1";
+            }
+
             var delayString = endpointElement.Attribute("Delay")?.Value;
-            TimeSpan delay;
-            try
-            {
-                delay = TimeSpan.FromMilliseconds(Convert.ToInt32(delayString));
-            }
-            catch
-            {
-                delay = TimeSpan.FromSeconds(5);
-            }
+            var delay = ParseDelay(delayString);
+
             yield return new XmlEndpoint(name, address, delay);
         }
     }
 
-    private static async Task CreateEndpointRolesTable(SqliteConnection connection)
+    private static async Task CreateEndpointRolesTable(SqliteConnection connection, SqliteTransaction transaction)
     {
-        var createRolesTable = connection.CreateCommand();
-        createRolesTable.CommandText = """
-                                       CREATE TABLE IF NOT EXISTS endpoint_role (
-                                         role        TEXT NOT NULL CHECK (role IN ('active','popout')),
-                                         endpoint_id TEXT NOT NULL REFERENCES endpoint(id),
-                                         PRIMARY KEY (role, endpoint_id)
-                                       );
-                                       """;
-        await createRolesTable.ExecuteNonQueryAsync();
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+                              CREATE TABLE IF NOT EXISTS endpoint_role (
+                                role        TEXT NOT NULL CHECK (role IN ('active','popout')),
+                                endpoint_id integer NOT NULL REFERENCES endpoint(id) ON DELETE CASCADE,
+                                PRIMARY KEY (role, endpoint_id)
+                              );
+                              """;
+        await command.ExecuteNonQueryAsync();
     }
 
-    private static async Task CreateEndpointsTable(SqliteConnection connection)
+    private static async Task CreateEndpointsTable(SqliteConnection connection, SqliteTransaction transaction)
     {
-        var createEndpointsTable = connection.CreateCommand();
-        createEndpointsTable.CommandText = """
-                                           CREATE TABLE IF NOT EXISTS endpoint (
-                                             id        integer NOT NULL PRIMARY KEY,
-                                             name TEXT NOT NULL,
-                                             address TEXT NOT NULL,
-                                             delay TEXT NOT NULL
-                                           );
-                                           """;
-        await createEndpointsTable.ExecuteNonQueryAsync();
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+                              CREATE TABLE IF NOT EXISTS endpoint (
+                                id        integer NOT NULL PRIMARY KEY,
+                                name TEXT NOT NULL,
+                                address TEXT NOT NULL,
+                                delay TEXT NOT NULL
+                              );
+                              """;
+        await command.ExecuteNonQueryAsync();
     }
+
+    private async Task UpdateSqliteVersion(SqliteConnection connection, SqliteTransaction transaction)
+    {
+        var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = $"PRAGMA user_version = {ToVersion}";
+        await command.ExecuteNonQueryAsync();
+    }
+
+    private static TimeSpan ParseDelay(string? s) =>
+        int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms) && ms > 0
+            ? TimeSpan.FromMilliseconds(ms)
+            : TimeSpan.FromSeconds(5);
 
     private record XmlEndpoint(string Name, string Address, TimeSpan Delay);
 }

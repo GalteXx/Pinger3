@@ -18,29 +18,10 @@ internal class XmlAddressesStorageLoader
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Geckosystem", "Pinger");
 
-    private static async Task<XDocument> LoadDefaultConfigAsync()
-    {
-        var assembly = typeof(XmlAddressesStorageLoader).Assembly;
-        await using var stream =
-            assembly.GetManifestResourceStream("Pinger3.Assets.config.default.xml")
-            ?? throw new InvalidOperationException("Default config not found.");
-
-        return await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
-    }
-
-    public async Task<XDocument> LoadStorageAsync()
+    public async Task<XDocument?> LoadStorageAsync()
     {
         Directory.CreateDirectory(DirectoryPath);
         var fullPath = Path.Combine(DirectoryPath, ConfigName);
-
-        if (!File.Exists(fullPath))
-        {
-            var defaultConfig = await LoadDefaultConfigAsync();
-            await using var createStream = File.Create(fullPath);
-            await defaultConfig.SaveAsync(createStream, SaveOptions.None, CancellationToken.None);
-            return defaultConfig;
-        }
-
         try
         {
             await using var stream = File.OpenRead(fullPath);
@@ -48,18 +29,30 @@ internal class XmlAddressesStorageLoader
         }
         catch
         {
-            var defaultConfig = await LoadDefaultConfigAsync();
-            await using var overwrite = File.Create(fullPath);
-            await defaultConfig.SaveAsync(overwrite, SaveOptions.None, CancellationToken.None);
-            return defaultConfig;
+            return null;
         }
+    }
+
+    public Task DisableXmlStorage()
+    {
+        var fullPath = Path.Combine(DirectoryPath, ConfigName);
+        try
+        {
+            File.Move(fullPath, Path.Combine(DirectoryPath, "storage.xml.old"));
+        }
+        catch
+        {
+            // Ignored
+        }
+
+        return Task.CompletedTask;
     }
 
     public async Task SaveAsync(XDocument storage)
     {
         Directory.CreateDirectory(DirectoryPath);
         var fullPath = Path.Combine(DirectoryPath, ConfigName);
-        await using var createStream = File.Create(fullPath);
-        await storage.SaveAsync(createStream, SaveOptions.None, CancellationToken.None);
+            await using var stream = File.Create(fullPath);
+            await storage.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
     }
 }
