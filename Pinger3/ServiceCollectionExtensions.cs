@@ -34,6 +34,7 @@ namespace Pinger3
 
         private static void AddStorageServices(IServiceCollection collection)
         {
+            collection.AddTransient<SqliteConnectionFactory>();
             collection.AddTransient<PersistentDataMigrator>();
             collection.AddSingleton<IAddressesStorage, XmlAddressStorage>();
             collection.AddTransient<IStorageGateway, XmlStorageGateway>();

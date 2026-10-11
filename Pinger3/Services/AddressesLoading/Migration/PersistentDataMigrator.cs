@@ -19,6 +19,7 @@ public class PersistentDataMigrator(SqliteConnectionFactory connectionFactory)
         while (true)
         {
             await using var connection = connectionFactory.Create();
+            await connection.OpenAsync();
             var version = await GetVersionAsync(connection);
             var migration = _configMigrations.FirstOrDefault(m => m.FromVersion == version);
             if (migration == null)
