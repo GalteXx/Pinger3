@@ -100,7 +100,7 @@ public class InitialSqliteMigration : IStorageMigration
         command.Transaction = transaction;
         command.CommandText = """
                               CREATE TABLE IF NOT EXISTS endpoint (
-                                id        integer NOT NULL PRIMARY KEY,
+                                id        INTEGER PRIMARY KEY,
                                 name TEXT NOT NULL,
                                 address TEXT NOT NULL,
                                 delay TEXT NOT NULL
