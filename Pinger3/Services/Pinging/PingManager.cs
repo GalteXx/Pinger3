@@ -57,7 +57,7 @@ public class PingManager : IPingManager
             return;
         var runtime = await _factory.CreateRuntimeAsync(model, ct);
         _scheduler.Endpoints.Add(runtime.Id, runtime);
-        await _storage.AddActiveEndpointAsync(runtime.Id);
+        await _storage.SaveActiveEndpointAsync(runtime.Id);
     }
 
     public async Task RemoveEndpoint(string id)

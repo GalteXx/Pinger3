@@ -86,7 +86,7 @@ public sealed class PopOutCatalog : IPopOutCatalog
 
     private async Task OnEndpointAdded(EndpointModel model)
     {
-        await _storage.AddPopOutEndpointAsync(model.Id);
+        await _storage.SavePopOutEndpointAsync(model.Id);
         EndpointAdded?.Invoke(this, model);
     }
 
