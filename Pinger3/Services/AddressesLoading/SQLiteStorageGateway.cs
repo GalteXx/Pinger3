@@ -8,9 +8,9 @@ using Pinger3.Models;
 namespace Pinger3.Services;
 
 public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory)
-    : IStorageGateway, IActiveEndpointsStorage, IPopOutEndpointsStorage
+    : IStorageGateway
 {
-    public async IAsyncEnumerable<EndpointDto> ReadAllEndpointsAsync()
+    public async IAsyncEnumerable<EndpointDto> GetAllEndpointsAsync()
     {
         await using var connection = connectionFactory.Create();
         await connection.OpenAsync();
@@ -28,7 +28,7 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory)
         }
     }
 
-    public async Task<EndpointDto?> ReadEndpoint(string id)
+    public async Task<EndpointDto?> GetEndpoint(string id)
     {
         var rows = await QueryAsync(
             "SELECT id, name, address, delay FROM endpoint WHERE id = @id",
