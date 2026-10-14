@@ -23,7 +23,7 @@ public class InitialSqliteMigration : IStorageMigration
         await using (var transaction = (SqliteTransaction)await connection.BeginTransactionAsync())
         {
             await CreateEndpointsTable(connection, transaction);
-            await CreateEndpointRolesTable(connection, transaction);
+            await CreateEndpointRolesTables(connection, transaction);
 
             if (storage != null)
                 await InsertEndpoints(connection, transaction, GetEndpoints(storage));
@@ -80,18 +80,28 @@ public class InitialSqliteMigration : IStorageMigration
         }
     }
 
-    private static async Task CreateEndpointRolesTable(SqliteConnection connection, SqliteTransaction transaction)
+    private static async Task CreateEndpointRolesTables(SqliteConnection connection, SqliteTransaction transaction)
     {
-        await using var command = connection.CreateCommand();
-        command.Transaction = transaction;
-        command.CommandText = """
-                              CREATE TABLE IF NOT EXISTS endpoint_role (
-                                role        TEXT NOT NULL CHECK (role IN ('active','popout')),
-                                endpoint_id integer NOT NULL REFERENCES endpoint(id) ON DELETE CASCADE,
-                                PRIMARY KEY (role, endpoint_id)
-                              );
-                              """;
-        await command.ExecuteNonQueryAsync();
+        await using var popoutTableCommand = connection.CreateCommand();
+        await using var activeTableCommand = connection.CreateCommand();
+
+        popoutTableCommand.Transaction = transaction;
+        activeTableCommand.Transaction = transaction;
+
+        popoutTableCommand.CommandText = """
+                                         CREATE TABLE IF NOT EXISTS popout_endpoint (
+                                           endpoint_id INTEGER NOT NULL REFERENCES endpoint(id) ON DELETE CASCADE,
+                                           PRIMARY KEY (endpoint_id)
+                                         );
+                                         """;
+        activeTableCommand.CommandText = """
+                                         CREATE TABLE IF NOT EXISTS active_endpoint (
+                                            endpoint_id INTEGER NOT NULL REFERENCES endpoint(id) ON DELETE CASCADE,
+                                            PRIMARY KEY (endpoint_id)
+                                         );
+                                         """;
+        await activeTableCommand.ExecuteNonQueryAsync();
+        await popoutTableCommand.ExecuteNonQueryAsync();
     }
 
     private static async Task CreateEndpointsTable(SqliteConnection connection, SqliteTransaction transaction)
