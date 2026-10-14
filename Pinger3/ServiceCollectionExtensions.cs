@@ -37,7 +37,7 @@ namespace Pinger3
             collection.AddTransient<SqliteConnectionFactory>();
             collection.AddTransient<PersistentDataMigrator>();
             collection.AddSingleton<IAddressesStorage, XmlAddressStorage>();
-            collection.AddTransient<IStorageGateway, XmlStorageGateway>();
+            collection.AddTransient<IStorageGateway, SqliteStorageGateway>();
             collection.AddSingleton<IEndpointRepository, EndpointRepository>();
             collection.AddTransient<EndpointModelFactory>();
         }

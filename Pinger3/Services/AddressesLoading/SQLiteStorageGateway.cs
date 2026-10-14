@@ -60,45 +60,25 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory)
             new SqliteParameter("@address", dto.Name),
             new SqliteParameter("@delay", dto.RequestDelay));
 
-    public Task WriteActiveEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
+    public async Task SaveActiveEndpointAsync(string id) =>
+        await ExecuteNonQueryCommandAsync(
+            "INSERT INTO active_endpoint (endpoint_id) VALUES (@endpoint_id)",
+            new SqliteParameter("@endpoint_id", id));
 
-    public Task EraseActiveEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
+    public async Task RemoveActiveEndpointAsync(string id) =>
+        await ExecuteNonQueryCommandAsync(
+            "DELETE FROM active_endpoint WHERE endpoint_id = @endpoint_id",
+            new SqliteParameter("@endpoint_id", id));
 
-    public Task WritePopOutEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
+    public async Task SavePopOutEndpointAsync(string id) =>
+        await ExecuteNonQueryCommandAsync(
+            "INSERT INTO popout_endpoint (endpoint_id) VALUES (@endpoint_id)",
+            new SqliteParameter("@endpoint_id", id));
 
-    public Task ErasePopOutEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task AddActiveEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task RemoveActiveEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task AddPopOutEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task RemovePopOutEndpointAsync(string id)
-    {
-        throw new System.NotImplementedException();
-    }
+    public async Task RemovePopOutEndpointAsync(string id) =>
+        await ExecuteNonQueryCommandAsync(
+            "DELETE FROM popout_endpoint WHERE endpoint_id = @endpoint_id",
+            new SqliteParameter("@endpoint_id", id));
 
     private async Task<T> ExecuteAsync<T>(string commandText, Func<SqliteCommand, Task<T>> execute,
         params SqliteParameter[] parameters)
