@@ -28,9 +28,16 @@ public sealed class EndpointRepository(IEndpointsStorage storage) : IEndpointRep
         }
     }
 
-    public async Task Add(EndpointModel endpoint)
+    public async Task AddEndpoint(EndpointModel endpoint)
     {
         _endpoints.Add(endpoint.Id, endpoint);
+        await storage.AddEndpointAsync(endpoint);
+        OnEndpointUpdated(endpoint.Id);
+    }
+
+    public async Task EditEndpoint(EndpointModel endpoint)
+    {
+        _endpoints[endpoint.Id] = endpoint;
         await storage.EditEndpointAsync(endpoint);
         OnEndpointUpdated(endpoint.Id);
     }

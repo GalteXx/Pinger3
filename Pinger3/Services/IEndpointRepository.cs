@@ -10,6 +10,7 @@ public interface IEndpointRepository
     ReadOnlyDictionary<string, EndpointModel> CachedEndpoints { get; }
     event EventHandler<string>? EndpointUpdated;
     Task LoadFromSource();
-    Task Add(EndpointModel endpoint);
+    Task AddEndpoint(EndpointModel endpoint);
     EndpointModel? GetEndpoint(string id);
+    Task EditEndpoint(EndpointModel endpoint);
 }
