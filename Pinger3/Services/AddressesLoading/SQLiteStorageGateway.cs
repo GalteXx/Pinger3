@@ -12,25 +12,21 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory)
 {
     public async IAsyncEnumerable<EndpointDto> GetAllEndpointsAsync()
     {
-        await using var connection = connectionFactory.Create();
-        await connection.OpenAsync();
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM endpoint";
-        await using var reader = await command.ExecuteReaderAsync();
-
-        while (await reader.ReadAsync())
-        {
-            yield return new EndpointDto(
+        var endpoints = QueryAsync("SELECT * FROM endpoint",
+            reader => new EndpointDto
+            (
                 reader.GetString(0),
                 reader.GetString(1),
                 reader.GetString(2),
-                reader.GetString(3));
-        }
+                reader.GetString(3)
+            ));
+        await foreach (var dto in endpoints)
+            yield return dto;
     }
 
     public async Task<EndpointDto?> GetEndpoint(string id)
     {
-        var rows = await QueryAsync(
+        var endpoints = QueryAsync(
             "SELECT id, name, address, delay FROM endpoint WHERE id = @id",
             reader => new EndpointDto
             (
@@ -41,7 +37,12 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory)
             ),
             new SqliteParameter("@id", id));
 
-        return rows.FirstOrDefault();
+        await foreach (var dto in endpoints)
+        {
+            return dto;
+        }
+
+        return null;
     }
 
     public async Task EditEndpointAsync(EndpointDto dto) =>
@@ -80,6 +81,16 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory)
             "DELETE FROM popout_endpoint WHERE endpoint_id = @endpoint_id",
             new SqliteParameter("@endpoint_id", id));
 
+    public IAsyncEnumerable<string> GetAllPopOutEndpointsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IAsyncEnumerable<string> GetActiveEndpointsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task<T> ExecuteAsync<T>(string commandText, Func<SqliteCommand, Task<T>> execute,
         params SqliteParameter[] parameters)
     {
@@ -95,18 +106,21 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory)
         return await execute(command);
     }
 
-    private Task<List<T>> QueryAsync<T>(
-        string sql,
-        Func<SqliteDataReader, T> map,
-        params SqliteParameter[] parameters) =>
-        ExecuteAsync(sql, async cmd =>
-        {
-            await using var reader = await cmd.ExecuteReaderAsync();
-            var results = new List<T>();
-            while (await reader.ReadAsync())
-                results.Add(map(reader));
-            return results;
-        }, parameters);
+    private async IAsyncEnumerable<T> QueryAsync<T>(string commandText, Func<SqliteDataReader, T> map,
+        params SqliteParameter[] parameters)
+    {
+        await using var connection = connectionFactory.Create();
+        await connection.OpenAsync();
+        await using var command = connection.CreateCommand();
+        command.CommandText = commandText;
+        if (parameters.Length > 0)
+            command.Parameters.AddRange(parameters);
+
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+            yield return map(reader);
+    }
 
     private Task<int> ExecuteNonQueryCommandAsync(string commandText, params SqliteParameter[] parameters) =>
         ExecuteAsync(commandText, cmd => cmd.ExecuteNonQueryAsync(), parameters);
