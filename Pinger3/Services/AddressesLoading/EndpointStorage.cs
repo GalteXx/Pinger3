@@ -38,8 +38,10 @@ internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory fac
     public Task SaveActiveEndpointAsync(string id) => gateway.SaveActiveEndpointAsync(id);
 
     public Task RemoveActiveEndpointAsync(string id) => gateway.RemoveActiveEndpointAsync(id);
+    public IAsyncEnumerable<string> GetActiveEndpointsAsync() => gateway.GetActiveEndpointsAsync();
 
     public Task SavePopOutEndpointAsync(string id) => gateway.SavePopOutEndpointAsync(id);
 
     public Task RemovePopOutEndpointAsync(string id) => gateway.RemovePopOutEndpointAsync(id);
+    public IAsyncEnumerable<string> GetAllPopOutEndpointsAsync() => gateway.GetAllPopOutEndpointsAsync();
 }
