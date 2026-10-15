@@ -14,4 +14,6 @@ public interface IStorageGateway
     Task RemoveActiveEndpointAsync(string id);
     Task SavePopOutEndpointAsync(string id);
     Task RemovePopOutEndpointAsync(string id);
+    IAsyncEnumerable<string> GetAllPopOutEndpointsAsync();
+    IAsyncEnumerable<string> GetActiveEndpointsAsync();
 }
