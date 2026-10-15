@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services;
 
-internal class XmlEndpointStorage(IStorageGateway gateway, EndpointModelFactory factory)
+internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory factory)
     : IEndpointsStorage, IActiveEndpointsStorage, IPopOutEndpointsStorage
 {
     public async IAsyncEnumerable<EndpointModel> GetAddressesAsync()

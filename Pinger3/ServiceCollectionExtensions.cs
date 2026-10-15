@@ -28,7 +28,7 @@ namespace Pinger3
 
         private static void AddPopOutServices(IServiceCollection collection)
         {
-            collection.AddSingleton<IPopOutEndpointsStorage, XmlEndpointStorage>();
+            collection.AddTransient<IPopOutEndpointsStorage, EndpointStorage>();
             collection.AddSingleton<IPopOutCatalog, PopOutCatalog>();
         }
 
@@ -36,15 +36,15 @@ namespace Pinger3
         {
             collection.AddTransient<SqliteConnectionFactory>();
             collection.AddTransient<PersistentDataMigrator>();
-            collection.AddSingleton<IEndpointsStorage, XmlEndpointStorage>();
+            collection.AddTransient<IEndpointsStorage, EndpointStorage>();
             collection.AddTransient<IStorageGateway, SqliteStorageGateway>();
-            collection.AddSingleton<IEndpointRepository, EndpointRepository>();
+            collection.AddTransient<IEndpointRepository, EndpointRepository>();
             collection.AddTransient<EndpointModelFactory>();
         }
 
         private static void AddPingServices(IServiceCollection collection)
         {
-            collection.AddSingleton<IActiveEndpointsStorage, XmlEndpointStorage>();
+            collection.AddTransient<IActiveEndpointsStorage, EndpointStorage>();
             collection.AddTransient<IPingTransport, PingTransport>();
             collection.AddSingleton<IPingManager, PingManager>();
             collection.AddTransient<IPingScheduler, PingScheduler>();
