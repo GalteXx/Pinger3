@@ -16,7 +16,7 @@ public sealed class EndpointRepository(IEndpointsStorage storage) : IEndpointRep
 
     public async Task LoadFromSource()
     {
-        var stream = storage.ParseAddressesAsync();
+        var stream = storage.GetAddressesAsync();
         await foreach (var endpoint in stream)
         {
             _endpoints.Add(endpoint.Id, endpoint);
@@ -31,7 +31,7 @@ public sealed class EndpointRepository(IEndpointsStorage storage) : IEndpointRep
     public async Task Add(EndpointModel endpoint)
     {
         _endpoints.Add(endpoint.Id, endpoint);
-        await storage.WriteAddressAsync(endpoint);
+        await storage.EditEndpointAsync(endpoint);
         OnEndpointUpdated(endpoint.Id);
     }
 

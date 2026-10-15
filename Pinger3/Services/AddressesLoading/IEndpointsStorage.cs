@@ -6,7 +6,8 @@ namespace Pinger3.Services;
 
 public interface IEndpointsStorage
 {
-    public IAsyncEnumerable<EndpointModel> ParseAddressesAsync();
-        
-    public Task WriteAddressAsync(EndpointModel address);
+    IAsyncEnumerable<EndpointModel> GetAddressesAsync();
+    Task EditEndpointAsync(EndpointModel endpoint);
+    Task<EndpointModel?> GetEndpointAsync(string id);
+    Task AddEndpointAsync(EndpointModel endpoint);
 }
