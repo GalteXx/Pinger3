@@ -6,7 +6,7 @@ namespace Pinger3.Services;
 
 public class EndpointModelFactory
 {
-    public EndpointModel CreateValidEndpointConfig(EndpointDto endpoint)
+    public EndpointModel CreateValidEndpointModel(EndpointDto endpoint)
     {
         var delay = endpoint.RequestDelay == null
             ? TimeSpan.FromSeconds(1)

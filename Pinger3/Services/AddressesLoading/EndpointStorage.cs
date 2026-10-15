@@ -13,14 +13,14 @@ internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory fac
 
         await foreach (var endpointDto in dtoStream)
         {
-            yield return factory.CreateValidEndpointConfig(endpointDto);
+            yield return factory.CreateValidEndpointModel(endpointDto);
         }
     }
 
     public async Task<EndpointModel?> GetEndpointAsync(string id)
     {
         var dto = await gateway.GetEndpoint(id);
-        return dto == null ? null : factory.CreateValidEndpointConfig(dto);
+        return dto == null ? null : factory.CreateValidEndpointModel(dto);
     }
 
     public async Task EditEndpointAsync(EndpointModel endpoint)
