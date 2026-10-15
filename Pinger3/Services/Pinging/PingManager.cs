@@ -29,6 +29,18 @@ public class PingManager : IPingManager
         scheduler.PingReceived += (sender, e) => PingReceived?.Invoke(sender, e);
     }
 
+    private async Task AddSavedEndpoints()
+    {
+        await foreach (var id in _storage.GetActiveEndpointsAsync())
+        {
+            var model = _repository.GetEndpoint(id);
+            if (model == null)
+                return;
+            var runtime = await _factory.CreateRuntimeAsync(model, CancellationToken.None);
+            _scheduler.Endpoints.Add(runtime.Id, runtime);
+        }
+    }
+
     private async Task OnPingModelUpdated(string id)
     {
         if (!_scheduler.Endpoints.TryGetValue(id, out var runtime))
