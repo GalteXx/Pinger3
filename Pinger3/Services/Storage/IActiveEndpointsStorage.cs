@@ -6,7 +6,7 @@ namespace Pinger3.Services;
 
 public interface IActiveEndpointsStorage
 {
-    Task SaveActiveEndpointAsync(string id);
-    Task RemoveActiveEndpointAsync(string id);
-    IAsyncEnumerable<string> GetActiveEndpointsAsync(CancellationToken ct);
+    Task SaveEndpointAsync(string id, CancellationToken ct);
+    Task RemoveEndpointAsync(string id, CancellationToken ct);
+    IAsyncEnumerable<string> GetEndpointsAsync(CancellationToken ct);
 }
