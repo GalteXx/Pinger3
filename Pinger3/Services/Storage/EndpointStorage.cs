@@ -1,5 +1,6 @@
 ﻿using Pinger3.Models;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pinger3.Services;
@@ -38,7 +39,7 @@ internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory fac
     public Task SaveActiveEndpointAsync(string id) => gateway.SaveActiveEndpointAsync(id);
 
     public Task RemoveActiveEndpointAsync(string id) => gateway.RemoveActiveEndpointAsync(id);
-    public IAsyncEnumerable<string> GetActiveEndpointsAsync() => gateway.GetActiveEndpointsAsync();
+    public IAsyncEnumerable<string> GetActiveEndpointsAsync(CancellationToken ct) => gateway.GetActiveEndpointsAsync(CancellationToken ct);
 
     public Task SavePopOutEndpointAsync(string id) => gateway.SavePopOutEndpointAsync(id);
 
