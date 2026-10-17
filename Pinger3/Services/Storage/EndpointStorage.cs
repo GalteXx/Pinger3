@@ -1,16 +1,16 @@
 ﻿using Pinger3.Models;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pinger3.Services;
 
-internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory factory)
-    : IEndpointsStorage, IActiveEndpointsStorage, IPopOutEndpointsStorage
+internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory factory) : IEndpointsStorage
 {
-    public async IAsyncEnumerable<EndpointModel> GetAddressesAsync()
+    public async IAsyncEnumerable<EndpointModel> GetAddressesAsync([EnumeratorCancellation] CancellationToken ct)
     {
-        var dtoStream = gateway.GetAllEndpointsAsync();
+        var dtoStream = gateway.GetAllEndpointsAsync(ct);
 
         await foreach (var endpointDto in dtoStream)
         {
@@ -18,31 +18,21 @@ internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory fac
         }
     }
 
-    public async Task<EndpointModel?> GetEndpointAsync(string id)
+    public async Task<EndpointModel?> GetEndpointAsync(string id, CancellationToken ct)
     {
-        var dto = await gateway.GetEndpoint(id);
+        var dto = await gateway.GetEndpointAsync(id, ct);
         return dto == null ? null : factory.CreateValidEndpointModel(dto);
     }
 
-    public async Task EditEndpointAsync(EndpointModel endpoint)
+    public async Task EditEndpointAsync(EndpointModel endpoint, CancellationToken ct)
     {
         await gateway.EditEndpointAsync(new EndpointDto(endpoint.Id, endpoint.Name, endpoint.Address,
-            endpoint.DelayBetweenRequests.ToString()));
+            endpoint.DelayBetweenRequests.ToString()), ct);
     }
 
-    public async Task AddEndpointAsync(EndpointModel endpoint)
+    public async Task AddEndpointAsync(EndpointModel endpoint, CancellationToken ct)
     {
         await gateway.AddEndpointAsync(new EndpointDto(endpoint.Id, endpoint.Name, endpoint.Address,
-            endpoint.DelayBetweenRequests.ToString()));
+            endpoint.DelayBetweenRequests.ToString()), ct);
     }
-
-    public Task SaveActiveEndpointAsync(string id) => gateway.SaveActiveEndpointAsync(id);
-
-    public Task RemoveActiveEndpointAsync(string id) => gateway.RemoveActiveEndpointAsync(id);
-    public IAsyncEnumerable<string> GetActiveEndpointsAsync(CancellationToken ct) => gateway.GetActiveEndpointsAsync(CancellationToken ct);
-
-    public Task SavePopOutEndpointAsync(string id) => gateway.SavePopOutEndpointAsync(id);
-
-    public Task RemovePopOutEndpointAsync(string id) => gateway.RemovePopOutEndpointAsync(id);
-    public IAsyncEnumerable<string> GetAllPopOutEndpointsAsync() => gateway.GetAllPopOutEndpointsAsync();
 }
