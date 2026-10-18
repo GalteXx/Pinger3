@@ -7,8 +7,10 @@ namespace Pinger3.Services;
 public class EndpointCache : IEndpointCache
 {
     private readonly ConcurrentDictionary<string, EndpointModel> _endpoints = new();
-    
+
     public bool TryGetValue(string key, out EndpointModel? value) => _endpoints.TryGetValue(key, out value);
+
+    public EndpointModel? GetValueOrDefault(string id) => _endpoints.GetValueOrDefault(id);
 
     public void Remove(string key)
     {

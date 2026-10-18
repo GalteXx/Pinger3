@@ -1,54 +1,49 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public sealed class EndpointRepository(IEndpointsStorage storage) : IEndpointRepository
+public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointCache cache) : IEndpointRepository
 {
-    private readonly Dictionary<string, EndpointModel> _endpoints = [];
-
-    public ReadOnlyDictionary<string, EndpointModel> CachedEndpoints => _endpoints.AsReadOnly();
-
-    public event EventHandler<string>? EndpointUpdated;
-
     public async Task LoadFromSource()
     {
-        var stream = storage.GetAddressesAsync();
+        var stream = storage.GetAddressesAsync(CancellationToken.None);
         await foreach (var endpoint in stream)
         {
-            _endpoints.Add(endpoint.Id, endpoint);
             endpoint.Updated += (sender, _) =>
             {
+                cache.AddOrUpdateValue(endpoint);
                 if (sender is EndpointModel e)
                     OnEndpointUpdated(e.Id);
             };
         }
     }
 
-    public async Task AddEndpoint(EndpointModel endpoint)
+    public async Task AddEndpointAsync(EndpointModel endpoint, CancellationToken ct)
     {
-        _endpoints.Add(endpoint.Id, endpoint);
-        await storage.AddEndpointAsync(endpoint);
+        await storage.AddEndpointAsync(endpoint, ct);
+        cache.AddOrUpdateValue(endpoint);
         OnEndpointUpdated(endpoint.Id);
     }
 
-    public async Task EditEndpoint(EndpointModel endpoint)
+    public async Task EditEndpointAsync(EndpointModel endpoint, CancellationToken ct)
     {
-        _endpoints[endpoint.Id] = endpoint;
-        await storage.EditEndpointAsync(endpoint);
+        await storage.EditEndpointAsync(endpoint, ct);
+        cache.AddOrUpdateValue(endpoint);
         OnEndpointUpdated(endpoint.Id);
     }
 
     public EndpointModel? GetEndpoint(string id)
     {
-        return _endpoints.GetValueOrDefault(id);
+        return cache.GetValueOrDefault(id);
     }
 
     private void OnEndpointUpdated(string id)
     {
-        EndpointUpdated?.Invoke(this, id);
+        // Aggregator things
     }
 }

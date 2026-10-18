@@ -1,5 +1,4 @@
-using System;
-using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
 
@@ -7,10 +6,8 @@ namespace Pinger3.Services;
 
 public interface IEndpointRepository
 {
-    ReadOnlyDictionary<string, EndpointModel> CachedEndpoints { get; }
-    event EventHandler<string>? EndpointUpdated;
     Task LoadFromSource();
-    Task AddEndpoint(EndpointModel endpoint);
+    Task AddEndpointAsync(EndpointModel endpoint, CancellationToken ct);
     EndpointModel? GetEndpoint(string id);
-    Task EditEndpoint(EndpointModel endpoint);
+    Task EditEndpointAsync(EndpointModel endpoint, CancellationToken ct);
 }
