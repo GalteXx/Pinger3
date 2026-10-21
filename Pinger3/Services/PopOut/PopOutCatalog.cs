@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
 using Pinger3.Services.Pinging;
@@ -51,7 +52,7 @@ public sealed class PopOutCatalog : IPopOutCatalog
         return _ids.Select(endpoint => _repository.GetEndpoint(endpoint)).OfType<EndpointModel>();
     }
     
-    public async Task Add(string id)
+    public async Task Add(string id, CancellationToken ct)
     {
         if (_ids.Contains(id))
             return;
@@ -65,18 +66,18 @@ public sealed class PopOutCatalog : IPopOutCatalog
         _ids.Add(id);
     }
 
-    public async Task Toggle(string id)
+    public async Task Toggle(string id, CancellationToken ct)
     {
         if (_ids.Contains(id))
-            await Remove(id);
+            await Remove(id, ct);
         else
-            await Add(id);
+            await Add(id, ct);
     }
 
-    public async Task Remove(string id)
+    public async Task Remove(string id, CancellationToken ct)
     {
         _ids.Remove(id);
-        await OnEndpointRemoved(id);
+        await OnEndpointRemoved(id, ct);
     }
 
     public bool IsPopOut(string id)
@@ -84,15 +85,15 @@ public sealed class PopOutCatalog : IPopOutCatalog
         return _ids.Contains(id);
     }
 
-    private async Task OnEndpointAdded(EndpointModel model)
+    private async Task OnEndpointAdded(EndpointModel model, CancellationToken ct)
     {
-        await _storage.SavePopOutEndpointAsync(model.Id);
+        await _storage.SaveEndpointAsync(model.Id, ct);
         EndpointAdded?.Invoke(this, model);
     }
 
-    private async Task OnEndpointRemoved(string id)
+    private async Task OnEndpointRemoved(string id, CancellationToken ct)
     {
-        await _storage.RemovePopOutEndpointAsync(id);
+        await _storage.RemoveEndpointAsync(id, ct);
         EndpointRemoved?.Invoke(this, id);
     }
 }
