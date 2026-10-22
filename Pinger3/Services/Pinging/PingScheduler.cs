@@ -11,6 +11,7 @@ public sealed class PingScheduler : IPingScheduler
 {
     private readonly TimeSpan _tick = TimeSpan.FromMilliseconds(100);
     private readonly IPingTransport _transport;
+    private readonly Dictionary<string, EndpointRuntime> _endpoints = [];
 
     public PingScheduler(IPingTransport transport)
     {
@@ -23,7 +24,10 @@ public sealed class PingScheduler : IPingScheduler
         }, TaskScheduler.Default);
     }
 
-    public Dictionary<string, EndpointRuntime> Endpoints { get; } = [];
+    public void AddToSchedule(string runtimeId, EndpointRuntime endpoint) => _endpoints.Add(endpoint.Id, endpoint);
+
+    public void RemoveFromSchedule(string endpointId) => _endpoints.Remove(endpointId);
+
     public event EventHandler<string>? PingSent;
     public event EventHandler<PingUpdated>? PingReceived;
 
@@ -32,7 +36,7 @@ public sealed class PingScheduler : IPingScheduler
         while (!ct.IsCancellationRequested)
         {
             var now = DateTime.Now;
-            var due = Endpoints.Values
+            var due = _endpoints.Values
                 .Where(e => e.LastPinged + e.DelayBetweenRequests <= now && !e.IsPinged);
 
             foreach (var runtime in due)
@@ -47,9 +51,9 @@ public sealed class PingScheduler : IPingScheduler
     private async Task SendPingAsync(EndpointRuntime runtime, CancellationToken token)
     {
         runtime.IsPinged = true;
-        
+
         PingSent?.Invoke(this, runtime.Id);
-        
+
         var result = await _transport.PingAsync(runtime, token);
         runtime.Ping = result;
 

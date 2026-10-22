@@ -6,7 +6,8 @@ namespace Pinger3.Services.Pinging;
 
 public interface IPingScheduler
 {
-    Dictionary<string, EndpointRuntime> Endpoints { get; }
+    void AddToSchedule(EndpointRuntime endpoint);
+    void RemoveFromSchedule(string endpointId);
     event EventHandler<string>? PingSent;
     event EventHandler<PingUpdated>? PingReceived;
 }

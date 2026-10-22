@@ -41,13 +41,13 @@ public sealed class PingManager : IPingManager, IDisposable
             if (model == null)
                 return;
             var runtime = await _factory.CreateRuntimeAsync(model, CancellationToken.None);
-            _scheduler.Endpoints.Add(runtime.Id, runtime);
+            _scheduler.AddToSchedule(runtime);
         }
     }
 
     private async Task OnPingModelUpdated(EndpointModel model, CancellationToken ct)
     {
-        if (!_scheduler.Endpoints.TryGetValue(model.Id, out var runtime))
+        if (!_scheduler.Endpoints.TryGetValue(model.Id, out var runtime)) //replace with cache check
             return;
         
         var update = await _updateResolver.ResolveAsync(model, CancellationToken.None);
@@ -70,17 +70,17 @@ public sealed class PingManager : IPingManager, IDisposable
         if (model == null)
             return;
         var runtime = await _factory.CreateRuntimeAsync(model, ct);
-        _scheduler.Endpoints.Add(runtime.Id, runtime);
+        _scheduler.AddToSchedule(runtime);
         await _activeEndpointsStorage.SaveEndpointAsync(runtime.Id, ct);
     }
 
     public async Task RemoveEndpoint(string id, CancellationToken ct)
     {
-        _scheduler.Endpoints.Remove(id);
+        _scheduler.RemoveFromSchedule(id);
         await _activeEndpointsStorage.RemoveEndpointAsync(id, ct);
     }
 
-    public bool IsRunning(string id) => _scheduler.Endpoints.ContainsKey(id);
+    public bool IsRunning(string id) => _scheduler.Endpoints.ContainsKey(id); // Cache check
     
     public event EventHandler<string>? PingSent;
 
