@@ -1,29 +1,33 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
-public class PingManager : IPingManager
+public sealed class PingManager : IPingManager, IDisposable
 {
     private readonly IPingScheduler _scheduler;
     private readonly EndpointRuntimeFactory _factory;
     private readonly IEndpointRepository _repository;
     private readonly EndpointUpdateResolver _updateResolver;
-    private readonly IActiveEndpointsStorage _storage;
+    private readonly IActiveEndpointsStorage _activeEndpointsStorage;
+    
+    private readonly List<IDisposable> _subscriptions;
 
     public PingManager(IPingScheduler scheduler, EndpointRuntimeFactory factory, IEndpointRepository repository,
-        EndpointUpdateResolver updateResolver, IActiveEndpointsStorage storage)
+        EndpointUpdateResolver updateResolver, IActiveEndpointsStorage activeEndpointsStorage, IEndpointUpdateNotifier updateNotifier)
     {
         _scheduler = scheduler;
         _factory = factory;
         _repository = repository;
         _updateResolver = updateResolver;
-        _storage = storage;
-
-        // It won't throw anything. Trust me bro
-        _repository.EndpointUpdated += (_, id) => OnPingModelUpdated(id);
+        _activeEndpointsStorage = activeEndpointsStorage;
+        _subscriptions =
+        [
+            updateNotifier.SubscribeToUpdate(async (model, ct) => await OnPingModelUpdated(model, ct))
+        ];
 
         scheduler.PingSent += (sender, e) => PingSent?.Invoke(sender, e);
         scheduler.PingReceived += (sender, e) => PingReceived?.Invoke(sender, e);
@@ -31,7 +35,7 @@ public class PingManager : IPingManager
 
     private async Task AddSavedEndpoints(CancellationToken ct)
     {
-        await foreach (var id in _storage.GetActiveEndpointsAsync())
+        await foreach (var id in _activeEndpointsStorage.GetEndpointsAsync(ct))
         {
             var model = _repository.GetEndpoint(id); 
             if (model == null)
@@ -41,13 +45,11 @@ public class PingManager : IPingManager
         }
     }
 
-    private async Task OnPingModelUpdated(string id)
+    private async Task OnPingModelUpdated(EndpointModel model, CancellationToken ct)
     {
-        if (!_scheduler.Endpoints.TryGetValue(id, out var runtime))
+        if (!_scheduler.Endpoints.TryGetValue(model.Id, out var runtime))
             return;
-        var model = _repository.GetEndpoint(id);
-        if (model is null)
-            return;
+        
         var update = await _updateResolver.ResolveAsync(model, CancellationToken.None);
         if (update is null)
             return;
@@ -59,7 +61,7 @@ public class PingManager : IPingManager
         if (!IsRunning(id))
             await AddEndpointAsync(id, ct);
         else
-            await RemoveEndpoint(id);
+            await RemoveEndpoint(id, ct);
     }
 
     public async Task AddEndpointAsync(string id, CancellationToken ct)
@@ -69,13 +71,13 @@ public class PingManager : IPingManager
             return;
         var runtime = await _factory.CreateRuntimeAsync(model, ct);
         _scheduler.Endpoints.Add(runtime.Id, runtime);
-        await _storage.SaveActiveEndpointAsync(runtime.Id);
+        await _activeEndpointsStorage.SaveEndpointAsync(runtime.Id, ct);
     }
 
-    public async Task RemoveEndpoint(string id)
+    public async Task RemoveEndpoint(string id, CancellationToken ct)
     {
         _scheduler.Endpoints.Remove(id);
-        await _storage.RemoveActiveEndpointAsync(id);
+        await _activeEndpointsStorage.RemoveEndpointAsync(id, ct);
     }
 
     public bool IsRunning(string id) => _scheduler.Endpoints.ContainsKey(id);
@@ -83,4 +85,9 @@ public class PingManager : IPingManager
     public event EventHandler<string>? PingSent;
 
     public event EventHandler<PingUpdated>? PingReceived;
+    public void Dispose()
+    {
+        foreach(var subscription in _subscriptions)
+            subscription.Dispose();
+    }
 }

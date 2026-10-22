@@ -8,7 +8,7 @@ namespace Pinger3.Services.Pinging;
 public interface IPingManager
 {
     Task AddEndpointAsync(string id, CancellationToken ct);
-    Task RemoveEndpoint(string id);
+    Task RemoveEndpoint(string id, CancellationToken ct);
     bool IsRunning(string id);
     event EventHandler<string>? PingSent;
     event EventHandler<PingUpdated>? PingReceived;
