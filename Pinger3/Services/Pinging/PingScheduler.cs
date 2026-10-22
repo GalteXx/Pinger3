@@ -24,7 +24,7 @@ public sealed class PingScheduler : IPingScheduler
         }, TaskScheduler.Default);
     }
 
-    public void AddToSchedule(string runtimeId, EndpointRuntime endpoint) => _endpoints.Add(endpoint.Id, endpoint);
+    public void AddToSchedule(EndpointRuntime endpoint) => _endpoints.Add(endpoint.Id, endpoint);
 
     public void RemoveFromSchedule(string endpointId) => _endpoints.Remove(endpointId);
 
