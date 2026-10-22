@@ -7,6 +7,6 @@ namespace Pinger3.Services;
 
 public interface IEndpointUpdateNotifier
 {
-    IDisposable SubscribeToDeletion(Func<EndpointModel, CancellationToken, ValueTask> handler);
+    IDisposable SubscribeToDeletion(Func<string, CancellationToken, ValueTask> handler);
     IDisposable SubscribeToUpdate(Func<EndpointModel, CancellationToken, ValueTask> handler);
 }

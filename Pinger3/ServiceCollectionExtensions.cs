@@ -17,34 +17,39 @@ namespace Pinger3
         {
             collection.AddSingleton<IWindowService, WindowService>();
             collection.AddSingleton<TrayIconService>();
-            
+
             AddStorageServices(collection);
             AddPingServices(collection);
             AddPopOutServices(collection);
-            
+
             AddViewModels(collection);
             AddWindows(collection);
         }
 
         private static void AddPopOutServices(IServiceCollection collection)
         {
-            collection.AddTransient<IPopOutEndpointsStorage, EndpointStorage>();
+            collection.AddTransient<IPopOutEndpointsStorage, SqliteStorageGateway>();
             collection.AddSingleton<IPopOutCatalog, PopOutCatalog>();
         }
 
         private static void AddStorageServices(IServiceCollection collection)
         {
             collection.AddTransient<SqliteConnectionFactory>();
+            collection.AddTransient<EndpointModelFactory>();
+            
             collection.AddTransient<PersistentDataMigrator>();
+            
             collection.AddTransient<IEndpointsStorage, EndpointStorage>();
             collection.AddTransient<IStorageGateway, SqliteStorageGateway>();
-            collection.AddSingleton<IEndpointRepository, EndpointRepository>();
-            collection.AddTransient<EndpointModelFactory>();
+            collection.AddTransient<IEndpointRepository, EndpointRepository>();
+            
+            collection.AddTransient<IEndpointUpdateNotifier, EndpointUpdateAggregator>();
+            collection.AddTransient<IEndpointUpdatePublisher, EndpointUpdateAggregator>();
         }
 
         private static void AddPingServices(IServiceCollection collection)
         {
-            collection.AddTransient<IActiveEndpointsStorage, EndpointStorage>();
+            collection.AddTransient<IActiveEndpointsStorage, SqliteStorageGateway>();
             collection.AddTransient<IPingTransport, PingTransport>();
             collection.AddSingleton<IPingManager, PingManager>();
             collection.AddTransient<IPingScheduler, PingScheduler>();
@@ -57,7 +62,7 @@ namespace Pinger3
         {
             collection.AddTransient<IPingTargetViewModelFactory, PingTargetViewModelFactory>();
             collection.AddTransient<PopOutEndpointViewModelFactory>();
-            
+
             collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
             collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
             collection.AddTransient<IPopoutWindowViewModel, PopoutWindowViewModel>();

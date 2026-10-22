@@ -23,17 +23,17 @@ public class PingManager : IPingManager
         _storage = storage;
 
         // It won't throw anything. Trust me bro
-        _repository.EndpointUpdated += (_, id) => OnPingModelUpdated(id).Start();
+        _repository.EndpointUpdated += (_, id) => OnPingModelUpdated(id);
 
         scheduler.PingSent += (sender, e) => PingSent?.Invoke(sender, e);
         scheduler.PingReceived += (sender, e) => PingReceived?.Invoke(sender, e);
     }
 
-    private async Task AddSavedEndpoints()
+    private async Task AddSavedEndpoints(CancellationToken ct)
     {
         await foreach (var id in _storage.GetActiveEndpointsAsync())
         {
-            var model = _repository.GetEndpoint(id);
+            var model = _repository.GetEndpoint(id); 
             if (model == null)
                 return;
             var runtime = await _factory.CreateRuntimeAsync(model, CancellationToken.None);
