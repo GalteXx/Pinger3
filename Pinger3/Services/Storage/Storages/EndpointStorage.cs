@@ -8,7 +8,7 @@ namespace Pinger3.Services;
 
 internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory factory) : IEndpointsStorage
 {
-    public async IAsyncEnumerable<EndpointModel> GetAddressesAsync([EnumeratorCancellation] CancellationToken ct)
+    public async IAsyncEnumerable<EndpointModel> GetEndpointsAsync([EnumeratorCancellation] CancellationToken ct)
     {
         var dtoStream = gateway.GetAllEndpointsAsync(ct);
 
