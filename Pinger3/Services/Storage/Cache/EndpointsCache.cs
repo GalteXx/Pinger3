@@ -10,6 +10,11 @@ public class EndpointsCache : IEndpointsCache
 
     public bool TryGetValue(string key, out EndpointModel? value) => _endpoints.TryGetValue(key, out value);
 
+    public IEnumerable<EndpointModel> GetAllEndpoints()
+    {
+        return _endpoints.Values;
+    }
+
     public EndpointModel? GetValueOrDefault(string id) => _endpoints.GetValueOrDefault(id);
 
     public void Remove(string key)
