@@ -10,4 +10,5 @@ public interface IPingScheduler
     void RemoveFromSchedule(string endpointId);
     event EventHandler<string>? PingSent;
     event EventHandler<PingUpdated>? PingReceived;
+    void UpdateInSchedule(string id, ResolvedEndpointUpdate update);
 }

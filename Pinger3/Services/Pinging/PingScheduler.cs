@@ -28,6 +28,11 @@ public sealed class PingScheduler : IPingScheduler
 
     public void RemoveFromSchedule(string endpointId) => _endpoints.Remove(endpointId);
 
+    public void UpdateInSchedule(string id, ResolvedEndpointUpdate update)
+    {
+        _endpoints[id].UpdateAddress(update); // should throw
+    }
+
     public event EventHandler<string>? PingSent;
     public event EventHandler<PingUpdated>? PingReceived;
 
