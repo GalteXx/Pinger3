@@ -11,7 +11,7 @@ public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointCache
 {
     public async Task LoadFromSource()
     {
-        var stream = storage.GetAddressesAsync(CancellationToken.None);
+        var stream = storage.GetEndpointsAsync(CancellationToken.None);
         await foreach (var endpoint in stream)
         {
             endpoint.Updated += (sender, _) =>
