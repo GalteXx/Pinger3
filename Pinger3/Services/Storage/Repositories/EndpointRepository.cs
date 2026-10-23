@@ -9,19 +9,7 @@ namespace Pinger3.Services;
 
 public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointsCache cache) : IEndpointRepository
 {
-    public async Task LoadFromSource()
-    {
-        var stream = storage.GetEndpointsAsync(CancellationToken.None);
-        await foreach (var endpoint in stream)
-        {
-            endpoint.Updated += (sender, _) =>
-            {
-                cache.AddOrUpdateValue(endpoint);
-                if (sender is EndpointModel e)
-                    OnEndpointUpdated(e.Id);
-            };
-        }
-    }
+    public IEnumerable<EndpointModel> GetEndpoints() => cache.GetAllEndpoints();
 
     public async Task AddEndpointAsync(EndpointModel endpoint, CancellationToken ct)
     {
