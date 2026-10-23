@@ -2,7 +2,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public interface IEndpointCache
+public interface IEndpointsCache
 {
     bool TryGetValue(string key, out EndpointModel? value);
     void Remove(string key);

@@ -7,7 +7,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointCache cache) : IEndpointRepository
+public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointsCache cache) : IEndpointRepository
 {
     public async Task LoadFromSource()
     {

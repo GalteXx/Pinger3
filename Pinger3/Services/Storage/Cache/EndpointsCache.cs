@@ -4,7 +4,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public class EndpointCache : IEndpointCache
+public class EndpointsCache : IEndpointsCache
 {
     private readonly ConcurrentDictionary<string, EndpointModel> _endpoints = new();
 

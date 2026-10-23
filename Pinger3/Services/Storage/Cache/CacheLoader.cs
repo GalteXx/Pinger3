@@ -6,7 +6,7 @@ namespace Pinger3.Services;
 public class CacheLoader(
     IPopOutEndpointsCache popOutEndpointsCache,
     IActiveEndpointsCache activeEndpointsCache,
-    IEndpointCache endpointCache,
+    IEndpointsCache endpointsCache,
     IPopOutEndpointsStorage popOutEndpointsStorage,
     IActiveEndpointsStorage activeEndpointsStorage,
     IEndpointsStorage storage) : ICacheLoader
@@ -22,7 +22,7 @@ public class CacheLoader(
     {
         await foreach (var endpoint in storage.GetEndpointsAsync(ct))
         {
-            endpointCache.AddOrUpdateValue(endpoint);
+            endpointsCache.AddOrUpdateValue(endpoint);
         }
     }
 
