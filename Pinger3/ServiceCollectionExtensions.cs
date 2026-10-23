@@ -9,71 +9,80 @@ using Pinger3.Services.PopOut.Factories;
 using Pinger3.ViewModels.Controls.Factories;
 using Pinger3.Views;
 
-namespace Pinger3
+namespace Pinger3;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static void AddCommonServices(this IServiceCollection collection)
     {
-        public static void AddCommonServices(this IServiceCollection collection)
-        {
-            collection.AddSingleton<IWindowService, WindowService>();
-            collection.AddSingleton<TrayIconService>();
+        collection.AddSingleton<IWindowService, WindowService>();
+        collection.AddSingleton<TrayIconService>();
 
-            AddStorageServices(collection);
-            AddPingServices(collection);
-            AddPopOutServices(collection);
+        AddCacheServices(collection);
+        AddStorageServices(collection);
+        AddPingServices(collection);
+        AddPopOutServices(collection);
 
-            AddViewModels(collection);
-            AddWindows(collection);
-        }
+        AddViewModels(collection);
+        AddWindows(collection);
+    }
 
-        private static void AddPopOutServices(IServiceCollection collection)
-        {
-            collection.AddTransient<IPopOutEndpointsStorage, SqliteStorageGateway>();
-            collection.AddSingleton<IPopOutCatalog, PopOutCatalog>();
-        }
+    private static void AddPopOutServices(IServiceCollection collection)
+    {
+        collection.AddTransient<IPopOutEndpointsStorage, SqliteStorageGateway>();
+        collection.AddTransient<IPopOutCatalog, PopOutCatalog>();
+    }
 
-        private static void AddStorageServices(IServiceCollection collection)
-        {
-            collection.AddTransient<SqliteConnectionFactory>();
-            collection.AddTransient<EndpointModelFactory>();
+    private static void AddCacheServices(IServiceCollection collection)
+    {
+        collection.AddSingleton<IPopOutEndpointsCache, EndpointsMembershipCache>();
+        collection.AddSingleton<IActiveEndpointsCache, EndpointsMembershipCache>();
+        collection.AddSingleton<IEndpointsCache, EndpointsCache>();
             
-            collection.AddTransient<PersistentDataMigrator>();
-            
-            collection.AddTransient<IEndpointsStorage, EndpointStorage>();
-            collection.AddTransient<IStorageGateway, SqliteStorageGateway>();
-            collection.AddTransient<IEndpointRepository, EndpointRepository>();
-            
-            collection.AddTransient<IEndpointUpdateNotifier, EndpointUpdateAggregator>();
-            collection.AddTransient<IEndpointUpdatePublisher, EndpointUpdateAggregator>();
-        }
+        collection.AddTransient<ICacheLoader, CacheLoader>();
+    }
 
-        private static void AddPingServices(IServiceCollection collection)
-        {
-            collection.AddTransient<IActiveEndpointsStorage, SqliteStorageGateway>();
-            collection.AddTransient<IPingTransport, PingTransport>();
-            collection.AddSingleton<IPingManager, PingManager>();
-            collection.AddTransient<IPingScheduler, PingScheduler>();
-            collection.AddTransient<AddressResolver>();
-            collection.AddTransient<EndpointRuntimeFactory>();
-            collection.AddTransient<EndpointUpdateResolver>();
-        }
+    private static void AddStorageServices(IServiceCollection collection)
+    {
+        collection.AddTransient<SqliteConnectionFactory>();
+        collection.AddTransient<EndpointModelFactory>();
 
-        private static void AddViewModels(IServiceCollection collection)
-        {
-            collection.AddTransient<IPingTargetViewModelFactory, PingTargetViewModelFactory>();
-            collection.AddTransient<PopOutEndpointViewModelFactory>();
+        collection.AddTransient<PersistentDataMigrator>();
 
-            collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
-            collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
-            collection.AddTransient<IPopoutWindowViewModel, PopoutWindowViewModel>();
-            collection.AddTransient<IMainWindowViewModel, MainWindowViewModel>();
-        }
+        collection.AddTransient<IEndpointsStorage, EndpointStorage>();
+        collection.AddTransient<IStorageGateway, SqliteStorageGateway>();
+        collection.AddTransient<IEndpointRepository, EndpointRepository>();
 
-        private static void AddWindows(IServiceCollection collection)
-        {
-            collection.AddSingleton(sp => new PopoutWindow(sp.GetRequiredService<IPopoutWindowViewModel>()));
-            collection.AddTransient(sp => new SettingsWindow(sp.GetRequiredService<ISettingsViewModel>()));
-            collection.AddTransient(sp => new MainWindow(sp.GetRequiredService<IMainWindowViewModel>()));
-        }
+        collection.AddTransient<IEndpointUpdateNotifier, EndpointUpdateAggregator>();
+        collection.AddTransient<IEndpointUpdatePublisher, EndpointUpdateAggregator>();
+    }
+
+    private static void AddPingServices(IServiceCollection collection)
+    {
+        collection.AddTransient<IActiveEndpointsStorage, SqliteStorageGateway>();
+        collection.AddTransient<IPingTransport, PingTransport>();
+        collection.AddSingleton<IPingManager, PingManager>();
+        collection.AddTransient<IPingScheduler, PingScheduler>();
+        collection.AddTransient<AddressResolver>();
+        collection.AddTransient<EndpointRuntimeFactory>();
+        collection.AddTransient<EndpointUpdateResolver>();
+    }
+
+    private static void AddViewModels(IServiceCollection collection)
+    {
+        collection.AddTransient<IPingTargetViewModelFactory, PingTargetViewModelFactory>();
+        collection.AddTransient<PopOutEndpointViewModelFactory>();
+
+        collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
+        collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
+        collection.AddTransient<IPopoutWindowViewModel, PopoutWindowViewModel>();
+        collection.AddTransient<IMainWindowViewModel, MainWindowViewModel>();
+    }
+
+    private static void AddWindows(IServiceCollection collection)
+    {
+        collection.AddSingleton(sp => new PopoutWindow(sp.GetRequiredService<IPopoutWindowViewModel>()));
+        collection.AddTransient(sp => new SettingsWindow(sp.GetRequiredService<ISettingsViewModel>()));
+        collection.AddTransient(sp => new MainWindow(sp.GetRequiredService<IMainWindowViewModel>()));
     }
 }
