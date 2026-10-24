@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
 using Pinger3.Services;
 using Pinger3.ViewModels.Controls;
@@ -7,32 +8,31 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using Pinger3.Models;
 using Pinger3.Services.Pinging;
 using Pinger3.Services.PopOut;
 using Pinger3.ViewModels.Controls.Factories;
 
 namespace Pinger3.ViewModels.PageViewModels
 {
-    public partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
+    public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel, IDisposable
     {
         // TODO: get an observable Dictionary
         public ObservableCollection<IPingingTargetViewModel> Endpoints { get; } = [];
 
         private readonly TimeSpan _timerIntervalMs = TimeSpan.FromMilliseconds(10);
-        private readonly IEndpointRepository _repository;
         private readonly IPingTargetViewModelFactory _factory;
         private readonly DispatcherTimer _timespanUpdateTimer;
         private readonly IPingManager _pingManager;
         private readonly IPopOutCatalog _popOutCatalog;
+        private readonly List<IDisposable> _subscriptions;
 
         public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
-            IPingManager pingManager, IPopOutCatalog popOutCatalog)
+            IPingManager pingManager, IPopOutCatalog popOutCatalog, IEndpointUpdateNotifier updateNotifier)
         {
-            _repository = endpointRepository;
             _factory = factory;
             _pingManager = pingManager;
             _popOutCatalog = popOutCatalog;
-            _repository.EndpointUpdated += UpdateViewModel;
             _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
                 Interval = _timerIntervalMs,
@@ -41,19 +41,30 @@ namespace Pinger3.ViewModels.PageViewModels
             _timespanUpdateTimer.Tick += UpdateEndpointViewModelTimeSpans;
             _timespanUpdateTimer.Start();
 
-            foreach (var endpoint in _repository.CachedEndpoints.Values)
+            foreach (var endpoint in endpointRepository.GetEndpoints())
             {
                 Endpoints.Add(factory.Create(endpoint));
             }
 
-            _pingManager.PingSent += (_, id) =>
-            {
-                Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent();
-            };
+            _subscriptions =
+            [
+                updateNotifier.SubscribeToUpdate(async (model, _) => await UpdateViewModel(model)),
+                updateNotifier.SubscribeToDeletion(async (id, _) => await DeleteViewModel(id))
+            ];
+
+            _pingManager.PingSent += (_, id) => { Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent(); };
             _pingManager.PingReceived += (_, update) =>
             {
                 Endpoints.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
             };
+        }
+
+        private ValueTask<object> DeleteViewModel(string id)
+        {
+            var endpoint = Endpoints.FirstOrDefault(vm => vm.Id == id);
+            if (endpoint != null)
+                Endpoints.Remove(endpoint);
+            return ValueTask.FromResult<object>(ValueTask.CompletedTask);
         }
 
         private void UpdateEndpointViewModelTimeSpans(object? sender, EventArgs e)
@@ -64,19 +75,17 @@ namespace Pinger3.ViewModels.PageViewModels
             }
         }
 
-        private void UpdateViewModel(object? sender, string e)
+        private ValueTask UpdateViewModel(EndpointModel model)
         {
-            if (_repository.GetEndpoint(e) is not { } value)
-                return;
-
-            var vm = Endpoints.FirstOrDefault(vm => vm.Id == e);
+            var vm = Endpoints.FirstOrDefault(vm => vm.Id == model.Id);
             if (vm == null)
             {
-                Endpoints.Add(_factory.Create(value));
-                return;
+                Endpoints.Add(_factory.Create(model));
+                return ValueTask.CompletedTask;
             }
 
-            vm.UpdateFromModel(value);
+            vm.UpdateFromModel(model);
+            return ValueTask.CompletedTask;
         }
 
         public void OnMainWindowLoaded()
@@ -85,9 +94,9 @@ namespace Pinger3.ViewModels.PageViewModels
         }
 
         [RelayCommand]
-        private void TogglePopOut(string id)
+        private async Task TogglePopOut(string id, CancellationToken ct)
         {
-            _popOutCatalog.Toggle(id);
+            await _popOutCatalog.Toggle(id, ct);
         }
 
         [RelayCommand]
@@ -98,6 +107,12 @@ namespace Pinger3.ViewModels.PageViewModels
             if (vm == null)
                 return;
             vm.IsActive = _pingManager.IsRunning(id);
+        }
+
+        public void Dispose()
+        {
+            foreach (var subscription in _subscriptions)
+                subscription.Dispose();
         }
     }
 }
