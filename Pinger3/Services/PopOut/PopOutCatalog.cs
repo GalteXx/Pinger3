@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
@@ -8,19 +7,22 @@ using Pinger3.Services.Pinging;
 
 namespace Pinger3.Services.PopOut;
 
-public sealed class PopOutCatalog : IPopOutCatalog
+public sealed class PopOutCatalog : IPopOutCatalog, IDisposable
 {
     private readonly IEndpointRepository _repository;
-    private readonly IPopOutEndpointsStorage _storage;
-    private readonly HashSet<string> _ids;
+    private readonly IPopOutEndpointsRegistry _registry;
+    private readonly List<IDisposable> _subscriptions;
 
-    public PopOutCatalog(IPingManager manager, IEndpointRepository repository, IPopOutEndpointsStorage storage)
+    public PopOutCatalog(IPingManager manager, IEndpointRepository repository, IPopOutEndpointsRegistry registry,
+        IEndpointUpdateNotifier updateNotifier)
     {
         _repository = repository;
-        _storage = storage;
-        _ids = [];
-
-        repository.EndpointUpdated += OnEndpointUpdated;
+        _registry = registry;
+        _subscriptions =
+        [
+            updateNotifier.SubscribeToUpdate(async (model, _) =>  await OnEndpointUpdated(model)),
+            updateNotifier.SubscribeToDeletion(async (id, ct) => await OnEndpointRemoved(id, ct))
+        ];
         manager.PingReceived += (sender, updated) =>
         {
             if (IsPopOut(updated.Id))
@@ -33,11 +35,10 @@ public sealed class PopOutCatalog : IPopOutCatalog
         };
     }
 
-    private void OnEndpointUpdated(object? sender, string id)
+    private ValueTask OnEndpointUpdated(EndpointModel endpoint)
     {
-        var model = _repository.GetEndpoint(id);
-        if (model != null)
-            EndpointUpdated?.Invoke(this, model);
+        EndpointUpdated?.Invoke(this, endpoint);
+        return ValueTask.CompletedTask;
     }
 
     public event EventHandler<EndpointModel>? EndpointAdded;
@@ -47,28 +48,22 @@ public sealed class PopOutCatalog : IPopOutCatalog
     public event EventHandler<PingUpdated>? PingReceived;
     public event EventHandler<string>? PingSent;
 
-    public IEnumerable<EndpointModel> GetEndpoints()
-    {
-        return _ids.Select(endpoint => _repository.GetEndpoint(endpoint)).OfType<EndpointModel>();
-    }
-    
     public async Task Add(string id, CancellationToken ct)
     {
-        if (_ids.Contains(id))
+        if (_registry.IsPopOut(id))
             return;
-
         var endpoint = _repository.GetEndpoint(id);
 
         if (endpoint == null)
             return;
 
-        await OnEndpointAdded(endpoint);
-        _ids.Add(id);
+        await _registry.AddPopOutAsync(id, ct);
+        await OnEndpointAdded(endpoint, ct);
     }
 
     public async Task Toggle(string id, CancellationToken ct)
     {
-        if (_ids.Contains(id))
+        if (IsPopOut(id))
             await Remove(id, ct);
         else
             await Add(id, ct);
@@ -76,24 +71,30 @@ public sealed class PopOutCatalog : IPopOutCatalog
 
     public async Task Remove(string id, CancellationToken ct)
     {
-        _ids.Remove(id);
+        await _registry.RemovePopOutAsync(id, ct);
         await OnEndpointRemoved(id, ct);
     }
 
     public bool IsPopOut(string id)
     {
-        return _ids.Contains(id);
+        return _registry.IsPopOut(id);
     }
 
     private async Task OnEndpointAdded(EndpointModel model, CancellationToken ct)
     {
-        await _storage.SaveEndpointAsync(model.Id, ct);
+        await _registry.AddPopOutAsync(model.Id, ct);
         EndpointAdded?.Invoke(this, model);
     }
 
     private async Task OnEndpointRemoved(string id, CancellationToken ct)
     {
-        await _storage.RemoveEndpointAsync(id, ct);
+        await _registry.RemovePopOutAsync(id, ct);
         EndpointRemoved?.Invoke(this, id);
+    }
+
+    public void Dispose()
+    {
+        foreach (var subscription in _subscriptions) 
+            subscription.Dispose();
     }
 }
