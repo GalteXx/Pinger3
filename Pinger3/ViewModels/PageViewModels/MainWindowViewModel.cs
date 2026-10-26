@@ -24,15 +24,15 @@ namespace Pinger3.ViewModels.PageViewModels
         private readonly IPingTargetViewModelFactory _factory;
         private readonly DispatcherTimer _timespanUpdateTimer;
         private readonly IPingManager _pingManager;
-        private readonly IPopOutCatalog _popOutCatalog;
+        private readonly IPopOutManager _popOutManager;
         private readonly List<IDisposable> _subscriptions;
 
         public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
-            IPingManager pingManager, IPopOutCatalog popOutCatalog, IEndpointUpdateNotifier updateNotifier)
+            IPingManager pingManager, IPopOutManager popOutManager, IEndpointUpdateNotifier updateNotifier)
         {
             _factory = factory;
             _pingManager = pingManager;
-            _popOutCatalog = popOutCatalog;
+            _popOutManager = popOutManager;
             _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
                 Interval = _timerIntervalMs,
@@ -96,7 +96,7 @@ namespace Pinger3.ViewModels.PageViewModels
         [RelayCommand]
         private async Task TogglePopOut(string id, CancellationToken ct)
         {
-            await _popOutCatalog.Toggle(id, ct);
+            await _popOutManager.Toggle(id, ct);
         }
 
         [RelayCommand]

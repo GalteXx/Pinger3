@@ -19,25 +19,25 @@ public partial class PopoutWindowViewModel : ObservableObject, IPopoutWindowView
     [ObservableProperty] private double _opacity = 1;
 
 
-    public PopoutWindowViewModel(IPopOutCatalog popOutCatalog, PopOutEndpointViewModelFactory factory)
+    public PopoutWindowViewModel(IPopOutManager popOutManager, PopOutEndpointViewModelFactory factory)
     {
         _factory = factory;
 
-        foreach (var model in popOutCatalog.GetEndpoints())
+        foreach (var model in popOutManager.GetEndpoints())
         {
             PingViewModels.Add(_factory.Create(model));
         }
 
-        popOutCatalog.EndpointAdded += OnEndpointAdded;
-        popOutCatalog.EndpointRemoved +=
+        popOutManager.EndpointAdded += OnEndpointAdded;
+        popOutManager.EndpointRemoved +=
             (_, id) => PingViewModels.Remove(PingViewModels.FirstOrDefault(p => p.Id == id)!);
 
-        popOutCatalog.EndpointUpdated +=
+        popOutManager.EndpointUpdated +=
             (_, e) => GetValueOrDefault(e.Id)?.UpdateFromModel(e);
 
-        popOutCatalog.PingReceived +=
+        popOutManager.PingReceived +=
             (_, update) => GetValueOrDefault(update.Id)?.OnPingReceived(update);
-        popOutCatalog.PingSent += (_, id) => GetValueOrDefault(id)?.OnPingSent();
+        popOutManager.PingSent += (_, id) => GetValueOrDefault(id)?.OnPingSent();
     }
 
     private IPopOutEndpointViewModel? GetValueOrDefault(string id)

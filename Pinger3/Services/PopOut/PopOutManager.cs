@@ -7,13 +7,13 @@ using Pinger3.Services.Pinging;
 
 namespace Pinger3.Services.PopOut;
 
-public sealed class PopOutCatalog : IPopOutCatalog, IDisposable
+public sealed class PopOutManager : IPopOutManager, IDisposable
 {
     private readonly IEndpointRepository _repository;
     private readonly IPopOutEndpointsRegistry _registry;
     private readonly List<IDisposable> _subscriptions;
 
-    public PopOutCatalog(IPingManager manager, IEndpointRepository repository, IPopOutEndpointsRegistry registry,
+    public PopOutManager(IPingManager manager, IEndpointRepository repository, IPopOutEndpointsRegistry registry,
         IEndpointUpdateNotifier updateNotifier)
     {
         _repository = repository;

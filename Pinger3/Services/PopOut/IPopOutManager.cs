@@ -6,7 +6,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services.PopOut;
 
-public interface IPopOutCatalog
+public interface IPopOutManager
 {
     event EventHandler<EndpointModel>? EndpointAdded;
     event EventHandler<string>? EndpointRemoved;

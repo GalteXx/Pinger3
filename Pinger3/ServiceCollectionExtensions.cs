@@ -30,7 +30,7 @@ public static class ServiceCollectionExtensions
     private static void AddPopOutServices(IServiceCollection collection)
     {
         collection.AddTransient<IPopOutEndpointsStorage, SqliteStorageGateway>();
-        collection.AddTransient<IPopOutCatalog, PopOutCatalog>();
+        collection.AddTransient<IPopOutManager, PopOutManager>();
     }
 
     private static void AddCacheServices(IServiceCollection collection)

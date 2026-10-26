@@ -4,7 +4,7 @@ using Pinger3.Services.PopOut;
 
 namespace Pinger3.ViewModels.Controls.Factories;
 
-public sealed class PingTargetViewModelFactory(IPingManager pingManager, IPopOutCatalog popout)
+public sealed class PingTargetViewModelFactory(IPingManager pingManager, IPopOutManager popout)
     : IPingTargetViewModelFactory
 {
     public IPingingTargetViewModel Create(EndpointModel endpoint)
