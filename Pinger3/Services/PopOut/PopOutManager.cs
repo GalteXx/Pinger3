@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
@@ -20,7 +21,7 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
         _registry = registry;
         _subscriptions =
         [
-            updateNotifier.SubscribeToUpdate(async (model, _) =>  await OnEndpointUpdated(model)),
+            updateNotifier.SubscribeToUpdate(async (model, _) => await OnEndpointUpdated(model)),
             updateNotifier.SubscribeToDeletion(async (id, ct) => await OnEndpointRemoved(id, ct))
         ];
         manager.PingReceived += (sender, updated) =>
@@ -69,6 +70,9 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
             await Add(id, ct);
     }
 
+    public IEnumerable<EndpointModel> GetEndpointsModels() =>
+        _registry.GetPopOutIds().Select(id => _repository.GetEndpoint(id)).OfType<EndpointModel>();
+
     public async Task Remove(string id, CancellationToken ct)
     {
         await _registry.RemovePopOutAsync(id, ct);
@@ -94,7 +98,7 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
 
     public void Dispose()
     {
-        foreach (var subscription in _subscriptions) 
+        foreach (var subscription in _subscriptions)
             subscription.Dispose();
     }
 }

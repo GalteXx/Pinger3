@@ -17,4 +17,5 @@ public interface IPopOutManager
     Task Remove(string id, CancellationToken ct);
     bool IsPopOut(string id);
     Task Toggle(string id, CancellationToken ct);
+    IEnumerable<EndpointModel> GetEndpointsModels();
 }
