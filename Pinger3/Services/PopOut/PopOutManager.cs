@@ -70,7 +70,7 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
             await Add(id, ct);
     }
 
-    public IEnumerable<EndpointModel> GetEndpointsModels() =>
+    public IEnumerable<EndpointModel> GetEndpointModels() =>
         _registry.GetPopOutIds().Select(id => _repository.GetEndpoint(id)).OfType<EndpointModel>();
 
     public async Task Remove(string id, CancellationToken ct)

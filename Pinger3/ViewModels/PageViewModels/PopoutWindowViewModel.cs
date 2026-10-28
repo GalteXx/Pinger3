@@ -23,7 +23,7 @@ public partial class PopoutWindowViewModel : ObservableObject, IPopoutWindowView
     {
         _factory = factory;
 
-        foreach (var model in popOutManager.GetEndpoints())
+        foreach (var model in popOutManager.GetEndpointModels())
         {
             PingViewModels.Add(_factory.Create(model));
         }
