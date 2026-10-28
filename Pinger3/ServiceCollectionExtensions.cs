@@ -73,7 +73,6 @@ public static class ServiceCollectionExtensions
         collection.AddTransient<IPingTargetViewModelFactory, PingTargetViewModelFactory>();
         collection.AddTransient<PopOutEndpointViewModelFactory>();
 
-        collection.AddSingleton<ISettingsViewModel, SettingsViewModel>();
         collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
         collection.AddTransient<IPopoutWindowViewModel, PopoutWindowViewModel>();
         collection.AddTransient<IMainWindowViewModel, MainWindowViewModel>();
