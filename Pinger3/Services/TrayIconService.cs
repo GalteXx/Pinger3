@@ -33,15 +33,12 @@ namespace Pinger3.Services
 
             var showItem = new NativeMenuItem("Main Window");
             showItem.Click += (s, e) => ShowMainWindow();
-
-            var settingsItem = new NativeMenuItem("Settings");
-            settingsItem.Click += (s, e) => ShowSettings();
+            
 
             var exitItem = new NativeMenuItem("Stop");
             exitItem.Click += (s, e) => ExitApplication();
 
             menu.Items.Add(showItem);
-            menu.Items.Add(settingsItem);
             menu.Items.Add(new NativeMenuItemSeparator());
             menu.Items.Add(exitItem);
 
@@ -51,12 +48,7 @@ namespace Pinger3.Services
         {
             _windowService.ShowWindow<MainWindow>();
         }
-
-        private void ShowSettings()
-        {
-            _windowService.ShowWindow<SettingsWindow>();
-        }
-
+        
         private void ExitApplication()
         {
             _trayIcon.IsVisible = false;

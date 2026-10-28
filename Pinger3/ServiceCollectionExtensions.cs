@@ -81,7 +81,6 @@ public static class ServiceCollectionExtensions
     private static void AddWindows(IServiceCollection collection)
     {
         collection.AddSingleton(sp => new PopoutWindow(sp.GetRequiredService<IPopoutWindowViewModel>()));
-        collection.AddTransient(sp => new SettingsWindow(sp.GetRequiredService<ISettingsViewModel>()));
         collection.AddTransient(sp => new MainWindow(sp.GetRequiredService<IMainWindowViewModel>()));
     }
 }
