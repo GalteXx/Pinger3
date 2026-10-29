@@ -13,7 +13,7 @@ public sealed class PingScheduler : IPingScheduler
     private readonly IPingTransport _transport;
     private readonly Dictionary<string, EndpointRuntime> _endpoints = [];
 
-    public PingScheduler(IPingTransport transport)
+    public PingScheduler(IPingTransport transport, IPingUpdatePublisher updatePublisher)
     {
         _transport = transport;
         var pingingCycleTask = RunAsync(CancellationToken.None);
@@ -32,9 +32,7 @@ public sealed class PingScheduler : IPingScheduler
     {
         _endpoints[id].UpdateAddress(update); // should throw
     }
-
-    public event EventHandler<string>? PingSent;
-    public event EventHandler<PingUpdated>? PingReceived;
+    
 
     private async Task RunAsync(CancellationToken ct)
     {

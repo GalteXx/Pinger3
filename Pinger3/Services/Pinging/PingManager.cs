@@ -30,9 +30,6 @@ public sealed class PingManager : IPingManager, IDisposable
             updateNotifier.SubscribeToUpdate(async (model, ct) => await OnPingModelUpdated(model, ct)),
             updateNotifier.SubscribeToDeletion((id, _) => OnPingModelRemoved(id))
         ];
-
-        scheduler.PingSent += (sender, e) => PingSent?.Invoke(sender, e);
-        scheduler.PingReceived += (sender, e) => PingReceived?.Invoke(sender, e);
     }
 
     private async Task OnPingModelUpdated(EndpointModel model, CancellationToken ct)
@@ -79,10 +76,6 @@ public sealed class PingManager : IPingManager, IDisposable
     }
 
     public bool IsRunning(string id) => _activeEndpointsRegistry.IsActive(id);
-
-    public event EventHandler<string>? PingSent;
-
-    public event EventHandler<PingUpdated>? PingReceived;
 
     public void Dispose()
     {
