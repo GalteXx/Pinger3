@@ -28,7 +28,8 @@ namespace Pinger3.ViewModels.PageViewModels
         private readonly List<IDisposable> _subscriptions;
 
         public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
-            IPingManager pingManager, IPopOutManager popOutManager, IEndpointUpdateNotifier updateNotifier)
+            IPingManager pingManager, IPopOutManager popOutManager, IEndpointUpdateNotifier updateNotifier,
+            IPingUpdateNotifier pingUpdateNotifier)
         {
             _factory = factory;
             _pingManager = pingManager;
@@ -49,14 +50,18 @@ namespace Pinger3.ViewModels.PageViewModels
             _subscriptions =
             [
                 updateNotifier.SubscribeToUpdate(async (model, _) => await UpdateViewModel(model)),
-                updateNotifier.SubscribeToDeletion(async (id, _) => await DeleteViewModel(id))
+                updateNotifier.SubscribeToDeletion(async (id, _) => await DeleteViewModel(id)),
+                pingUpdateNotifier.SubscribeToPingSent((id, _) =>
+                {
+                    Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent();
+                    return ValueTask.CompletedTask;
+                }),
+                pingUpdateNotifier.SubscribeToPingUpdated((update, _) =>
+                {
+                    Endpoints.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
+                    return ValueTask.CompletedTask;
+                })
             ];
-
-            _pingManager.PingSent += (_, id) => { Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent(); };
-            _pingManager.PingReceived += (_, update) =>
-            {
-                Endpoints.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
-            };
         }
 
         private ValueTask<object> DeleteViewModel(string id)
