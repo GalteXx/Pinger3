@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Services.Migration;
+using Pinger3.Services.Pinging;
 
 namespace Pinger3
 {
@@ -53,12 +54,14 @@ namespace Pinger3
             var migrator = services.GetRequiredService<PersistentDataMigrator>();
             await migrator.MigrateAsync();
             
-            var cacheLoader = services.GetRequiredService<ICacheLoader>();
             // TODO: Loading screen with closing option
-            await cacheLoader.LoadApplicationCacheAsync(CancellationToken.None); 
-
-            services.GetRequiredService<IWindowService>().ShowWindow<MainWindow>();
             
+            var cacheLoader = services.GetRequiredService<ICacheLoader>();
+            await cacheLoader.LoadApplicationCacheAsync(CancellationToken.None);
+            var scheduleLoader = services.GetRequiredService<ScheduleLoader>();
+            await scheduleLoader.LoadScheduleAsync(CancellationToken.None);
+            
+            services.GetRequiredService<IWindowService>().ShowWindow<MainWindow>();
         }
 
         private void DisableAvaloniaDataAnnotationValidation()

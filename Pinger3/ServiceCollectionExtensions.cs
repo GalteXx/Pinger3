@@ -67,10 +67,13 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<IPingUpdateNotifier>(sp => sp.GetRequiredService<PingUpdateAggregator>());
         collection.AddSingleton<IPingUpdatePublisher>(sp => sp.GetRequiredService<PingUpdateAggregator>());
         
+        collection.AddSingleton<IPingScheduler, PingScheduler>();
+        
+        collection.AddTransient<ScheduleLoader>();
+        
         collection.AddTransient<IActiveEndpointsStorage, SqliteStorageGateway>();
         collection.AddTransient<IPingTransport, PingTransport>();
         collection.AddTransient<IPingManager, PingManager>();
-        collection.AddTransient<IPingScheduler, PingScheduler>();
         collection.AddTransient<AddressResolver>();
         collection.AddTransient<IEndpointRuntimeFactory, EndpointRuntimeFactory>();
         collection.AddTransient<EndpointUpdateResolver>();
