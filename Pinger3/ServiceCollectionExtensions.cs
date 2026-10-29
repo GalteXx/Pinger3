@@ -55,16 +55,21 @@ public static class ServiceCollectionExtensions
         collection.AddTransient<IEndpointsStorage, EndpointStorage>();
         collection.AddTransient<IStorageGateway, SqliteStorageGateway>();
         collection.AddTransient<IEndpointRepository, EndpointRepository>();
-
-        collection.AddTransient<IEndpointUpdateNotifier, EndpointUpdateAggregator>();
-        collection.AddTransient<IEndpointUpdatePublisher, EndpointUpdateAggregator>();
+        
+        collection.AddSingleton<EndpointUpdateAggregator>();
+        collection.AddTransient<IEndpointUpdateNotifier>(sp => sp.GetRequiredService<EndpointUpdateAggregator>());
+        collection.AddTransient<IEndpointUpdatePublisher>(sp => sp.GetRequiredService<EndpointUpdateAggregator>());
     }
 
     private static void AddPingServices(IServiceCollection collection)
     {
+        collection.AddSingleton<PingUpdateAggregator>();
+        collection.AddSingleton<IPingUpdateNotifier>(sp => sp.GetRequiredService<PingUpdateAggregator>());
+        collection.AddSingleton<IPingUpdatePublisher>(sp => sp.GetRequiredService<PingUpdateAggregator>());
+        
         collection.AddTransient<IActiveEndpointsStorage, SqliteStorageGateway>();
         collection.AddTransient<IPingTransport, PingTransport>();
-        collection.AddSingleton<IPingManager, PingManager>();
+        collection.AddTransient<IPingManager, PingManager>();
         collection.AddTransient<IPingScheduler, PingScheduler>();
         collection.AddTransient<AddressResolver>();
         collection.AddTransient<EndpointRuntimeFactory>();
