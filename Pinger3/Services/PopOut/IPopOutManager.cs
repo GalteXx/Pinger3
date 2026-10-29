@@ -10,9 +10,6 @@ public interface IPopOutManager
 {
     event EventHandler<EndpointModel>? EndpointAdded;
     event EventHandler<string>? EndpointRemoved;
-    event EventHandler<EndpointModel>? EndpointUpdated;
-    event EventHandler<PingUpdated>? PingReceived;
-    event EventHandler<string>? PingSent;
     Task Add(string id, CancellationToken ct);
     Task Remove(string id, CancellationToken ct);
     bool IsPopOut(string id);

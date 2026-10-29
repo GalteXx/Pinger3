@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Pinger3.DataTypes;
 
-public class AsyncEvent<T> : IAsyncEventSink<T>, IAsyncEventSource<T>
+public class AsyncEvent<T>
 {
     private readonly HandlerList<T> _updates = new();
 

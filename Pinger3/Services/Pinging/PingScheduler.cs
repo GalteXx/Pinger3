@@ -11,11 +11,13 @@ public sealed class PingScheduler : IPingScheduler
 {
     private readonly TimeSpan _tick = TimeSpan.FromMilliseconds(100);
     private readonly IPingTransport _transport;
+    private readonly IPingUpdatePublisher _updatePublisher;
     private readonly Dictionary<string, EndpointRuntime> _endpoints = [];
 
     public PingScheduler(IPingTransport transport, IPingUpdatePublisher updatePublisher)
     {
         _transport = transport;
+        _updatePublisher = updatePublisher;
         var pingingCycleTask = RunAsync(CancellationToken.None);
         pingingCycleTask.ContinueWith(t =>
         {
@@ -55,13 +57,13 @@ public sealed class PingScheduler : IPingScheduler
     {
         runtime.IsPinged = true;
 
-        PingSent?.Invoke(this, runtime.Id);
+        await _updatePublisher.PublishPingSentAsync(runtime.Id, token); // TODO: consider fire and forgetting?
 
         var result = await _transport.PingAsync(runtime, token);
         runtime.Ping = result;
 
         runtime.LastPinged = DateTime.Now;
         runtime.IsPinged = false;
-        PingReceived?.Invoke(this, new PingUpdated(runtime.Id, runtime.Ping));
+        await _updatePublisher.PublishPingUpdateAsync(new PingUpdated(runtime.Id, runtime.Ping), token);
     }
 }

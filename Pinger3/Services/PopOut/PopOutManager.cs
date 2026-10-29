@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
-using Pinger3.Services.Pinging;
 
 namespace Pinger3.Services.PopOut;
 
@@ -14,40 +13,19 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
     private readonly IPopOutEndpointsRegistry _registry;
     private readonly List<IDisposable> _subscriptions;
 
-    public PopOutManager(IPingManager manager, IEndpointRepository repository, IPopOutEndpointsRegistry registry,
+    public PopOutManager(IEndpointRepository repository, IPopOutEndpointsRegistry registry,
         IEndpointUpdateNotifier updateNotifier)
     {
         _repository = repository;
         _registry = registry;
         _subscriptions =
         [
-            updateNotifier.SubscribeToUpdate(async (model, _) => await OnEndpointUpdated(model)),
-            updateNotifier.SubscribeToDeletion(async (id, ct) => await OnEndpointRemoved(id, ct))
+            updateNotifier.SubscribeToDeletion(async (id, token) => await registry.RemovePopOutAsync(id, token))
         ];
-        manager.PingReceived += (sender, updated) =>
-        {
-            if (IsPopOut(updated.Id))
-                PingReceived?.Invoke(sender, updated);
-        };
-        manager.PingSent += (sender, e) =>
-        {
-            if (IsPopOut(e))
-                PingSent?.Invoke(sender, e);
-        };
-    }
-
-    private ValueTask OnEndpointUpdated(EndpointModel endpoint)
-    {
-        EndpointUpdated?.Invoke(this, endpoint);
-        return ValueTask.CompletedTask;
     }
 
     public event EventHandler<EndpointModel>? EndpointAdded;
     public event EventHandler<string>? EndpointRemoved;
-
-    public event EventHandler<EndpointModel>? EndpointUpdated;
-    public event EventHandler<PingUpdated>? PingReceived;
-    public event EventHandler<string>? PingSent;
 
     public async Task Add(string id, CancellationToken ct)
     {
@@ -57,8 +35,6 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
 
         if (endpoint == null)
             return;
-
-        await _registry.AddPopOutAsync(id, ct);
         await OnEndpointAdded(endpoint, ct);
     }
 
@@ -75,7 +51,6 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
 
     public async Task Remove(string id, CancellationToken ct)
     {
-        await _registry.RemovePopOutAsync(id, ct);
         await OnEndpointRemoved(id, ct);
     }
 
