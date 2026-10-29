@@ -2,18 +2,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Pinger3.Services
+namespace Pinger3.Services;
+
+public class WindowService(IServiceProvider serviceProvider) : IWindowService
 {
-    public class WindowService(IServiceProvider serviceProvider) : IWindowService
+    public void ShowWindow<T>() where T : Window
     {
-        private readonly IServiceProvider _serviceProvider = serviceProvider;
-
-        public void ShowWindow<T>() where T : Window
-        {
-            var window = _serviceProvider.GetRequiredService<T>();
-            window.Show();
-        }
-
-        public T GetWindowInstance<T>() where T : Window => _serviceProvider.GetRequiredService<T>();
+        var scope =  serviceProvider.CreateScope();
+        var window = scope.ServiceProvider.GetRequiredService<T>();
+        
+        window.Closed += (s, e) => scope.Dispose();
+        window.Show();
     }
 }

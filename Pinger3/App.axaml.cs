@@ -57,7 +57,7 @@ namespace Pinger3
             // TODO: Loading screen with closing option
             await cacheLoader.LoadApplicationCacheAsync(CancellationToken.None); 
 
-            services.GetRequiredService<WindowService>().GetWindowInstance<MainWindow>().Show();
+            services.GetRequiredService<IWindowService>().ShowWindow<MainWindow>();
             
         }
 
