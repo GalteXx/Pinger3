@@ -6,7 +6,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
-public class EndpointRuntimeFactory(AddressResolver resolver)
+public class EndpointRuntimeFactory(AddressResolver resolver) : IEndpointRuntimeFactory
 {
     public async Task<EndpointRuntime> CreateRuntimeAsync(EndpointModel model, CancellationToken ct)
     {

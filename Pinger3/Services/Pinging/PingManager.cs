@@ -9,14 +9,14 @@ namespace Pinger3.Services.Pinging;
 public sealed class PingManager : IPingManager, IDisposable
 {
     private readonly IPingScheduler _scheduler;
-    private readonly EndpointRuntimeFactory _factory;
+    private readonly IEndpointRuntimeFactory _factory;
     private readonly IEndpointRepository _repository;
     private readonly EndpointUpdateResolver _updateResolver;
     private readonly IActiveEndpointsRegistry _activeEndpointsRegistry;
 
     private readonly List<IDisposable> _subscriptions;
 
-    public PingManager(IPingScheduler scheduler, EndpointRuntimeFactory factory, IEndpointRepository repository,
+    public PingManager(IPingScheduler scheduler, IEndpointRuntimeFactory factory, IEndpointRepository repository,
         EndpointUpdateResolver updateResolver, IEndpointUpdateNotifier updateNotifier,
         IActiveEndpointsRegistry activeEndpointsRegistry)
     {

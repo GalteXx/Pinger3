@@ -72,7 +72,7 @@ public static class ServiceCollectionExtensions
         collection.AddTransient<IPingManager, PingManager>();
         collection.AddTransient<IPingScheduler, PingScheduler>();
         collection.AddTransient<AddressResolver>();
-        collection.AddTransient<EndpointRuntimeFactory>();
+        collection.AddTransient<IEndpointRuntimeFactory, EndpointRuntimeFactory>();
         collection.AddTransient<EndpointUpdateResolver>();
     }
 
