@@ -38,6 +38,9 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<IPopOutEndpointsCache, EndpointsMembershipCache>();
         collection.AddSingleton<IActiveEndpointsCache, EndpointsMembershipCache>();
         collection.AddSingleton<IEndpointsCache, EndpointsCache>();
+        
+        collection.AddTransient<IPopOutEndpointsRegistry, PopOutEndpointsRegistry>();
+        collection.AddTransient<IActiveEndpointsRegistry, ActiveEndpointRegistry>();
             
         collection.AddTransient<ICacheLoader, CacheLoader>();
     }
