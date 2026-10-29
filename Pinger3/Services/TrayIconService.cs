@@ -57,8 +57,9 @@ namespace Pinger3.Services
 
         private void OnTrayIconClicked(object? sender, EventArgs e)
         {
-            var popout = _windowService.GetWindowInstance<PopoutWindow>();
-            popout.IsVisible = !popout.IsVisible;
+            throw new NotImplementedException();
+            //var popout = _windowService.GetWindowInstance<PopoutWindow>();
+            //popout.IsVisible = !popout.IsVisible;
         }
 
         public void Show()
