@@ -6,7 +6,7 @@ using Pinger3.Models;
 
 namespace Pinger3.Services.Pinging;
 
-public class PingUpdateAggregator
+public class PingUpdateAggregator : IPingUpdateNotifier, IPingUpdatePublisher
 {
     private readonly AsyncEvent<string> _pingSent = new();
     private readonly AsyncEvent<PingUpdated> _pingUpdated = new();
