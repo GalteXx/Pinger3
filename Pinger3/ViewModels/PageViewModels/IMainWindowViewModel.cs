@@ -10,6 +10,6 @@ namespace Pinger3.ViewModels.PageViewModels
 
         public IAsyncRelayCommand<string> TogglePingingCommand { get; }
         
-        public IRelayCommand<string> TogglePopOutCommand { get; }
+        public IAsyncRelayCommand<string> TogglePopOutCommand { get; }
     }
 }

@@ -10,8 +10,11 @@ namespace Pinger3.ViewModels.Design
     {
         public ObservableCollection<IPingingTargetViewModel> Endpoints { get; } = [];
 
-        public IAsyncRelayCommand<string> TogglePingingCommand { get; } = new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
-        public IRelayCommand<string> TogglePopOutCommand { get; } = new RelayCommand<string>(_ => { });
+        public IAsyncRelayCommand<string> TogglePingingCommand { get; } =
+            new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
+
+        public IAsyncRelayCommand<string> TogglePopOutCommand { get; } =
+            new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
 
         public MainWindowViewModelDesign()
         {

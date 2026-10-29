@@ -8,17 +8,14 @@ namespace Pinger3.Views
 {
     public partial class MainWindow : Window
     {
-        public List<PingingTargetCategory> AddressCategories { get; } //this is technically View Logic, so no VM involved
         public MainWindow()
         {
-            AddressCategories = [.. Enum.GetValues<PingingTargetCategory>()];
             InitializeComponent();
             Loaded += MainWindow_Loaded;
         }
 
         public MainWindow(IMainWindowViewModel viewModel)
         {
-            AddressCategories = [.. Enum.GetValues<PingingTargetCategory>()];
             DataContext = viewModel;
             InitializeComponent();
             Loaded += MainWindow_Loaded;
@@ -28,7 +25,7 @@ namespace Pinger3.Views
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel vm)
-                 vm!.OnMainWindowLoaded();
+                 vm.OnMainWindowLoaded();
         }
 
         private void NativeMenuItem_Click(object? sender, System.EventArgs e)
