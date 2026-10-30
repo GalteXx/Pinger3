@@ -20,25 +20,18 @@ public class CacheLoader(
 
     private async Task LoadEndpointsCacheAsync(CancellationToken ct)
     {
-        await foreach (var endpoint in storage.GetEndpointsAsync(ct))
-        {
-            endpointsCache.AddOrUpdateValue(endpoint);
-        }
+        await foreach (var endpoint in storage.GetEndpointsAsync(ct)) endpointsCache.AddOrUpdateValue(endpoint);
     }
 
     private async Task LoadPopOutCacheAsync(CancellationToken ct)
     {
         await foreach (var popoutId in popOutEndpointsStorage.GetAllEndpointsAsync(ct))
-        {
             popOutEndpointsCache.AddId(popoutId);
-        }
     }
 
     private async Task LoadActiveEndpointsCacheAsync(CancellationToken ct)
     {
         await foreach (var activePopOutId in activeEndpointsStorage.GetEndpointsAsync(ct))
-        {
             activeEndpointsCache.AddId(activePopOutId);
-        }
     }
 }

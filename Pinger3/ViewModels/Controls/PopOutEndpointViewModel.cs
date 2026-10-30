@@ -7,16 +7,16 @@ namespace Pinger3.ViewModels.Controls;
 public partial class PopOutEndpointViewModel(string id, string name)
     : ObservableObject, IPopOutEndpointViewModel
 {
-    public string Id { get; } = id;
-    
+    [ObservableProperty] private string _address = "0.0.0.0`";
+    private DateTime _lastPingTime;
+
     [ObservableProperty] private string _name = name;
     [ObservableProperty] private TimeSpan _ping = TimeSpan.FromMilliseconds(-1);
-    [ObservableProperty] private TimeSpan _timeSinceLastRequest = TimeSpan.FromMilliseconds(-1);
-    [ObservableProperty] private string  _address = "0.0.0.0`";
-    
+
     private bool _pingInProgress;
-    private DateTime _lastPingTime;
-    
+    [ObservableProperty] private TimeSpan _timeSinceLastRequest = TimeSpan.FromMilliseconds(-1);
+    public string Id { get; } = id;
+
 
     public void UpdateFromModel(EndpointModel model)
     {
@@ -27,7 +27,7 @@ public partial class PopOutEndpointViewModel(string id, string name)
 
     public void UpdateTimeSinceLastRequest()
     {
-        if(_pingInProgress)
+        if (_pingInProgress)
             TimeSinceLastRequest = DateTime.Now - _lastPingTime;
     }
 

@@ -25,7 +25,10 @@ public class AsyncEvent<T>
 
         public IDisposable Subscribe(Func<THandler, CancellationToken, ValueTask> handler)
         {
-            lock (_gate) _handlers = [.. _handlers, handler];
+            lock (_gate)
+            {
+                _handlers = [.. _handlers, handler];
+            }
 
             return new Subscription(() =>
             {
@@ -49,6 +52,10 @@ public class AsyncEvent<T>
     private sealed class Subscription(Action dispose) : IDisposable
     {
         private Action? _dispose = dispose;
-        public void Dispose() => Interlocked.Exchange(ref _dispose, null)?.Invoke();
+
+        public void Dispose()
+        {
+            Interlocked.Exchange(ref _dispose, null)?.Invoke();
+        }
     }
 }

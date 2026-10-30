@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-namespace Pinger3.ViewModels.Controls
+namespace Pinger3.ViewModels.Controls;
+
+public interface INavigationViewModel
 {
-    public interface INavigationViewModel
-    {
-        public IRelayCommand OpenPopoutWindowCommand { get; }
-    }
+    public IRelayCommand OpenPopoutWindowCommand { get; }
 }

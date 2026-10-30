@@ -4,9 +4,13 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services;
 
-public class ActiveEndpointRegistry(IActiveEndpointsCache cache, IActiveEndpointsStorage storage) : IActiveEndpointsRegistry
+public class ActiveEndpointRegistry(IActiveEndpointsCache cache, IActiveEndpointsStorage storage)
+    : IActiveEndpointsRegistry
 {
-    public bool IsActive(string id) => cache.IsStored(id);
+    public bool IsActive(string id)
+    {
+        return cache.IsStored(id);
+    }
 
     public async Task ActivateAsync(string id, CancellationToken ct)
     {
@@ -21,9 +25,12 @@ public class ActiveEndpointRegistry(IActiveEndpointsCache cache, IActiveEndpoint
         if (!IsActive(id))
             return;
         // By the moment this called, the Endpoint is most likely gone already
-        await storage.RemoveEndpointAsync(id, ct); 
+        await storage.RemoveEndpointAsync(id, ct);
         cache.RemoveId(id);
     }
 
-    public IEnumerable<string> GetActiveIds() => cache.GetAllIds();
+    public IEnumerable<string> GetActiveIds()
+    {
+        return cache.GetAllIds();
+    }
 }

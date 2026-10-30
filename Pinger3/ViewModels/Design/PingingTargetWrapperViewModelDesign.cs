@@ -1,14 +1,17 @@
-﻿using Pinger3.ViewModels.Controls;
-using System;
+﻿using System;
+using Pinger3.ViewModels.Controls;
 
-namespace Pinger3.ViewModels.Design
+namespace Pinger3.ViewModels.Design;
+
+internal class PingingTargetWrapperViewModelDesign : IPingingTargetWrapperViewModel
 {
-    internal class PingingTargetWrapperViewModelDesign : IPingingTargetWrapperViewModel
+    private bool isMarkedForPopout;
+
+    public bool IsMarkedForPopout
     {
-        private bool isMarkedForPopout;
-
-        public bool IsMarkedForPopout { get => Random.Shared.Next(0, 1) == 0; set => isMarkedForPopout = value; }
-
-        public IPingingTargetViewModel TargetViewModel => new PingingTargetViewModelDesign();
+        get => Random.Shared.Next(0, 1) == 0;
+        set => isMarkedForPopout = value;
     }
+
+    public IPingingTargetViewModel TargetViewModel => new PingingTargetViewModelDesign();
 }

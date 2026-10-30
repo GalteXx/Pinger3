@@ -8,13 +8,13 @@ namespace Pinger3.Services.Pinging;
 
 public sealed class PingManager : IPingManager, IDisposable
 {
-    private readonly IPingScheduler _scheduler;
+    private readonly IActiveEndpointsRegistry _activeEndpointsRegistry;
     private readonly IEndpointRuntimeFactory _factory;
     private readonly IEndpointRepository _repository;
-    private readonly EndpointUpdateResolver _updateResolver;
-    private readonly IActiveEndpointsRegistry _activeEndpointsRegistry;
+    private readonly IPingScheduler _scheduler;
 
     private readonly List<IDisposable> _subscriptions;
+    private readonly EndpointUpdateResolver _updateResolver;
 
     public PingManager(IPingScheduler scheduler, IEndpointRuntimeFactory factory, IEndpointRepository repository,
         EndpointUpdateResolver updateResolver, IEndpointUpdateNotifier updateNotifier,
@@ -32,23 +32,10 @@ public sealed class PingManager : IPingManager, IDisposable
         ];
     }
 
-    private async Task OnPingModelUpdated(EndpointModel model, CancellationToken ct)
+    public void Dispose()
     {
-        if (_activeEndpointsRegistry.IsActive(model.Id))
-            return;
-
-        var update = await _updateResolver.ResolveAsync(model, CancellationToken.None);
-        if (update is null)
-            return;
-        _scheduler.UpdateInSchedule(model.Id, update);
-    }
-
-    private ValueTask OnPingModelRemoved(string id)
-    {
-        if (!_activeEndpointsRegistry.IsActive(id))
-            return ValueTask.CompletedTask;
-        _scheduler.RemoveFromSchedule(id);
-        return ValueTask.CompletedTask;
+        foreach (var subscription in _subscriptions)
+            subscription.Dispose();
     }
 
     public async Task ToggleEndpointPingingAsync(string id, CancellationToken ct)
@@ -75,11 +62,27 @@ public sealed class PingManager : IPingManager, IDisposable
         _scheduler.RemoveFromSchedule(id);
     }
 
-    public bool IsRunning(string id) => _activeEndpointsRegistry.IsActive(id);
-
-    public void Dispose()
+    public bool IsRunning(string id)
     {
-        foreach (var subscription in _subscriptions)
-            subscription.Dispose();
+        return _activeEndpointsRegistry.IsActive(id);
+    }
+
+    private async Task OnPingModelUpdated(EndpointModel model, CancellationToken ct)
+    {
+        if (_activeEndpointsRegistry.IsActive(model.Id))
+            return;
+
+        var update = await _updateResolver.ResolveAsync(model, CancellationToken.None);
+        if (update is null)
+            return;
+        _scheduler.UpdateInSchedule(model.Id, update);
+    }
+
+    private ValueTask OnPingModelRemoved(string id)
+    {
+        if (!_activeEndpointsRegistry.IsActive(id))
+            return ValueTask.CompletedTask;
+        _scheduler.RemoveFromSchedule(id);
+        return ValueTask.CompletedTask;
     }
 }

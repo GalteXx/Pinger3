@@ -1,25 +1,24 @@
-﻿using Avalonia.Data.Converters;
-using System;
+﻿using System;
 using System.Globalization;
+using Avalonia.Data.Converters;
 
-namespace Pinger3.Converters
+namespace Pinger3.Converters;
+
+internal class TimespanToStringConverter : IValueConverter
 {
-    internal class TimespanToStringConverter : IValueConverter
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            if (value is not TimeSpan timeSpan)
-                throw new ArgumentException("Invalid value type");
-            if (timeSpan < TimeSpan.Zero)
-                return "N/A";
-            if (timeSpan == TimeSpan.MaxValue)
-                return "Timeout";
-            return $"{double.Round(timeSpan.TotalMilliseconds, 1)} ms";
-        }
+        if (value is not TimeSpan timeSpan)
+            throw new ArgumentException("Invalid value type");
+        if (timeSpan < TimeSpan.Zero)
+            return "N/A";
+        if (timeSpan == TimeSpan.MaxValue)
+            return "Timeout";
+        return $"{double.Round(timeSpan.TotalMilliseconds, 1)} ms";
+    }
 
-        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

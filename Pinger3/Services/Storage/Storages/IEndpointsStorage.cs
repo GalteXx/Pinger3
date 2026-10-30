@@ -1,7 +1,7 @@
-﻿using Pinger3.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Pinger3.Models;
 
 namespace Pinger3.Services;
 

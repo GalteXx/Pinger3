@@ -22,8 +22,7 @@
 
 
     <Grid RowDefinitions="25, 50 *">
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15" Grid.Row="1">
-        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 15" Grid.Row="1" />
         <DataGrid Margin="10" BorderBrush="{DynamicResource SecondaryColor}" BorderThickness="1"
                   GridLinesVisibility="Horizontal"
                   Background="{DynamicResource BackgroundColor}" Grid.Row="2"

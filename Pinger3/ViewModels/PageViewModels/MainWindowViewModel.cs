@@ -1,123 +1,117 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommunityToolkit.Mvvm.Input;
-using Pinger3.Services;
-using Pinger3.ViewModels.Controls;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using Pinger3.Models;
+using Pinger3.Services;
 using Pinger3.Services.Pinging;
 using Pinger3.Services.PopOut;
+using Pinger3.ViewModels.Controls;
 using Pinger3.ViewModels.Controls.Factories;
 
-namespace Pinger3.ViewModels.PageViewModels
+namespace Pinger3.ViewModels.PageViewModels;
+
+public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel, IDisposable
 {
-    public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel, IDisposable
+    private readonly IPingTargetViewModelFactory _factory;
+    private readonly IPingManager _pingManager;
+    private readonly IPopOutManager _popOutManager;
+    private readonly List<IDisposable> _subscriptions;
+
+    private readonly TimeSpan _timerIntervalMs = TimeSpan.FromMilliseconds(10);
+    private readonly DispatcherTimer _timespanUpdateTimer;
+
+    public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
+        IPingManager pingManager, IPopOutManager popOutManager, IEndpointUpdateNotifier updateNotifier,
+        IPingUpdateNotifier pingUpdateNotifier)
     {
-        // TODO: get an observable Dictionary
-        public ObservableCollection<IPingingTargetViewModel> Endpoints { get; } = [];
-
-        private readonly TimeSpan _timerIntervalMs = TimeSpan.FromMilliseconds(10);
-        private readonly IPingTargetViewModelFactory _factory;
-        private readonly DispatcherTimer _timespanUpdateTimer;
-        private readonly IPingManager _pingManager;
-        private readonly IPopOutManager _popOutManager;
-        private readonly List<IDisposable> _subscriptions;
-
-        public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
-            IPingManager pingManager, IPopOutManager popOutManager, IEndpointUpdateNotifier updateNotifier,
-            IPingUpdateNotifier pingUpdateNotifier)
+        _factory = factory;
+        _pingManager = pingManager;
+        _popOutManager = popOutManager;
+        _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Normal)
         {
-            _factory = factory;
-            _pingManager = pingManager;
-            _popOutManager = popOutManager;
-            _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Normal)
+            Interval = _timerIntervalMs,
+            IsEnabled = true
+        };
+        _timespanUpdateTimer.Tick += UpdateEndpointViewModelTimeSpans;
+        _timespanUpdateTimer.Start();
+
+        foreach (var endpoint in endpointRepository.GetEndpoints()) Endpoints.Add(factory.Create(endpoint));
+
+        _subscriptions =
+        [
+            updateNotifier.SubscribeToUpdate(async (model, _) => await UpdateViewModel(model)),
+            updateNotifier.SubscribeToDeletion(async (id, _) => await DeleteViewModel(id)),
+            pingUpdateNotifier.SubscribeToPingSent((id, _) =>
             {
-                Interval = _timerIntervalMs,
-                IsEnabled = true
-            };
-            _timespanUpdateTimer.Tick += UpdateEndpointViewModelTimeSpans;
-            _timespanUpdateTimer.Start();
-
-            foreach (var endpoint in endpointRepository.GetEndpoints())
-            {
-                Endpoints.Add(factory.Create(endpoint));
-            }
-
-            _subscriptions =
-            [
-                updateNotifier.SubscribeToUpdate(async (model, _) => await UpdateViewModel(model)),
-                updateNotifier.SubscribeToDeletion(async (id, _) => await DeleteViewModel(id)),
-                pingUpdateNotifier.SubscribeToPingSent((id, _) =>
-                {
-                    Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent();
-                    return ValueTask.CompletedTask;
-                }),
-                pingUpdateNotifier.SubscribeToPingUpdated((update, _) =>
-                {
-                    Endpoints.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
-                    return ValueTask.CompletedTask;
-                })
-            ];
-        }
-
-        private ValueTask<object> DeleteViewModel(string id)
-        {
-            var endpoint = Endpoints.FirstOrDefault(vm => vm.Id == id);
-            if (endpoint != null)
-                Endpoints.Remove(endpoint);
-            return ValueTask.FromResult<object>(ValueTask.CompletedTask);
-        }
-
-        private void UpdateEndpointViewModelTimeSpans(object? sender, EventArgs e)
-        {
-            foreach (var endpoint in Endpoints)
-            {
-                endpoint.UpdateTimeSinceLastRequest();
-            }
-        }
-
-        private ValueTask UpdateViewModel(EndpointModel model)
-        {
-            var vm = Endpoints.FirstOrDefault(vm => vm.Id == model.Id);
-            if (vm == null)
-            {
-                Endpoints.Add(_factory.Create(model));
+                Endpoints.FirstOrDefault(vm => vm.Id == id)?.OnPingSent();
                 return ValueTask.CompletedTask;
-            }
+            }),
+            pingUpdateNotifier.SubscribeToPingUpdated((update, _) =>
+            {
+                Endpoints.FirstOrDefault(vm => vm.Id == update.Id)?.OnPingReceived(update);
+                return ValueTask.CompletedTask;
+            })
+        ];
+    }
 
-            vm.UpdateFromModel(model);
+    public void Dispose()
+    {
+        foreach (var subscription in _subscriptions)
+            subscription.Dispose();
+    }
+
+    // TODO: get an observable Dictionary
+    public ObservableCollection<IPingingTargetViewModel> Endpoints { get; } = [];
+
+    private ValueTask<object> DeleteViewModel(string id)
+    {
+        var endpoint = Endpoints.FirstOrDefault(vm => vm.Id == id);
+        if (endpoint != null)
+            Endpoints.Remove(endpoint);
+        return ValueTask.FromResult<object>(ValueTask.CompletedTask);
+    }
+
+    private void UpdateEndpointViewModelTimeSpans(object? sender, EventArgs e)
+    {
+        foreach (var endpoint in Endpoints) endpoint.UpdateTimeSinceLastRequest();
+    }
+
+    private ValueTask UpdateViewModel(EndpointModel model)
+    {
+        var vm = Endpoints.FirstOrDefault(vm => vm.Id == model.Id);
+        if (vm == null)
+        {
+            Endpoints.Add(_factory.Create(model));
             return ValueTask.CompletedTask;
         }
 
-        public void OnMainWindowLoaded()
-        {
-            OnPropertyChanged(nameof(Endpoints));
-        }
+        vm.UpdateFromModel(model);
+        return ValueTask.CompletedTask;
+    }
 
-        [RelayCommand]
-        private async Task TogglePopOut(string id, CancellationToken ct)
-        {
-            await _popOutManager.Toggle(id, ct);
-        }
+    public void OnMainWindowLoaded()
+    {
+        OnPropertyChanged(nameof(Endpoints));
+    }
 
-        [RelayCommand]
-        private async Task TogglePinging(string id, CancellationToken token)
-        {
-            await _pingManager.ToggleEndpointPingingAsync(id, token);
-            var vm = Endpoints.FirstOrDefault(vm => vm.Id == id);
-            if (vm == null)
-                return;
-            vm.IsActive = _pingManager.IsRunning(id);
-        }
+    [RelayCommand]
+    private async Task TogglePopOut(string id, CancellationToken ct)
+    {
+        await _popOutManager.Toggle(id, ct);
+    }
 
-        public void Dispose()
-        {
-            foreach (var subscription in _subscriptions)
-                subscription.Dispose();
-        }
+    [RelayCommand]
+    private async Task TogglePinging(string id, CancellationToken token)
+    {
+        await _pingManager.ToggleEndpointPingingAsync(id, token);
+        var vm = Endpoints.FirstOrDefault(vm => vm.Id == id);
+        if (vm == null)
+            return;
+        vm.IsActive = _pingManager.IsRunning(id);
     }
 }

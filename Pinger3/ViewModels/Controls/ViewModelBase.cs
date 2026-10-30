@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Pinger3.ViewModels.Controls
+namespace Pinger3.ViewModels.Controls;
+
+public abstract class ViewModelBase : ObservableObject
 {
-    public abstract class ViewModelBase : ObservableObject
-    {
-    }
 }

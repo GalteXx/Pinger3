@@ -9,10 +9,9 @@ namespace Pinger3.Services.Migration;
 
 public class InitialSqliteMigration : IStorageMigration
 {
+    private readonly XmlAddressesStorageLoader _loader = new();
     public int FromVersion => 0;
     public int ToVersion => 1;
-
-    private readonly XmlAddressesStorageLoader _loader = new();
 
     public async Task Migrate(SqliteConnection connection)
     {
@@ -125,10 +124,12 @@ public class InitialSqliteMigration : IStorageMigration
         await command.ExecuteNonQueryAsync();
     }
 
-    private static TimeSpan ParseDelay(string? s) =>
-        int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms) && ms > 0
+    private static TimeSpan ParseDelay(string? s)
+    {
+        return int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms) && ms > 0
             ? TimeSpan.FromMilliseconds(ms)
             : TimeSpan.FromSeconds(5);
+    }
 
     private record XmlEndpoint(string Name, string Address, TimeSpan Delay);
 }

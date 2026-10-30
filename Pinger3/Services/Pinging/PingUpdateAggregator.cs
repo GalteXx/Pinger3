@@ -12,14 +12,22 @@ public class PingUpdateAggregator : IPingUpdateNotifier, IPingUpdatePublisher
     private readonly AsyncEvent<PingUpdated> _pingUpdated = new();
 
     public IDisposable SubscribeToPingUpdated(Func<PingUpdated, CancellationToken, ValueTask> handler)
-        => _pingUpdated.Subscribe(handler);
+    {
+        return _pingUpdated.Subscribe(handler);
+    }
 
     public IDisposable SubscribeToPingSent(Func<string, CancellationToken, ValueTask> handler)
-        => _pingSent.Subscribe(handler);
+    {
+        return _pingSent.Subscribe(handler);
+    }
 
     public ValueTask PublishPingUpdateAsync(PingUpdated updatedModel, CancellationToken ct = default)
-        => _pingUpdated.PublishAsync(updatedModel, ct);
+    {
+        return _pingUpdated.PublishAsync(updatedModel, ct);
+    }
 
     public ValueTask PublishPingSentAsync(string id, CancellationToken ct = default)
-        => _pingSent.PublishAsync(id, ct);
+    {
+        return _pingSent.PublishAsync(id, ct);
+    }
 }

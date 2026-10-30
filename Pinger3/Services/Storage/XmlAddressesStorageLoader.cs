@@ -7,8 +7,8 @@ using System.Xml.Linq;
 namespace Pinger3.Services;
 
 /// <summary>
-/// Loads .Xml storage with addresses at local/Geckosystem/Pinger
-/// No point in abstracting it out, should not be used by other namespaces
+///     Loads .Xml storage with addresses at local/Geckosystem/Pinger
+///     No point in abstracting it out, should not be used by other namespaces
 /// </summary>
 internal class XmlAddressesStorageLoader
 {

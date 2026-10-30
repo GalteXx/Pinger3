@@ -1,15 +1,14 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
 using Pinger3.ViewModels.Controls;
-using System.Collections.ObjectModel;
 
-namespace Pinger3.ViewModels.PageViewModels
+namespace Pinger3.ViewModels.PageViewModels;
+
+public interface IMainWindowViewModel
 {
-    public interface IMainWindowViewModel
-    {
-        public ObservableCollection<IPingingTargetViewModel> Endpoints { get; }
+    public ObservableCollection<IPingingTargetViewModel> Endpoints { get; }
 
-        public IAsyncRelayCommand<string> TogglePingingCommand { get; }
-        
-        public IAsyncRelayCommand<string> TogglePopOutCommand { get; }
-    }
+    public IAsyncRelayCommand<string> TogglePingingCommand { get; }
+
+    public IAsyncRelayCommand<string> TogglePopOutCommand { get; }
 }

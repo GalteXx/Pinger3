@@ -1,8 +1,7 @@
-﻿namespace Pinger3.ViewModels.Controls
+﻿namespace Pinger3.ViewModels.Controls;
+
+public interface IPingingTargetWrapperViewModel
 {
-    public interface IPingingTargetWrapperViewModel
-    {
-        bool IsMarkedForPopout { get; set; }
-        IPingingTargetViewModel TargetViewModel { get; }
-    }
+    bool IsMarkedForPopout { get; set; }
+    IPingingTargetViewModel TargetViewModel { get; }
 }

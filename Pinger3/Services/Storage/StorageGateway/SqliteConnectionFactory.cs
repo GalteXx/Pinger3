@@ -13,9 +13,9 @@ public class SqliteConnectionFactory
     public SqliteConnection Create()
     {
         Directory.CreateDirectory(_directoryPath);
-        var connectionString = new SqliteConnectionStringBuilder()
+        var connectionString = new SqliteConnectionStringBuilder
         {
-            DataSource = Path.Combine(_directoryPath, "Pinger3.sqlite"),
+            DataSource = Path.Combine(_directoryPath, "Pinger3.sqlite")
         }.ToString();
         return new SqliteConnection(connectionString);
     }

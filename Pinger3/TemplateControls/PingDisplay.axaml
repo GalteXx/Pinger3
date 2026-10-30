@@ -1,15 +1,15 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
-					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:controls="using:Pinger3.TemplateControls">
-	<Design.PreviewWith>
-		<controls:PingDisplay Classes="Full" />
-	</Design.PreviewWith>
-	<ControlTheme x:Key="{x:Type controls:PingDisplay}"
-				  TargetType="controls:PingDisplay">
-		<Setter Property="Template">
-			<ControlTemplate>
-				<ContentPresenter/>
-			</ControlTemplate>
-		</Setter>
-	</ControlTheme>
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Pinger3.TemplateControls">
+    <Design.PreviewWith>
+        <controls:PingDisplay Classes="Full" />
+    </Design.PreviewWith>
+    <ControlTheme x:Key="{x:Type controls:PingDisplay}"
+                  TargetType="controls:PingDisplay">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter />
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
 </ResourceDictionary>

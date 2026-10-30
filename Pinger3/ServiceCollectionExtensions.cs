@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Pinger3.ViewModels.Controls;
-using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Services;
 using Pinger3.Services.Migration;
 using Pinger3.Services.Pinging;
 using Pinger3.Services.PopOut;
 using Pinger3.Services.PopOut.Factories;
+using Pinger3.ViewModels.Controls;
 using Pinger3.ViewModels.Controls.Factories;
+using Pinger3.ViewModels.PageViewModels;
 using Pinger3.Views;
 
 namespace Pinger3;
@@ -38,10 +38,10 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<IPopOutEndpointsCache, EndpointsMembershipCache>();
         collection.AddSingleton<IActiveEndpointsCache, EndpointsMembershipCache>();
         collection.AddSingleton<IEndpointsCache, EndpointsCache>();
-        
+
         collection.AddTransient<IPopOutEndpointsRegistry, PopOutEndpointsRegistry>();
         collection.AddTransient<IActiveEndpointsRegistry, ActiveEndpointRegistry>();
-            
+
         collection.AddTransient<ICacheLoader, CacheLoader>();
     }
 
@@ -55,7 +55,7 @@ public static class ServiceCollectionExtensions
         collection.AddTransient<IEndpointsStorage, EndpointStorage>();
         collection.AddTransient<IStorageGateway, SqliteStorageGateway>();
         collection.AddTransient<IEndpointRepository, EndpointRepository>();
-        
+
         collection.AddSingleton<EndpointUpdateAggregator>();
         collection.AddTransient<IEndpointUpdateNotifier>(sp => sp.GetRequiredService<EndpointUpdateAggregator>());
         collection.AddTransient<IEndpointUpdatePublisher>(sp => sp.GetRequiredService<EndpointUpdateAggregator>());
@@ -66,11 +66,11 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<PingUpdateAggregator>();
         collection.AddSingleton<IPingUpdateNotifier>(sp => sp.GetRequiredService<PingUpdateAggregator>());
         collection.AddSingleton<IPingUpdatePublisher>(sp => sp.GetRequiredService<PingUpdateAggregator>());
-        
+
         collection.AddSingleton<IPingScheduler, PingScheduler>();
-        
+
         collection.AddTransient<ScheduleLoader>();
-        
+
         collection.AddTransient<IActiveEndpointsStorage, SqliteStorageGateway>();
         collection.AddTransient<IPingTransport, PingTransport>();
         collection.AddTransient<IPingManager, PingManager>();

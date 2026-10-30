@@ -1,8 +1,8 @@
-﻿using Pinger3.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Pinger3.Models;
 
 namespace Pinger3.Services;
 
@@ -12,10 +12,7 @@ internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory fac
     {
         var dtoStream = gateway.GetAllEndpointsAsync(ct);
 
-        await foreach (var endpointDto in dtoStream)
-        {
-            yield return factory.CreateValidEndpointModel(endpointDto);
-        }
+        await foreach (var endpointDto in dtoStream) yield return factory.CreateValidEndpointModel(endpointDto);
     }
 
     public async Task<EndpointModel?> GetEndpointAsync(string id, CancellationToken ct)

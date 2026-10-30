@@ -9,10 +9,10 @@ namespace Pinger3.Services.Pinging;
 
 public sealed class PingScheduler : IPingScheduler
 {
+    private readonly Dictionary<string, EndpointRuntime> _endpoints = [];
     private readonly TimeSpan _tick = TimeSpan.FromMilliseconds(100);
     private readonly IPingTransport _transport;
     private readonly IPingUpdatePublisher _updatePublisher;
-    private readonly Dictionary<string, EndpointRuntime> _endpoints = [];
 
     public PingScheduler(IPingTransport transport, IPingUpdatePublisher updatePublisher)
     {
@@ -26,15 +26,21 @@ public sealed class PingScheduler : IPingScheduler
         }, TaskScheduler.Default);
     }
 
-    public void AddToSchedule(EndpointRuntime endpoint) => _endpoints.Add(endpoint.Id, endpoint);
+    public void AddToSchedule(EndpointRuntime endpoint)
+    {
+        _endpoints.Add(endpoint.Id, endpoint);
+    }
 
-    public void RemoveFromSchedule(string endpointId) => _endpoints.Remove(endpointId);
+    public void RemoveFromSchedule(string endpointId)
+    {
+        _endpoints.Remove(endpointId);
+    }
 
     public void UpdateInSchedule(string id, ResolvedEndpointUpdate update)
     {
         _endpoints[id].UpdateAddress(update); // should throw
     }
-    
+
 
     private async Task RunAsync(CancellationToken ct)
     {
@@ -44,10 +50,7 @@ public sealed class PingScheduler : IPingScheduler
             var due = _endpoints.Values
                 .Where(e => e.LastPinged + e.DelayBetweenRequests <= now && !e.IsPinged);
 
-            foreach (var runtime in due)
-            {
-                _ = SendPingAsync(runtime, ct);
-            }
+            foreach (var runtime in due) _ = SendPingAsync(runtime, ct);
 
             await Task.Delay(_tick, ct);
         }

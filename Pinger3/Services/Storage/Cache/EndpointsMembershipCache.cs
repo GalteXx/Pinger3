@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
@@ -9,18 +8,43 @@ public class EndpointsMembershipCache : IActiveEndpointsCache, IPopOutEndpointsC
     private readonly ConcurrentDictionary<string, string> _activeEndpoints = new();
     private readonly ConcurrentDictionary<string, string> _popOutEndpoints = new();
 
-    IEnumerable<string> IActiveEndpointsCache.GetAllIds() => _activeEndpoints.Keys;
+    IEnumerable<string> IActiveEndpointsCache.GetAllIds()
+    {
+        return _activeEndpoints.Keys;
+    }
 
-    void IActiveEndpointsCache.AddId(string id) => _activeEndpoints.TryAdd(id, id);
+    void IActiveEndpointsCache.AddId(string id)
+    {
+        _activeEndpoints.TryAdd(id, id);
+    }
 
-    void IActiveEndpointsCache.RemoveId(string id) => _activeEndpoints.TryRemove(id, out _);
+    void IActiveEndpointsCache.RemoveId(string id)
+    {
+        _activeEndpoints.TryRemove(id, out _);
+    }
 
-    bool IActiveEndpointsCache.IsStored(string id) => _activeEndpoints.ContainsKey(id);
-    IEnumerable<string> IPopOutEndpointsCache.GetAllIds() => _popOutEndpoints.Keys;
+    bool IActiveEndpointsCache.IsStored(string id)
+    {
+        return _activeEndpoints.ContainsKey(id);
+    }
 
-    void IPopOutEndpointsCache.AddId(string id) => _popOutEndpoints.TryAdd(id, id);
+    IEnumerable<string> IPopOutEndpointsCache.GetAllIds()
+    {
+        return _popOutEndpoints.Keys;
+    }
 
-    void IPopOutEndpointsCache.RemoveId(string id) => _popOutEndpoints.TryRemove(id, out _);
+    void IPopOutEndpointsCache.AddId(string id)
+    {
+        _popOutEndpoints.TryAdd(id, id);
+    }
 
-    bool IPopOutEndpointsCache.IsStored(string id) => _popOutEndpoints.ContainsKey(id);
+    void IPopOutEndpointsCache.RemoveId(string id)
+    {
+        _popOutEndpoints.TryRemove(id, out _);
+    }
+
+    bool IPopOutEndpointsCache.IsStored(string id)
+    {
+        return _popOutEndpoints.ContainsKey(id);
+    }
 }

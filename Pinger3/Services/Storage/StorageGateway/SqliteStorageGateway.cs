@@ -11,6 +11,56 @@ namespace Pinger3.Services;
 public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : IStorageGateway, IActiveEndpointsStorage,
     IPopOutEndpointsStorage
 {
+    async Task IActiveEndpointsStorage.SaveEndpointAsync(string id, CancellationToken ct)
+    {
+        await ExecuteNonQueryCommandAsync(
+            "INSERT INTO active_endpoint (endpoint_id) VALUES (@endpoint_id)",
+            ct,
+            new SqliteParameter("@endpoint_id", id));
+    }
+
+    async Task IActiveEndpointsStorage.RemoveEndpointAsync(string id, CancellationToken ct)
+    {
+        await ExecuteNonQueryCommandAsync(
+            "DELETE FROM active_endpoint WHERE endpoint_id = @endpoint_id",
+            ct,
+            new SqliteParameter("@endpoint_id", id));
+    }
+
+    async IAsyncEnumerable<string> IActiveEndpointsStorage.GetEndpointsAsync(
+        [EnumeratorCancellation] CancellationToken ct)
+    {
+        var ids = QueryAsync("SELECT * FROM active_endpoint",
+            reader => reader.GetString(0), ct);
+        await foreach (var id in ids)
+            yield return id;
+    }
+
+    async Task IPopOutEndpointsStorage.SaveEndpointAsync(string id, CancellationToken ct)
+    {
+        await ExecuteNonQueryCommandAsync(
+            "INSERT INTO popout_endpoint (endpoint_id) VALUES (@endpoint_id)",
+            ct,
+            new SqliteParameter("@endpoint_id", id));
+    }
+
+    async Task IPopOutEndpointsStorage.RemoveEndpointAsync(string id, CancellationToken ct)
+    {
+        await ExecuteNonQueryCommandAsync(
+            "DELETE FROM popout_endpoint WHERE endpoint_id = @endpoint_id",
+            ct,
+            new SqliteParameter("@endpoint_id", id));
+    }
+
+    async IAsyncEnumerable<string> IPopOutEndpointsStorage.GetAllEndpointsAsync(
+        [EnumeratorCancellation] CancellationToken ct)
+    {
+        var ids = QueryAsync("SELECT * FROM popout_endpoint",
+            reader => reader.GetString(0), ct);
+        await foreach (var id in ids)
+            yield return id;
+    }
+
     public async IAsyncEnumerable<EndpointDto> GetAllEndpointsAsync([EnumeratorCancellation] CancellationToken ct)
     {
         var endpoints = QueryAsync("SELECT * FROM endpoint", CreateDto, ct);
@@ -30,7 +80,8 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
         return null;
     }
 
-    async Task IStorageGateway.EditEndpointAsync(EndpointDto dto, CancellationToken ct) =>
+    async Task IStorageGateway.EditEndpointAsync(EndpointDto dto, CancellationToken ct)
+    {
         await ExecuteNonQueryCommandAsync(
             "UPDATE endpoint SET name = @name, address = @address, delay = @delay WHERE id = @id",
             ct,
@@ -38,8 +89,10 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
             new SqliteParameter("@name", dto.Name),
             new SqliteParameter("@address", dto.Name),
             new SqliteParameter("@delay", dto.RequestDelay));
+    }
 
-    async Task IStorageGateway.AddEndpointAsync(EndpointDto dto, CancellationToken ct) =>
+    async Task IStorageGateway.AddEndpointAsync(EndpointDto dto, CancellationToken ct)
+    {
         await ExecuteNonQueryCommandAsync(
             "INSERT INTO endpoint (name, address, delay) VALUES (@name, @address, @delay)",
             ct,
@@ -47,47 +100,6 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
             new SqliteParameter("@name", dto.Name),
             new SqliteParameter("@address", dto.Name),
             new SqliteParameter("@delay", dto.RequestDelay));
-
-    async Task IActiveEndpointsStorage.SaveEndpointAsync(string id, CancellationToken ct) =>
-        await ExecuteNonQueryCommandAsync(
-            "INSERT INTO active_endpoint (endpoint_id) VALUES (@endpoint_id)",
-            ct,
-            new SqliteParameter("@endpoint_id", id));
-
-    async Task IActiveEndpointsStorage.RemoveEndpointAsync(string id, CancellationToken ct) =>
-        await ExecuteNonQueryCommandAsync(
-            "DELETE FROM active_endpoint WHERE endpoint_id = @endpoint_id",
-            ct,
-            new SqliteParameter("@endpoint_id", id));
-
-    async Task IPopOutEndpointsStorage.SaveEndpointAsync(string id, CancellationToken ct) =>
-        await ExecuteNonQueryCommandAsync(
-            "INSERT INTO popout_endpoint (endpoint_id) VALUES (@endpoint_id)",
-            ct,
-            new SqliteParameter("@endpoint_id", id));
-
-    async Task IPopOutEndpointsStorage.RemoveEndpointAsync(string id, CancellationToken ct) =>
-        await ExecuteNonQueryCommandAsync(
-            "DELETE FROM popout_endpoint WHERE endpoint_id = @endpoint_id",
-            ct,
-            new SqliteParameter("@endpoint_id", id));
-
-    async IAsyncEnumerable<string> IPopOutEndpointsStorage.GetAllEndpointsAsync(
-        [EnumeratorCancellation] CancellationToken ct)
-    {
-        var ids = QueryAsync("SELECT * FROM popout_endpoint",
-            reader => reader.GetString(0), ct);
-        await foreach (var id in ids)
-            yield return id;
-    }
-
-    async IAsyncEnumerable<string> IActiveEndpointsStorage.GetEndpointsAsync(
-        [EnumeratorCancellation] CancellationToken ct)
-    {
-        var ids = QueryAsync("SELECT * FROM active_endpoint",
-            reader => reader.GetString(0), ct);
-        await foreach (var id in ids)
-            yield return id;
     }
 
     private async Task<T> ExecuteAsync<T>(string commandText, Func<SqliteCommand, Task<T>> execute,
@@ -131,6 +143,8 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
     }
 
     private Task<int> ExecuteNonQueryCommandAsync(string commandText, CancellationToken ct,
-        params SqliteParameter[] parameters) =>
-        ExecuteAsync(commandText, cmd => cmd.ExecuteNonQueryAsync(ct), parameters);
+        params SqliteParameter[] parameters)
+    {
+        return ExecuteAsync(commandText, cmd => cmd.ExecuteNonQueryAsync(ct), parameters);
+    }
 }

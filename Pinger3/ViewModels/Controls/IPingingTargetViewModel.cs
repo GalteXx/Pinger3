@@ -1,24 +1,22 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Pinger3.Models;
-using System;
+﻿using System;
 using System.ComponentModel;
+using Pinger3.Models;
 
-namespace Pinger3.ViewModels.Controls
+namespace Pinger3.ViewModels.Controls;
+
+public interface IPingingTargetViewModel : INotifyPropertyChanged
 {
-    public interface IPingingTargetViewModel : INotifyPropertyChanged
-    {
-        string Id { get; }
-        string Address { get; }
-        string Name { get; }
-        TimeSpan Ping { get; }
-        TimeSpan TimeSinceLastRequest { get; }
-        TimeSpan DelayBetweenRequests { get; }
-        bool IsActive { get; set; }
-        bool IsPopOut {get; set;}
+    string Id { get; }
+    string Address { get; }
+    string Name { get; }
+    TimeSpan Ping { get; }
+    TimeSpan TimeSinceLastRequest { get; }
+    TimeSpan DelayBetweenRequests { get; }
+    bool IsActive { get; set; }
+    bool IsPopOut { get; set; }
 
-        public void UpdateFromModel(EndpointModel endpointModel);
-        void UpdateTimeSinceLastRequest();
-        void OnPingReceived(PingUpdated update);
-        void OnPingSent();
-    }
+    public void UpdateFromModel(EndpointModel endpointModel);
+    void UpdateTimeSinceLastRequest();
+    void OnPingReceived(PingUpdated update);
+    void OnPingSent();
 }

@@ -1,25 +1,25 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.Input;
 using Pinger3.Services;
 using Pinger3.Views;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
-namespace Pinger3.ViewModels.Controls
+namespace Pinger3.ViewModels.Controls;
+
+public partial class NavigationViewModel(IWindowService windowService) : INavigationViewModel, INotifyPropertyChanged
 {
-    public partial class NavigationViewModel(IWindowService windowService) : INavigationViewModel, INotifyPropertyChanged
+    private readonly IWindowService _windowService = windowService;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    [RelayCommand]
+    private void OpenPopoutWindow()
     {
-        private readonly IWindowService _windowService = windowService;
+        _windowService.ShowWindow<PopoutWindow>();
+    }
 
-        [RelayCommand]
-        private void OpenPopoutWindow()
-        {
-            _windowService.ShowWindow<PopoutWindow>();
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

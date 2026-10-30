@@ -4,10 +4,13 @@ using System.Threading.Tasks;
 
 namespace Pinger3.Services;
 
-public class PopOutEndpointsRegistry(IPopOutEndpointsStorage storage, IPopOutEndpointsCache cache) 
+public class PopOutEndpointsRegistry(IPopOutEndpointsStorage storage, IPopOutEndpointsCache cache)
     : IPopOutEndpointsRegistry
 {
-    public bool IsPopOut(string id) => cache.IsStored(id);
+    public bool IsPopOut(string id)
+    {
+        return cache.IsStored(id);
+    }
 
     public async Task AddPopOutAsync(string id, CancellationToken ct)
     {
@@ -25,5 +28,8 @@ public class PopOutEndpointsRegistry(IPopOutEndpointsStorage storage, IPopOutEnd
         cache.RemoveId(id);
     }
 
-    public IEnumerable<string> GetPopOutIds() => cache.GetAllIds();
+    public IEnumerable<string> GetPopOutIds()
+    {
+        return cache.GetAllIds();
+    }
 }

@@ -8,18 +8,26 @@ namespace Pinger3.Services;
 
 public class EndpointUpdateAggregator : IEndpointUpdateNotifier, IEndpointUpdatePublisher
 {
-    private readonly AsyncEvent<EndpointModel> _update = new();
     private readonly AsyncEvent<string> _deletion = new();
+    private readonly AsyncEvent<EndpointModel> _update = new();
 
     public IDisposable SubscribeToUpdate(Func<EndpointModel, CancellationToken, ValueTask> handler)
-        => _update.Subscribe(handler);
+    {
+        return _update.Subscribe(handler);
+    }
 
     public IDisposable SubscribeToDeletion(Func<string, CancellationToken, ValueTask> handler)
-        => _deletion.Subscribe(handler);
+    {
+        return _deletion.Subscribe(handler);
+    }
 
     public ValueTask PublishUpdateAsync(EndpointModel updatedModel, CancellationToken ct = default)
-        => _update.PublishAsync(updatedModel, ct);
+    {
+        return _update.PublishAsync(updatedModel, ct);
+    }
 
     public ValueTask PublishDeletionAsync(string modelId, CancellationToken ct = default)
-        => _deletion.PublishAsync(modelId, ct);
+    {
+        return _deletion.PublishAsync(modelId, ct);
+    }
 }
