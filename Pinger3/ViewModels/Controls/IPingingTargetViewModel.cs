@@ -15,7 +15,7 @@ public interface IPingingTargetViewModel : INotifyPropertyChanged
     bool IsActive { get; set; }
     bool IsPopOut { get; set; }
 
-    public void UpdateFromModel(EndpointModel endpointModel);
+    void UpdateFromModel(EndpointModel endpointModel);
     void UpdateTimeSinceLastRequest();
     void OnPingReceived(PingUpdated update);
     void OnPingSent();
