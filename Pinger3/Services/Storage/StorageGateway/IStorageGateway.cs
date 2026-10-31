@@ -10,5 +10,6 @@ public interface IStorageGateway
     IAsyncEnumerable<EndpointDto> GetAllEndpointsAsync(CancellationToken ct);
     Task EditEndpointAsync(EndpointDto dto, CancellationToken ct);
     Task AddEndpointAsync(EndpointDto dto, CancellationToken ct);
+    Task DeleteEndpointAsync(string id, CancellationToken ct);
     Task<EndpointDto?> GetEndpointAsync(string id, CancellationToken ct);
 }

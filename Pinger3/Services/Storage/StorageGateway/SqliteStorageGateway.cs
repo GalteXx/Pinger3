@@ -19,12 +19,12 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
             new SqliteParameter("@endpoint_id", id));
     }
 
-    async Task IActiveEndpointsStorage.RemoveEndpointAsync(string id, CancellationToken ct)
+    async Task IActiveEndpointsStorage.RemoveEndpointAsync(string Id, CancellationToken ct)
     {
         await ExecuteNonQueryCommandAsync(
             "DELETE FROM active_endpoint WHERE endpoint_id = @endpoint_id",
             ct,
-            new SqliteParameter("@endpoint_id", id));
+            new SqliteParameter("@endpoint_id", Id));
     }
 
     async IAsyncEnumerable<string> IActiveEndpointsStorage.GetEndpointsAsync(
@@ -44,12 +44,12 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
             new SqliteParameter("@endpoint_id", id));
     }
 
-    async Task IPopOutEndpointsStorage.RemoveEndpointAsync(string id, CancellationToken ct)
+    async Task IPopOutEndpointsStorage.RemoveEndpointAsync(string Id, CancellationToken ct)
     {
         await ExecuteNonQueryCommandAsync(
             "DELETE FROM popout_endpoint WHERE endpoint_id = @endpoint_id",
             ct,
-            new SqliteParameter("@endpoint_id", id));
+            new SqliteParameter("@endpoint_id", Id));
     }
 
     async IAsyncEnumerable<string> IPopOutEndpointsStorage.GetAllEndpointsAsync(
@@ -61,11 +61,20 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
             yield return id;
     }
 
-    public async IAsyncEnumerable<EndpointDto> GetAllEndpointsAsync([EnumeratorCancellation] CancellationToken ct)
+    async IAsyncEnumerable<EndpointDto> IStorageGateway.GetAllEndpointsAsync(
+        [EnumeratorCancellation] CancellationToken ct)
     {
         var endpoints = QueryAsync("SELECT * FROM endpoint", CreateDto, ct);
         await foreach (var dto in endpoints)
             yield return dto;
+    }
+
+    async Task IStorageGateway.DeleteEndpointAsync(string id, CancellationToken ct)
+    {
+        await ExecuteNonQueryCommandAsync(
+            "DELETE FROM endpoint WHERE id = @id",
+            ct,
+            new SqliteParameter("@id", id));
     }
 
     async Task<EndpointDto?> IStorageGateway.GetEndpointAsync(string id, CancellationToken ct)

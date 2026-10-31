@@ -11,4 +11,5 @@ public interface IEndpointRepository
     EndpointModel? GetEndpoint(string id);
     Task EditEndpointAsync(EndpointModel endpoint, CancellationToken ct);
     IEnumerable<EndpointModel> GetEndpoints();
+    Task DeleteEndpointAsync(string id, CancellationToken ct);
 }

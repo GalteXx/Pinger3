@@ -32,4 +32,9 @@ internal class EndpointStorage(IStorageGateway gateway, EndpointModelFactory fac
         await gateway.AddEndpointAsync(new EndpointDto(endpoint.Id, endpoint.Name, endpoint.Address,
             endpoint.DelayBetweenRequests.ToString()), ct);
     }
+
+    public async Task DeleteEndpointAsync(string id, CancellationToken ct)
+    {
+        await gateway.DeleteEndpointAsync(id, ct);
+    }
 }

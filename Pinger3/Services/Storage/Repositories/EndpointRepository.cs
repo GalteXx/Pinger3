@@ -29,6 +29,13 @@ public sealed class EndpointRepository(
         await OnEndpointUpdated(endpoint);
     }
 
+    public async Task DeleteEndpointAsync(string id, CancellationToken ct)
+    {
+        await storage.DeleteEndpointAsync(id, ct);
+        cache.Remove(id);
+        await updatePublisher.PublishDeletionAsync(id, ct);
+    }
+
     public EndpointModel? GetEndpoint(string id)
     {
         return cache.GetValueOrDefault(id);
