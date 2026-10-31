@@ -5,7 +5,10 @@ using Pinger3.Models;
 
 namespace Pinger3.Services;
 
-public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointsCache cache) : IEndpointRepository
+public sealed class EndpointRepository(
+    IEndpointsStorage storage,
+    IEndpointsCache cache,
+    IEndpointUpdatePublisher updatePublisher) : IEndpointRepository
 {
     public IEnumerable<EndpointModel> GetEndpoints()
     {
@@ -16,14 +19,14 @@ public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointsCach
     {
         await storage.AddEndpointAsync(endpoint, ct);
         cache.AddOrUpdateValue(endpoint);
-        OnEndpointUpdated(endpoint.Id);
+        await OnEndpointUpdated(endpoint);
     }
 
     public async Task EditEndpointAsync(EndpointModel endpoint, CancellationToken ct)
     {
         await storage.EditEndpointAsync(endpoint, ct);
         cache.AddOrUpdateValue(endpoint);
-        OnEndpointUpdated(endpoint.Id);
+        await OnEndpointUpdated(endpoint);
     }
 
     public EndpointModel? GetEndpoint(string id)
@@ -31,8 +34,8 @@ public sealed class EndpointRepository(IEndpointsStorage storage, IEndpointsCach
         return cache.GetValueOrDefault(id);
     }
 
-    private void OnEndpointUpdated(string id)
+    private async Task OnEndpointUpdated(EndpointModel model)
     {
-        // Aggregator things
+        await updatePublisher.PublishUpdateAsync(model);
     }
 }
