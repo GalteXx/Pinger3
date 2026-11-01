@@ -69,7 +69,7 @@ public sealed class PingManager : IPingManager, IDisposable
 
     private async Task OnPingModelUpdated(EndpointModel model, CancellationToken ct)
     {
-        if (_activeEndpointsRegistry.IsActive(model.Id))
+        if (!_activeEndpointsRegistry.IsActive(model.Id))
             return;
 
         var update = await _updateResolver.ResolveAsync(model, CancellationToken.None);
