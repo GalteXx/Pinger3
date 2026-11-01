@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Pinger3.ViewModels.PageViewModels"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+        x:Class="Pinger3.Views.EndpointEditorWindow"
+        x:DataType="vm:IEndpointEditorViewModel"
+        Title="Endpoint Editor">
+    <StackPanel Margin="10" Spacing="5">
+        <TextBlock Text="Name"/>
+        <TextBox Text="{Binding EndpointName}"/>
+        <TextBlock Text="Address"/>
+        <TextBox Text="{Binding EndpointAddress}"/>
+        <TextBlock Text="Request Delay"/>
+        <TextBox Text="{Binding EndpointRequestDelay}"/>
+        <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+            <Button Content="Edit" Command="{Binding EditEndpointCommand}"/>
+            <Button Content="Delete" Command="{Binding DeleteEndpointCommand}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
