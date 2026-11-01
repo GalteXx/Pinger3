@@ -82,6 +82,13 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Row="2" 
+                VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                Margin="20" Padding="0"
+                BorderBrush="{DynamicResource SecondaryColor}" Background="{DynamicResource BackgroundColor}"
+                Command="{Binding CreateNewEndpointCommand}">
+            <TextBlock Text="+" FontSize="30" Margin="10, 0"/>
+        </Button>
     </Grid>
 
 </Window>

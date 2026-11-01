@@ -17,6 +17,7 @@ namespace Pinger3.ViewModels.PageViewModels;
 
 public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowViewModel, IDisposable
 {
+    private readonly IEndpointRepository _endpointRepository;
     private readonly IPingTargetViewModelFactory _factory;
     private readonly IPingManager _pingManager;
     private readonly IPopOutManager _popOutManager;
@@ -29,6 +30,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowView
         IPingManager pingManager, IPopOutManager popOutManager, IEndpointUpdateNotifier updateNotifier,
         IPingUpdateNotifier pingUpdateNotifier)
     {
+        _endpointRepository = endpointRepository;
         _factory = factory;
         _pingManager = pingManager;
         _popOutManager = popOutManager;
@@ -40,7 +42,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowView
         _timespanUpdateTimer.Tick += UpdateEndpointViewModelTimeSpans;
         _timespanUpdateTimer.Start();
 
-        foreach (var endpoint in endpointRepository.GetEndpoints()) Endpoints.Add(factory.Create(endpoint));
+        foreach (var endpoint in _endpointRepository.GetEndpoints()) Endpoints.Add(factory.Create(endpoint));
 
         _subscriptions =
         [
@@ -97,6 +99,24 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowView
     public void OnMainWindowLoaded()
     {
         OnPropertyChanged(nameof(Endpoints));
+    }
+
+    [RelayCommand]
+    private async Task DeleteEndpoint(string id, CancellationToken ct)
+    {
+        await _endpointRepository.DeleteEndpointAsync(id, ct);
+    }
+
+    [RelayCommand]
+    private async Task EditEndpoint(EndpointModel model, CancellationToken ct)
+    {
+        await _endpointRepository.EditEndpointAsync(model, ct);
+    }
+
+    [RelayCommand]
+    private async Task CreateNewEndpoint(CancellationToken ct)
+    {
+        await _endpointRepository.CreateNewEndpointAsync(ct);
     }
 
     [RelayCommand]

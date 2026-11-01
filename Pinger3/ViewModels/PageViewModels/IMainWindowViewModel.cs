@@ -11,4 +11,6 @@ public interface IMainWindowViewModel
     public IAsyncRelayCommand<string> TogglePingingCommand { get; }
 
     public IAsyncRelayCommand<string> TogglePopOutCommand { get; }
+
+    public IAsyncRelayCommand CreateNewEndpointCommand { get; }
 }

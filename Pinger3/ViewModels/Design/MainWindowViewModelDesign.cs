@@ -20,4 +20,7 @@ public class MainWindowViewModelDesign : IMainWindowViewModel
 
     public IAsyncRelayCommand<string> TogglePopOutCommand { get; } =
         new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
+
+    public IAsyncRelayCommand CreateNewEndpointCommand =>
+        new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
 }
