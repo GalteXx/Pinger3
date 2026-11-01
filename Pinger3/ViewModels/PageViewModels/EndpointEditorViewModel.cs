@@ -41,6 +41,7 @@ public partial class EndpointEditorViewModel(IEndpointRepository endpointReposit
 
         var model = new EndpointModel(EndpointId, EndpointName, EndpointAddress, delay);
         await endpointRepository.EditEndpointAsync(model, ct);
+        OnOperationFinished();
     }
 
     [RelayCommand]
@@ -49,5 +50,13 @@ public partial class EndpointEditorViewModel(IEndpointRepository endpointReposit
         if (string.IsNullOrWhiteSpace(EndpointId))
             return;
         await endpointRepository.DeleteEndpointAsync(EndpointId, ct);
+        OnOperationFinished();
+    }
+
+    public event EventHandler? OperationFinished;
+
+    protected void OnOperationFinished()
+    {
+        OperationFinished?.Invoke(this, EventArgs.Empty);
     }
 }

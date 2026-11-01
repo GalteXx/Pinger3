@@ -14,5 +14,6 @@ public partial class EndpointEditorWindow : Window
     {
         InitializeComponent();
         DataContext = viewModel;
+        viewModel.OperationFinished += (_, _) => Close();
     }
 }
