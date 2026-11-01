@@ -80,6 +80,17 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Edit">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Foreground="{DynamicResource PrimaryColor}"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Content="Edit"
+                                      Command="{Binding #MainWindowInstance.DataContext.EditEndpointCommand}"
+                                      CommandParameter="{Binding Id}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button Grid.Row="2" 

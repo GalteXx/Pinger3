@@ -21,6 +21,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowView
     private readonly IPingTargetViewModelFactory _factory;
     private readonly IPingManager _pingManager;
     private readonly IPopOutManager _popOutManager;
+    private readonly IWindowService _windowService;
     private readonly List<IDisposable> _subscriptions;
 
     private readonly TimeSpan _timerIntervalMs = TimeSpan.FromMilliseconds(10);
@@ -28,12 +29,13 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowView
 
     public MainWindowViewModel(IEndpointRepository endpointRepository, IPingTargetViewModelFactory factory,
         IPingManager pingManager, IPopOutManager popOutManager, IEndpointUpdateNotifier updateNotifier,
-        IPingUpdateNotifier pingUpdateNotifier)
+        IPingUpdateNotifier pingUpdateNotifier, IWindowService windowService)
     {
         _endpointRepository = endpointRepository;
         _factory = factory;
         _pingManager = pingManager;
         _popOutManager = popOutManager;
+        _windowService = windowService;
         _timespanUpdateTimer = new DispatcherTimer(DispatcherPriority.Normal)
         {
             Interval = _timerIntervalMs,
@@ -108,9 +110,11 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowView
     }
 
     [RelayCommand]
-    private async Task EditEndpoint(EndpointModel model, CancellationToken ct)
+    private void EditEndpoint(string id)
     {
-        await _endpointRepository.EditEndpointAsync(model, ct);
+        var model = _endpointRepository.GetEndpoint(id) ??
+                    throw new InvalidOperationException("Edited endpoint not found");
+        _windowService.ShowEndpointEditorWindow(model);
     }
 
     [RelayCommand]

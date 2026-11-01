@@ -15,12 +15,15 @@ public class MainWindowViewModelDesign : IMainWindowViewModel
 
     public ObservableCollection<IPingingTargetViewModel> Endpoints { get; } = [];
 
-    public IAsyncRelayCommand<string> TogglePingingCommand { get; } =
+    public IAsyncRelayCommand<string> TogglePingingCommand =>
         new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
 
-    public IAsyncRelayCommand<string> TogglePopOutCommand { get; } =
+    public IAsyncRelayCommand<string> TogglePopOutCommand =>
         new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
 
     public IAsyncRelayCommand CreateNewEndpointCommand =>
+        new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
+
+    public IRelayCommand<string> EditEndpointCommand =>
         new AsyncRelayCommand<string>((_, _) => Task.CompletedTask);
 }

@@ -13,4 +13,6 @@ public interface IMainWindowViewModel
     public IAsyncRelayCommand<string> TogglePopOutCommand { get; }
 
     public IAsyncRelayCommand CreateNewEndpointCommand { get; }
+    
+    public IRelayCommand<string> EditEndpointCommand { get; }
 }
