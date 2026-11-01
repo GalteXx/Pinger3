@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -11,6 +12,7 @@ public class EndpointRuntimeFactory(AddressResolver resolver) : IEndpointRuntime
     public async Task<EndpointRuntime> CreateRuntimeAsync(EndpointModel model, CancellationToken ct)
     {
         var address = (await resolver.ResolveAddressesAsync(model, ct)).FirstOrDefault() ?? IPAddress.None;
+
         return new EndpointRuntime(model.Id, address, model.DelayBetweenRequests);
     }
 }

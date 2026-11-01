@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Pinger3.Models;
@@ -7,8 +8,16 @@ namespace Pinger3.Services.Pinging;
 
 public class AddressResolver
 {
-    public Task<IPAddress[]> ResolveAddressesAsync(EndpointModel model, CancellationToken ct)
+    public async Task<IPAddress[]> ResolveAddressesAsync(EndpointModel model, CancellationToken ct)
     {
-        return Dns.GetHostAddressesAsync(model.Address, ct);
+        try
+        {
+            return await Dns.GetHostAddressesAsync(model.Address, ct);
+        }
+        catch
+        {
+            // TODO: propagate dns resolution failure to UI
+            return [IPAddress.None];
+        }
     }
 }
