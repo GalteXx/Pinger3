@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:Pinger3.ViewModels.PageViewModels"
         xmlns:vmd="using:Pinger3.ViewModels.Design"
-        xmlns:converters="using:Pinger3.Converters"
         xmlns:controls="using:Pinger3.TemplateControls"
         mc:Ignorable="d" SizeToContent="WidthAndHeight"
         ExtendClientAreaToDecorationsHint="True"
@@ -22,9 +21,6 @@
     <Design.DataContext>
         <vmd:PopoutWindowViewModelDesign />
     </Design.DataContext>
-    <Window.Resources>
-        <converters:StringClassToBooleanConverter x:Key="ClassNameConverter" />
-    </Window.Resources>
 
     <ListBox ItemsSource="{Binding PingViewModels}" IsHitTestVisible="False">
         <ListBox.Styles>
@@ -35,14 +31,6 @@
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <controls:PingDisplay IsHitTestVisible="False"
-                                      Classes.Full="{Binding $parent[Window].DataContext.SelectedStyleClassName,
-                                      Converter={StaticResource ClassNameConverter}, ConverterParameter=Full}"
-                                      Classes.CompactPing="{Binding $parent[Window].DataContext.SelectedStyleClassName,
-                                      Converter={StaticResource ClassNameConverter}, ConverterParameter=CompactPing}"
-                                      Classes.CompactResponseTime="{Binding $parent[Window].DataContext.SelectedStyleClassName,
-                                      Converter={StaticResource ClassNameConverter}, ConverterParameter=CompactResponseTime}"
-                                      Classes.ResponseTimeOnly="{Binding $parent[Window].DataContext.SelectedStyleClassName,
-                                      Converter={StaticResource ClassNameConverter}, ConverterParameter=ResponseTimeOnly}"
                                       AddressName="{Binding Name}" Address="{Binding Address}"
                                       Ping="{Binding Ping}"
                                       ResponseWaitingTime="{Binding TimeSinceLastRequest}" />
