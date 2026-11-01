@@ -87,13 +87,13 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<INavigationViewModel, NavigationViewModel>();
         collection.AddTransient<IPopoutWindowViewModel, PopoutWindowViewModel>();
         collection.AddTransient<IMainWindowViewModel, MainWindowViewModel>();
-        collection.AddTransient<IEndpointEditorViewModel, EndpointEditorViewModel>();
+        collection.AddScoped<IEndpointEditorViewModel, EndpointEditorViewModel>();
     }
 
     private static void AddWindows(IServiceCollection collection)
     {
         collection.AddSingleton(sp => new PopoutWindow(sp.GetRequiredService<IPopoutWindowViewModel>()));
         collection.AddTransient(sp => new MainWindow(sp.GetRequiredService<IMainWindowViewModel>()));
-        collection.AddTransient(sp => new EndpointEditorWindow(sp.GetRequiredService<IEndpointEditorViewModel>()));
+        collection.AddScoped(sp => new EndpointEditorWindow(sp.GetRequiredService<IEndpointEditorViewModel>()));
     }
 }
