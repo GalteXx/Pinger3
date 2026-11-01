@@ -72,7 +72,7 @@ public sealed class PingManager : IPingManager, IDisposable
         if (!_activeEndpointsRegistry.IsActive(model.Id))
             return;
 
-        var update = await _updateResolver.ResolveAsync(model, CancellationToken.None);
+        var update = await _updateResolver.ResolveAsync(model, ct);
         if (update is null)
             return;
         _scheduler.UpdateInSchedule(model.Id, update);
