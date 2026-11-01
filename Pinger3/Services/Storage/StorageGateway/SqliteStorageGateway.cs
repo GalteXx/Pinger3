@@ -19,12 +19,12 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
             new SqliteParameter("@endpoint_id", id));
     }
 
-    async Task IActiveEndpointsStorage.RemoveEndpointAsync(string Id, CancellationToken ct)
+    async Task IActiveEndpointsStorage.RemoveEndpointAsync(string id, CancellationToken ct)
     {
         await ExecuteNonQueryCommandAsync(
             "DELETE FROM active_endpoint WHERE endpoint_id = @endpoint_id",
             ct,
-            new SqliteParameter("@endpoint_id", Id));
+            new SqliteParameter("@endpoint_id", id));
     }
 
     async IAsyncEnumerable<string> IActiveEndpointsStorage.GetEndpointsAsync(
@@ -106,7 +106,7 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
             ct,
             new SqliteParameter("@id", dto.Id),
             new SqliteParameter("@name", dto.Name),
-            new SqliteParameter("@address", dto.Name),
+            new SqliteParameter("@address", dto.Address),
             new SqliteParameter("@delay", dto.RequestDelay));
     }
 
