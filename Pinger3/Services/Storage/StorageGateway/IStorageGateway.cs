@@ -12,4 +12,5 @@ public interface IStorageGateway
     Task AddEndpointAsync(EndpointDto dto, CancellationToken ct);
     Task DeleteEndpointAsync(string id, CancellationToken ct);
     Task<EndpointDto?> GetEndpointAsync(string id, CancellationToken ct);
+    Task<EndpointDto> CreateNewEndpointAsync(CancellationToken ct);
 }

@@ -8,6 +8,7 @@ namespace Pinger3.Services;
 public interface IEndpointRepository
 {
     Task AddEndpointAsync(EndpointModel endpoint, CancellationToken ct);
+    Task<EndpointModel> CreateNewEndpointAsync(CancellationToken ct);
     EndpointModel? GetEndpoint(string id);
     Task EditEndpointAsync(EndpointModel endpoint, CancellationToken ct);
     IEnumerable<EndpointModel> GetEndpoints();

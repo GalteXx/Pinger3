@@ -89,6 +89,16 @@ public class SqliteStorageGateway(SqliteConnectionFactory connectionFactory) : I
         return null;
     }
 
+    async Task<EndpointDto> IStorageGateway.CreateNewEndpointAsync(CancellationToken ct)
+    {
+        var rowStream = QueryAsync(
+            "INSERT INTO endpoint (name, address, delay) VALUES ('New Endpoint', 'localhost', '00:00:15') RETURNING *",
+            CreateDto, ct);
+        await foreach (var row in rowStream)
+            return row;
+        throw new InvalidOperationException("Creation of new Endpoint returned no result");
+    }
+
     async Task IStorageGateway.EditEndpointAsync(EndpointDto dto, CancellationToken ct)
     {
         await ExecuteNonQueryCommandAsync(

@@ -22,6 +22,14 @@ public sealed class EndpointRepository(
         await OnEndpointUpdated(endpoint);
     }
 
+    public async Task<EndpointModel> CreateNewEndpointAsync(CancellationToken ct)
+    {
+        var model = await storage.CreateNewEndpointAsync(ct);
+        cache.AddOrUpdateValue(model);
+        await OnEndpointUpdated(model);
+        return model;
+    }
+
     public async Task EditEndpointAsync(EndpointModel endpoint, CancellationToken ct)
     {
         await storage.EditEndpointAsync(endpoint, ct);
