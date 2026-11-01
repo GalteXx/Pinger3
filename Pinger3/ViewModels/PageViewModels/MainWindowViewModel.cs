@@ -126,9 +126,9 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IMainWindowView
     }
 
     [RelayCommand]
-    private async Task TogglePinging(string id, CancellationToken token)
+    private async Task TogglePinging(string id, CancellationToken ct)
     {
-        await _pingManager.ToggleEndpointPingingAsync(id, token);
+        await _pingManager.ToggleEndpointPingingAsync(id, ct);
         var vm = Endpoints.FirstOrDefault(vm => vm.Id == id);
         if (vm == null)
             return;
