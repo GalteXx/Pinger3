@@ -30,7 +30,7 @@
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.31"/>
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="11.0.0-rc.2.26504.105"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3"/>
