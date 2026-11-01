@@ -26,12 +26,6 @@ internal class PopoutWindowViewModelDesign : IPopoutWindowViewModel
         get => 0;
         set { }
     }
-
-    public string SelectedStyleClassName
-    {
-        get => "Full";
-        set { }
-    }
-
+    
     public event PropertyChangedEventHandler? PropertyChanged;
 }
