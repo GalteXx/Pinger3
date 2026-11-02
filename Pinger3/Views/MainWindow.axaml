@@ -83,10 +83,12 @@
                 <DataGridTemplateColumn Header="Edit">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Foreground="{DynamicResource PrimaryColor}"
+                            <Button Foreground="{DynamicResource PrimaryColor}" Padding="5, 3"
                                       HorizontalAlignment="Center" VerticalAlignment="Center"
                                       Content="Edit"
                                       Command="{Binding #MainWindowInstance.DataContext.EditEndpointCommand}"
+                                      BorderBrush="{DynamicResource SecondaryColor}"
+                                      Background="{DynamicResource BackgroundColor}"
                                       CommandParameter="{Binding Id}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

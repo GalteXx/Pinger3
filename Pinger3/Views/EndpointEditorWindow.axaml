@@ -3,20 +3,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:Pinger3.ViewModels.PageViewModels"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="230"
+        MinWidth="400" MinHeight="230"
         x:Class="Pinger3.Views.EndpointEditorWindow"
+        Background="{DynamicResource BackgroundColor}"
+        SizeToContent="WidthAndHeight"
         x:DataType="vm:IEndpointEditorViewModel"
-        Title="Endpoint Editor">
+        Title="Edit Endpoint">
+    <Design.DataContext>
+        <vm:EndpointEditorViewModelDesign/>
+    </Design.DataContext>
     <StackPanel Margin="10" Spacing="5">
-        <TextBlock Text="Name"/>
-        <TextBox Text="{Binding EndpointName}"/>
-        <TextBlock Text="Address"/>
-        <TextBox Text="{Binding EndpointAddress}"/>
-        <TextBlock Text="Request Delay"/>
-        <TextBox Text="{Binding EndpointRequestDelay}"/>
-        <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
-            <Button Content="Edit" Command="{Binding EditEndpointCommand}"/>
-            <Button Content="Delete" Command="{Binding DeleteEndpointCommand}"/>
-        </StackPanel>
+        <StackPanel.Styles>
+            <Style Selector="TextBox">
+                <Setter Property="BorderBrush" Value="{DynamicResource SecondaryColor}"/>
+            </Style>
+            <Style Selector="Button">
+                <Setter Property="CornerRadius" Value="0"/>
+                <Setter Property="Background" Value="Black"/>
+            </Style>
+        </StackPanel.Styles>
+        <TextBlock Text="Name" />
+        <TextBox Text="{Binding EndpointName}" />
+        <TextBlock Text="Address" />
+        <TextBox Text="{Binding EndpointAddress}" />
+        <TextBlock Text="Request Delay" />
+        <TextBox Text="{Binding EndpointRequestDelay}" />
+        <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch">
+            <Button Content="Delete" Command="{Binding DeleteEndpointCommand}"
+                    BorderBrush="DarkRed"/>
+            <Button Grid.Column="1" HorizontalAlignment="Right" Content="Edit"
+                    BorderBrush="{DynamicResource SecondaryColor}" 
+                    Command="{Binding EditEndpointCommand}"
+                    />
+        </Grid>
     </StackPanel>
 </Window>
