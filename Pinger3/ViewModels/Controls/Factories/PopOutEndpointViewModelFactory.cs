@@ -7,6 +7,6 @@ public class PopOutEndpointViewModelFactory
 {
     public IPopOutEndpointViewModel Create(EndpointModel model)
     {
-        return new PopOutEndpointViewModel(model.Id, model.Name);
+        return new PopOutEndpointViewModel(model.Id, model.Address, model.Name);
     }
 }

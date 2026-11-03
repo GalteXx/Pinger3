@@ -4,10 +4,10 @@ using Pinger3.Models;
 
 namespace Pinger3.ViewModels.Controls;
 
-public partial class PopOutEndpointViewModel(string id, string name)
+public partial class PopOutEndpointViewModel(string id, string address, string name)
     : ObservableObject, IPopOutEndpointViewModel
 {
-    [ObservableProperty] private string _address = "0.0.0.0`";
+    [ObservableProperty] private string _address = address;
     private DateTime _lastPingTime;
 
     [ObservableProperty] private string _name = name;
