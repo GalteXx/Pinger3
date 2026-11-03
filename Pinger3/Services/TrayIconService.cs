@@ -28,7 +28,7 @@ public sealed class TrayIconService : IDisposable
 
     public void Dispose()
     {
-        _trayIcon?.Dispose();
+        _trayIcon.Dispose();
     }
 
     private void InitializeMenu()
@@ -56,15 +56,12 @@ public sealed class TrayIconService : IDisposable
 
     private void ExitApplication()
     {
-        _trayIcon.IsVisible = false;
         ((IClassicDesktopStyleApplicationLifetime?)Application.Current?.ApplicationLifetime)?.Shutdown();
     }
 
     private void OnTrayIconClicked(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
-        //var popout = _windowService.GetWindowInstance<PopoutWindow>();
-        //popout.IsVisible = !popout.IsVisible;
+        _windowService.TogglePopOutWidgedVisibility();
     }
 
     public void Show()

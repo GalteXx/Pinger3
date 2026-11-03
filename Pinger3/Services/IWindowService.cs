@@ -7,4 +7,5 @@ public interface IWindowService
 {
     void ShowWindow<T>() where T : Window;
     void ShowEndpointEditorWindow(EndpointModel endpointModel);
+    void TogglePopOutWidgedVisibility();
 }

@@ -27,4 +27,11 @@ public class WindowService(IServiceProvider serviceProvider) : IWindowService
         window.Closed += (_, _) => scope.Dispose();
         window.Show();
     }
+
+    public void TogglePopOutWidgedVisibility()
+    {
+        var window = serviceProvider.GetRequiredService<PopoutWindow>();
+        window.IsVisible = !window.IsVisible;
+        
+    }
 }
