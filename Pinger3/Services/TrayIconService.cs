@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using Pinger3.Views;
 
 namespace Pinger3.Services;
@@ -56,6 +58,7 @@ public sealed class TrayIconService : IDisposable
 
     private void ExitApplication()
     {
+        Dispose();
         ((IClassicDesktopStyleApplicationLifetime?)Application.Current?.ApplicationLifetime)?.Shutdown();
     }
 

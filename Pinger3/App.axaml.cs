@@ -58,8 +58,8 @@ public class App : Application
         var scheduleLoader = services.GetRequiredService<ScheduleLoader>();
         await scheduleLoader.LoadScheduleAsync(CancellationToken.None);
 
-        services.GetRequiredService<TrayIconService>().Show();
         services.GetRequiredService<IWindowService>().ShowWindow<MainWindow>();
+        services.GetRequiredService<TrayIconService>().Show();
     }
 
     private void DisableAvaloniaDataAnnotationValidation()
