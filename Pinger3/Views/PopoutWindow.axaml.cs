@@ -15,6 +15,11 @@ public partial class PopoutWindow : Window
     {
         InitializeComponent();
         DataContext = vm;
+        Closing += (_, e) =>
+        {
+            e.Cancel = true;
+            Hide();
+        };
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
