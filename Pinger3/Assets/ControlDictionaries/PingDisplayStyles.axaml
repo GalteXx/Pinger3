@@ -35,7 +35,7 @@
                             <Border Margin="0,2" CornerRadius="5" BorderThickness="1"
                                     BorderBrush="{DynamicResource SecondaryColor}"
                                     Background="{TemplateBinding Ping, Converter={StaticResource TimespanToColorConverter}}" />
-                            <TextBlock Grid.Column="1"
+                            <TextBlock Grid.Column="1" Margin="3, 0,0,0"
                                        Text="{TemplateBinding Ping, Converter={StaticResource TimespanToStringConverter}}" />
                         </Grid>
 
@@ -43,7 +43,7 @@
                             <Border Margin="0,2" CornerRadius="5" BorderThickness="1"
                                     BorderBrush="{DynamicResource SecondaryColor}"
                                     Background="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToColorConverter}}" />
-                            <TextBlock Grid.Column="1"
+                            <TextBlock Grid.Column="1" Margin="3, 0,0,0"
                                        Text="{TemplateBinding ResponseWaitingTime, Converter={StaticResource TimespanToStringConverter}}" />
                         </Grid>
                     </Grid>

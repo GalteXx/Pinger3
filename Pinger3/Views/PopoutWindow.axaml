@@ -23,6 +23,11 @@
     </Design.DataContext>
 
     <ListBox ItemsSource="{Binding PingViewModels}" IsHitTestVisible="False">
+        <ListBox.Styles>
+            <Style Selector="ListBoxItem">
+                <Setter Property="Padding" Value="1" />
+            </Style>
+        </ListBox.Styles>
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <controls:PingDisplay IsHitTestVisible="False"
