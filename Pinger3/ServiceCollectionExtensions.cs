@@ -31,6 +31,9 @@ public static class ServiceCollectionExtensions
     {
         collection.AddTransient<IPopOutEndpointsStorage, SqliteStorageGateway>();
         collection.AddTransient<IPopOutManager, PopOutManager>();
+        collection.AddSingleton<PopOutEventAggregator>();
+        collection.AddSingleton<IPopOutEventNotifier>(sp => sp.GetRequiredService<PopOutEventAggregator>());
+        collection.AddSingleton<IPopOutEventPublisher>(sp => sp.GetRequiredService<PopOutEventAggregator>());
     }
 
     private static void AddCacheServices(IServiceCollection collection)

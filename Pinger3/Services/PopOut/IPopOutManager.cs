@@ -8,8 +8,6 @@ namespace Pinger3.Services.PopOut;
 
 public interface IPopOutManager
 {
-    event EventHandler<EndpointModel>? EndpointAdded;
-    event EventHandler<string>? EndpointRemoved;
     Task Add(string id, CancellationToken ct);
     Task Remove(string id, CancellationToken ct);
     bool IsPopOut(string id);

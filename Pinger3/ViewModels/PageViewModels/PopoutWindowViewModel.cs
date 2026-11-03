@@ -23,7 +23,8 @@ public sealed partial class PopoutWindowViewModel : ObservableObject, IPopoutWin
 
 
     public PopoutWindowViewModel(IPopOutManager popOutManager, PopOutEndpointViewModelFactory factory,
-        IPingUpdateNotifier pingUpdateNotifier, IEndpointUpdateNotifier updateNotifier)
+        IPingUpdateNotifier pingUpdateNotifier, IEndpointUpdateNotifier updateNotifier,
+        IPopOutEventNotifier popOutEventNotifier)
     {
         foreach (var model in popOutManager.GetEndpointModels()) PingViewModels.Add(factory.Create(model));
 
@@ -48,12 +49,18 @@ public sealed partial class PopoutWindowViewModel : ObservableObject, IPopoutWin
             {
                 GetValueOrDefault(pingUpdated.Id)?.OnPingReceived(pingUpdated);
                 return ValueTask.CompletedTask;
+            }),
+            popOutEventNotifier.SubscribeToAddition ((model, _) =>
+            {
+                PingViewModels.Add(factory.Create(model));
+                return  ValueTask.CompletedTask;
+            }),
+            popOutEventNotifier.SubscribeToRemoval((id, _) =>
+            {
+                PingViewModels.Remove(PingViewModels.FirstOrDefault(p => p.Id == id)!);
+                return ValueTask.CompletedTask;
             })
         ];
-
-        popOutManager.EndpointAdded += (_, e) => PingViewModels.Add(factory.Create(e));
-        popOutManager.EndpointRemoved +=
-            (_, id) => PingViewModels.Remove(PingViewModels.FirstOrDefault(p => p.Id == id)!);
     }
 
     public void Dispose()

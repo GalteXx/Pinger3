@@ -10,14 +10,16 @@ namespace Pinger3.Services.PopOut;
 public sealed class PopOutManager : IPopOutManager, IDisposable
 {
     private readonly IPopOutEndpointsRegistry _registry;
+    private readonly IPopOutEventPublisher _eventPublisher;
     private readonly IEndpointRepository _repository;
     private readonly List<IDisposable> _subscriptions;
 
     public PopOutManager(IEndpointRepository repository, IPopOutEndpointsRegistry registry,
-        IEndpointUpdateNotifier updateNotifier)
+        IEndpointUpdateNotifier updateNotifier, IPopOutEventPublisher eventPublisher)
     {
         _repository = repository;
         _registry = registry;
+        _eventPublisher = eventPublisher;
         _subscriptions =
         [
             updateNotifier.SubscribeToDeletion(async (id, token) => await registry.RemovePopOutAsync(id, token))
@@ -29,9 +31,6 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
         foreach (var subscription in _subscriptions)
             subscription.Dispose();
     }
-
-    public event EventHandler<EndpointModel>? EndpointAdded;
-    public event EventHandler<string>? EndpointRemoved;
 
     public async Task Add(string id, CancellationToken ct)
     {
@@ -70,12 +69,12 @@ public sealed class PopOutManager : IPopOutManager, IDisposable
     private async Task OnEndpointAdded(EndpointModel model, CancellationToken ct)
     {
         await _registry.AddPopOutAsync(model.Id, ct);
-        EndpointAdded?.Invoke(this, model);
+        await _eventPublisher.PublishAdditionAsync(model, ct);
     }
 
     private async Task OnEndpointRemoved(string id, CancellationToken ct)
     {
         await _registry.RemovePopOutAsync(id, ct);
-        EndpointRemoved?.Invoke(this, id);
+        await _eventPublisher.PublishRemovalAsync(id, ct);
     }
 }
