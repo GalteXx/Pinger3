@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Pinger3.Services;
 using Pinger3.Services.Pinging;
@@ -27,7 +28,16 @@ public sealed partial class PopoutWindowViewModel : ObservableObject, IPopoutWin
         IPopOutEventNotifier popOutEventNotifier)
     {
         foreach (var model in popOutManager.GetEndpointModels()) PingViewModels.Add(factory.Create(model));
-
+        var timeUpdater = new DispatcherTimer(DispatcherPriority.Normal)
+        {
+            Interval = TimeSpan.FromMilliseconds(100)
+        };
+        timeUpdater.Tick += (s, e) =>
+        {
+            foreach (var viewModel in PingViewModels)
+                viewModel.UpdateTimeSinceLastRequest();
+        };
+        timeUpdater.Start();
         _subscriptions =
         [
             updateNotifier.SubscribeToUpdate((model, _) =>

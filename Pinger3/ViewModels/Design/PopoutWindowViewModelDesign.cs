@@ -23,7 +23,7 @@ internal class PopoutWindowViewModelDesign : IPopoutWindowViewModel
 
     public double Opacity
     {
-        get => 0;
+        get => 1;
         set { }
     }
     
