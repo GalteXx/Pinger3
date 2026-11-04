@@ -26,9 +26,9 @@ public class EndpointEditorViewModelDesign : IEndpointEditorViewModel
         set { }
     }
 
-    public string EndpointRequestDelay
+    public TimeSpan EndpointRequestDelay
     {
-        get => _viewModel.DelayBetweenRequests.ToString();
+        get => _viewModel.DelayBetweenRequests;
         set { }
     }
 
