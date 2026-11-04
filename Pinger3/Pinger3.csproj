@@ -9,6 +9,9 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaResource Update="Assets\ControlDictionaries\TimePicker.axaml">
+          <SubType>Designer</SubType>
+        </AvaloniaResource>
     </ItemGroup>
 
     <ItemGroup>

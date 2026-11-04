@@ -36,9 +36,6 @@ public partial class EndpointEditorViewModel(IEndpointRepository endpointReposit
     [RelayCommand]
     private async Task EditEndpoint(CancellationToken ct)
     {
-        // if (!TimeSpan.TryParse(EndpointRequestDelay, out var delay))
-        //     return;
-
         var model = new EndpointModel(EndpointId, EndpointName, EndpointAddress, EndpointRequestDelay);
         await endpointRepository.EditEndpointAsync(model, ct);
         OnOperationFinished();
