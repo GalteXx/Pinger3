@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -10,7 +10,7 @@
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
         <AvaloniaResource Update="Assets\ControlDictionaries\TimePicker.axaml">
-          <SubType>Designer</SubType>
+            <SubType>Designer</SubType>
         </AvaloniaResource>
     </ItemGroup>
 
@@ -33,10 +33,10 @@
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.31"/>
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="11.0.0-rc.2.26504.105"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3"/>
+        <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3"/>
     </ItemGroup>
 
     <ItemGroup>
