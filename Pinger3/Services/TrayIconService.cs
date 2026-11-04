@@ -21,7 +21,7 @@ public sealed class TrayIconService : IDisposable
         _trayIcon = new TrayIcon
         {
             ToolTipText = "Pinger",
-            Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://Pinger3/Assets/icon.ico")))
+            Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://Pinger3/Assets/icon.png")))
         };
 
         InitializeMenu();

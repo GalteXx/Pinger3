@@ -10,7 +10,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         Topmost="True"
         PointerPressed="OnPointerPressed"
-        Icon="/Assets/icon.ico"
+        Icon="/Assets/icon.png"
         ShowInTaskbar="False"
         ShowActivated="False"
         x:CompileBindings="True"
