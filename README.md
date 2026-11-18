@@ -1,17 +1,12 @@
 ### Configuration
-There is no way to add own entries via UI yet
-On Windows the configuration is located at:
-AppData\Local\Geckosystem\Pinger\config.xml
+All Endpoints Configuration is now handled via UI, and are stored in .sqlite database file
 
-```xml
-</Config>
-  <TargetIPs>
-    <TargetIP Name="Loopback" IP="127.0.0.1" Delay="50"/>
-    <TargetIP Name="Example" Domain="example.com" Delay="50000"/>
-	</TargetIPs>
-</Config>
-``` 
+Your old .xml files will be migrated to sql and discarded upon launch of new verion. The UI itself should be pretty selfexplanatory.
+
+Settings/Preferences window was removed, it will be brought back in the next update, with more flexible personalization options.
 
 #### TODO:
- Allow UI Addition/Removal/Editing of Targets in Runtime
- 
+ - [x] ~~Move Endpoint Configuration to UI~~
+ - [ ] Return Personalization options
+ - [ ] Ping storage and timespan graph building
+ - [ ] Tracking Per proccess-to-endpoint traffic usage
